@@ -13,6 +13,16 @@ SAME_OWNER_REPO = re.compile(
     rf"(?<![A-Za-z0-9_.-]){re.escape(OWNER)}/([A-Za-z0-9_.-]+)"
 )
 
+SECRET_PATTERNS = {
+    "private-key-block": re.compile(
+        r"-----BEGIN " + r"(?:RSA |EC |OPENSSH )?" + r"PRIVATE KEY-----"
+    ),
+    "github-classic-token": re.compile(r"gh" + r"p_[A-Za-z0-9]{30,}"),
+    "github-fine-grained-token": re.compile(r"github" + r"_pat_[A-Za-z0-9_]{40,}"),
+    "aws-access-key": re.compile(r"AK" + r"IA[0-9A-Z]{16}"),
+    "api-secret": re.compile(r"sk" + r"-[A-Za-z0-9_-]{32,}"),
+}
+
 
 def fail(message: str) -> None:
     raise SystemExit(f"PUBLICATION_GATE_FAIL: {message}")
@@ -33,6 +43,10 @@ def main() -> None:
             text = path.read_text(encoding="utf-8")
         except UnicodeDecodeError:
             continue
+
+        for name, pattern in SECRET_PATTERNS.items():
+            if pattern.search(text):
+                hazards.append(f"{path.relative_to(ROOT)}: {name}")
 
         for match in SAME_OWNER_REPO.finditer(text):
             if match.group(1) != PUBLIC_REPO:
