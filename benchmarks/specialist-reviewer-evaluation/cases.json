@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "suite": "specialist-reviewer-evaluation",
+  "finding_code_taxonomy": [
+    "TEMPORAL_LEAKAGE",
+    "SURVIVORSHIP_BIAS",
+    "JOIN_CARDINALITY_EXPANSION",
+    "DENOMINATOR_DRIFT",
+    "INFERENCE_SCOPE_OVERSTATEMENT",
+    "STALE_EVIDENCE",
+    "CANDIDATE_MISMATCH",
+    "SOURCE_HIERARCHY_MISMATCH",
+    "CONFLICTING_AUTHORITATIVE_EVIDENCE",
+    "MISSING_POSTCONDITION",
+    "RUNTIME_VERSION_MISMATCH",
+    "PARTIAL_STATE",
+    "CHECKPOINT_ORDERING",
+    "AUTHORITY_GATE_BYPASS"
+  ],
+  "candidates": {
+    "research-validity-reviewer": {
+      "baseline_skills": [
+        "research-data-integrity",
+        "provenance-freshness"
+      ]
+    },
+    "evidence-provenance-reviewer": {
+      "baseline_skills": [
+        "provenance-freshness",
+        "verified-completion"
+      ]
+    },
+    "runtime-postcondition-verifier": {
+      "baseline_skills": [
+        "verified-completion",
+        "state-mutation-idempotency",
+        "authority-boundary-review"
+      ]
+    }
+  },
+  "cases": [
+    {
+      "id": "rvr-easy-01",
+      "reviewer_candidate": "research-validity-reviewer",
+      "level": "easy",
+      "scenario": "A historical decision simulation uses a feature value whose source record was published two days after the simulated decision timestamp. The event timestamp itself is earlier than the decision, and a naive date join therefore appears valid."
+    },
+    {
+      "id": "rvr-normal-02",
+      "reviewer_candidate": "research-validity-reviewer",
+      "level": "normal",
+      "scenario": "A metrics dataset joins one row per account to a table containing multiple active category rows per account. The final row count is larger than the account universe, but the reported average is computed without reconciling join cardinality."
+    },
+    {
+      "id": "rvr-deceptive-03",
+      "reviewer_candidate": "research-validity-reviewer",
+      "level": "deceptive",
+      "scenario": "A ten-year backtest selects the current members of a successful benchmark for the entire historical period and tunes a threshold after inspecting the final evaluation period. The report describes the result as out-of-sample evidence."
+    },
+    {
+      "id": "rvr-control-04",
+      "reviewer_candidate": "research-validity-reviewer",
+      "level": "control",
+      "scenario": "A descriptive count uses an immutable event table, stable unique event IDs, a fixed historical interval, no joins, no missing event timestamps, and makes no causal or predictive claim."
+    },
+    {
+      "id": "rvr-adversarial-05",
+      "reviewer_candidate": "research-validity-reviewer",
+      "level": "adversarial",
+      "scenario": "A success-rate report removes records with unavailable provider outcomes before computing the denominator, then generalizes the resulting rate to all submitted records. The provider failures are correlated with one source category."
+    },
+    {
+      "id": "epr-easy-01",
+      "reviewer_candidate": "evidence-provenance-reviewer",
+      "level": "easy",
+      "scenario": "A green validation report is cited for the current candidate, but the report identifies the immediately previous commit and was generated before a configuration change included in the current candidate."
+    },
+    {
+      "id": "epr-normal-02",
+      "reviewer_candidate": "evidence-provenance-reviewer",
+      "level": "normal",
+      "scenario": "A dashboard reports a live service as healthy from a cache last refreshed before a deployment. The service-owned status endpoint reports a newer version and degraded state."
+    },
+    {
+      "id": "epr-deceptive-03",
+      "reviewer_candidate": "evidence-provenance-reviewer",
+      "level": "deceptive",
+      "scenario": "A secondary mirror contains a plausible current-looking value and a recent page timestamp, but its underlying source snapshot is older than the primary authority record, which now contains a different value."
+    },
+    {
+      "id": "epr-control-04",
+      "reviewer_candidate": "evidence-provenance-reviewer",
+      "level": "control",
+      "scenario": "A historical release-date claim is supported by the project's immutable signed release record. The record is old because the event itself is historical and no current-state claim is made."
+    },
+    {
+      "id": "epr-adversarial-05",
+      "reviewer_candidate": "evidence-provenance-reviewer",
+      "level": "adversarial",
+      "scenario": "Two systems both presented as authoritative report different active versions for the same production object. Neither source hierarchy nor reconciliation rule establishes which one controls the completion claim."
+    },
+    {
+      "id": "rpv-easy-01",
+      "reviewer_candidate": "runtime-postcondition-verifier",
+      "level": "easy",
+      "scenario": "A create command exits successfully and returns an object ID, but an authoritative read immediately afterward shows that the required target object does not exist."
+    },
+    {
+      "id": "rpv-normal-02",
+      "reviewer_candidate": "runtime-postcondition-verifier",
+      "level": "normal",
+      "scenario": "A deployment API accepts artifact B and returns success. The target runtime remains on artifact A after the deployment job completes, while the job log itself is green."
+    },
+    {
+      "id": "rpv-deceptive-03",
+      "reviewer_candidate": "runtime-postcondition-verifier",
+      "level": "deceptive",
+      "scenario": "A batch job reports all input IDs processed and advances its checkpoint. A crash occurred after checkpoint advancement but before a subset of external side effects, so restart logic will skip those effects even though the processed count is complete."
+    },
+    {
+      "id": "rpv-control-04",
+      "reviewer_candidate": "runtime-postcondition-verifier",
+      "level": "control",
+      "scenario": "A documentation task requires one exact file on the default branch. The intended commit is on the default branch, the file content is verified there, and no deployment, publication, or external side effect is part of the task."
+    },
+    {
+      "id": "rpv-adversarial-05",
+      "reviewer_candidate": "runtime-postcondition-verifier",
+      "level": "adversarial",
+      "scenario": "A migration job exits successfully and the schema version is advanced, but one dependent table contains only part of the expected rows. An automation then publishes the new state despite a policy requiring a human gate after partial-recovery warnings."
+    }
+  ]
+}
