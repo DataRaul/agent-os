@@ -19,5 +19,7 @@ jobs:
           python-version: "3.11"
       - name: Validate Agent OS
         run: python scripts/validate_agent_os.py
+      - name: Validate public capability registry
+        run: python scripts/validate_capability_registry.py
       - name: Smoke-test specialist reviewer scorer
         run: python scripts/test_specialist_reviewer_eval.py

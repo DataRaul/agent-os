@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "registry_version": 1,
+  "status": "PUBLIC_CAPABILITY_REGISTRY_V1",
+  "versioning_policy": "Consumers must pin an exact Agent OS repository commit SHA. capability_contract_version increments only when a capability contract changes materially; repository SHA remains the authoritative implementation identity.",
+  "authority_policy": "Presence in this registry grants no external execution authority. Authority is supplied by the consuming environment and may only be narrowed by overlays or local policy.",
+  "privacy_policy": "This registry is fully public and self-contained. It contains no private project mappings, private routes, private eval fixtures, credentials, or dependency on a private overlay.",
+  "capabilities": [
+    {
+      "capability_id": "silent-failure-hunter",
+      "kind": "skill",
+      "state": "AVAILABLE",
+      "capability_contract_version": 1,
+      "path": "skills/silent-failure-hunter/SKILL.md",
+      "eval_path": "evals/silent-failure-hunter/cases.json",
+      "grants_authority": false
+    },
+    {
+      "capability_id": "verified-completion",
+      "kind": "skill",
+      "state": "AVAILABLE",
+      "capability_contract_version": 1,
+      "path": "skills/verified-completion/SKILL.md",
+      "eval_path": "evals/verified-completion/cases.json",
+      "grants_authority": false
+    },
+    {
+      "capability_id": "state-mutation-idempotency",
+      "kind": "skill",
+      "state": "AVAILABLE",
+      "capability_contract_version": 1,
+      "path": "skills/state-mutation-idempotency/SKILL.md",
+      "eval_path": "evals/state-mutation-idempotency/cases.json",
+      "grants_authority": false
+    },
+    {
+      "capability_id": "provenance-freshness",
+      "kind": "skill",
+      "state": "AVAILABLE",
+      "capability_contract_version": 1,
+      "path": "skills/provenance-freshness/SKILL.md",
+      "eval_path": "evals/provenance-freshness/cases.json",
+      "grants_authority": false
+    },
+    {
+      "capability_id": "research-data-integrity",
+      "kind": "skill",
+      "state": "AVAILABLE",
+      "capability_contract_version": 1,
+      "path": "skills/research-data-integrity/SKILL.md",
+      "eval_path": "evals/research-data-integrity/cases.json",
+      "grants_authority": false
+    },
+    {
+      "capability_id": "authority-boundary-review",
+      "kind": "skill",
+      "state": "AVAILABLE",
+      "capability_contract_version": 1,
+      "path": "skills/authority-boundary-review/SKILL.md",
+      "eval_path": "evals/authority-boundary-review/cases.json",
+      "grants_authority": false
+    },
+    {
+      "capability_id": "semantic-pr-review",
+      "kind": "skill",
+      "state": "AVAILABLE",
+      "capability_contract_version": 1,
+      "path": "skills/semantic-pr-review/SKILL.md",
+      "eval_path": "evals/semantic-pr-review/cases.json",
+      "grants_authority": false
+    },
+    {
+      "capability_id": "silent-failure-reviewer",
+      "kind": "reviewer",
+      "state": "AVAILABLE",
+      "capability_contract_version": 1,
+      "path": "agents/silent-failure-reviewer.md",
+      "primary_skill": "silent-failure-hunter",
+      "grants_authority": false
+    }
+  ]
+}

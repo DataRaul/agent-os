@@ -113,6 +113,12 @@ Every inventory/admission mutation must pass:
 - semantic review;
 - exact-main post-merge verification.
 
+### P4R — capability registry publication
+
+A vendor/tool candidate is not a reusable public Agent OS capability merely because P4 audited it. After the applicable P4.2–P4.4 gates establish a public reusable capability, publish its stable ID and contract metadata in `catalog/capability-registry.json` under `docs/CAPABILITY_REGISTRY.md`.
+
+The registry contains no private selection/mapping and grants no authority. Consumers pin an exact public repository SHA before adopting a registry revision.
+
 ## Update rule
 
 `catalog/tooling-inventory.json` is a dated evidence snapshot, not a live auto-update channel.
