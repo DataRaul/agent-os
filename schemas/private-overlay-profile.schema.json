@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/agent-os/private-overlay-profile.schema.json",
+  "$id": "https://github.com/DataRaul/agent-os/blob/main/schemas/private-overlay-profile.schema.json",
   "title": "Agent OS Private Overlay Project Profile",
   "type": "object",
   "additionalProperties": false,
