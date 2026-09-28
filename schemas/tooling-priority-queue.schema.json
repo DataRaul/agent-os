@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/agent-os/tooling-priority-queue.schema.json",
+  "title": "Agent OS tooling priority queue",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "inventory_snapshot_date",
+    "purpose",
+    "rules",
+    "summary",
+    "candidates",
+    "classified_priority_groups"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "inventory_snapshot_date": {"type": "string"},
+    "purpose": {"type": "string"},
+    "rules": {"type": "object"},
+    "summary": {"type": "object"},
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "position",
+          "capability_id",
+          "source_id",
+          "priority_group",
+          "priority_class",
+          "risk_flags",
+          "admission_state",
+          "inventory_state",
+          "audit_action"
+        ]
+      }
+    },
+    "classified_priority_groups": {"type": "object"}
+  },
+  "additionalProperties": false
+}
