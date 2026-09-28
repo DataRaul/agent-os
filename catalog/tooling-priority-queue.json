@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "inventory_snapshot_date": "2026-09-28",
+  "purpose": "Deterministic P4.1 queue for selecting the lowest-authority source-audited capabilities for narrow P4.2 evaluation.",
+  "rules": {
+    "marketplace_unknown_authority_deferred": true,
+    "source_audited_only_for_initial_queue": true,
+    "priority_order": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "initial_queue_allowed_groups": [
+      1,
+      2,
+      3
+    ],
+    "maximum_initial_queue_size": 5,
+    "deterministic_sort": [
+      "priority_group",
+      "capability_id"
+    ],
+    "no_admission_granted_by_prioritization": true
+  },
+  "summary": {
+    "audited_candidates_classified": 48,
+    "marketplace_candidates_deferred_unknown_authority": 65,
+    "priority_group_counts": {
+      "1": 2,
+      "2": 0,
+      "3": 1,
+      "4": 6,
+      "5": 28,
+      "6": 11
+    },
+    "initial_queue_count": 3
+  },
+  "candidates": [
+    {
+      "position": 1,
+      "capability_id": "agent-skills-standard:skill-format-specification",
+      "source_id": "agent-skills-standard",
+      "priority_group": 1,
+      "priority_class": "SPECIFICATION_OR_REFERENCE_HELPER",
+      "risk_flags": [
+        "FORMAT_REFERENCE",
+        "CLIENT_VARIANCE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "audit_action": "P4_2_NARROW_AUDIT"
+    },
+    {
+      "position": 2,
+      "capability_id": "agent-skills-standard:skills-ref-reference-library",
+      "source_id": "agent-skills-standard",
+      "priority_group": 1,
+      "priority_class": "SPECIFICATION_OR_REFERENCE_HELPER",
+      "risk_flags": [
+        "LOCAL_READ",
+        "REFERENCE_IMPLEMENTATION",
+        "DEMONSTRATION_ONLY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "audit_action": "P4_2_NARROW_AUDIT"
+    },
+    {
+      "position": 3,
+      "capability_id": "microsoft-playwright-skills:browser-observation",
+      "source_id": "microsoft-playwright-skills",
+      "priority_group": 3,
+      "priority_class": "ISOLATED_READ_ONLY_OBSERVATION",
+      "risk_flags": [
+        "NETWORK",
+        "PAGE_CONTENT_READ",
+        "SCREENSHOT",
+        "LOCAL_WRITE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "audit_action": "P4_2_NARROW_AUDIT"
+    }
+  ],
+  "classified_priority_groups": {
+    "1": [
+      "agent-skills-standard:skill-format-specification",
+      "agent-skills-standard:skills-ref-reference-library"
+    ],
+    "2": [],
+    "3": [
+      "microsoft-playwright-skills:browser-observation"
+    ],
+    "4": [
+      "cloudflare-skills:cloudflare",
+      "duckdb-skills:convert-file",
+      "duckdb-skills:query",
+      "duckdb-skills:read-memories",
+      "duckdb-skills:s3-explore",
+      "microsoft-playwright-skills:persistent-and-attached-sessions"
+    ],
+    "5": [
+      "agent-skills-standard:allowed-tools-field",
+      "agent-skills-standard:executable-script-convention",
+      "cloudflare-skills:agents-sdk",
+      "cloudflare-skills:durable-objects",
+      "cloudflare-skills:nextjs-on-cloudflare",
+      "cloudflare-skills:sandbox-next",
+      "cloudflare-skills:sandbox-stable",
+      "cloudflare-skills:turnstile-spin",
+      "cloudflare-skills:web-perf",
+      "cloudflare-skills:workers-best-practices",
+      "duckdb-skills:attach-db",
+      "duckdb-skills:duckdb-docs",
+      "duckdb-skills:install-duckdb",
+      "duckdb-skills:read-file",
+      "duckdb-skills:spatial",
+      "microsoft-playwright-skills:browser-navigation-and-interaction",
+      "microsoft-playwright-skills:npm-installation",
+      "microsoft-playwright-skills:request-mocking",
+      "microsoft-playwright-skills:run-code",
+      "microsoft-playwright-skills:skill-installation",
+      "microsoft-playwright-skills:storage-state",
+      "microsoft-playwright-skills:test-generation-and-healing",
+      "microsoft-playwright-skills:webmcp",
+      "openai-plugins:curated-marketplace",
+      "openai-plugins:external-marketplace-references",
+      "openai-plugins:local-mcp-and-script-plugins",
+      "openai-plugins:openai-first-party-plugins",
+      "openai-plugins:remote-mcp-plugins"
+    ],
+    "6": [
+      "cloudflare-skills:cloudflare-email-service",
+      "cloudflare-skills:cloudflare-one",
+      "cloudflare-skills:cloudflare-one-migrations",
+      "cloudflare-skills:sandbox-migrate-to-next",
+      "cloudflare-skills:wrangler",
+      "microsoft-playwright-skills:evidence-capture-and-pr-attachments",
+      "openai-plugins:communication-and-productivity-plugins",
+      "openai-plugins:developer-and-infrastructure-plugins",
+      "openai-plugins:finance-commerce-and-investing-plugins",
+      "openai-plugins:github-plugin",
+      "openai-plugins:plugin-creator"
+    ]
+  }
+}
