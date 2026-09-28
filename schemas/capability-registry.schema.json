@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Agent OS Public Capability Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "registry_version",
+    "status",
+    "versioning_policy",
+    "authority_policy",
+    "privacy_policy",
+    "capabilities"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "registry_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "versioning_policy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority_policy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "privacy_policy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "capability_id",
+          "kind",
+          "state",
+          "capability_contract_version",
+          "path",
+          "grants_authority"
+        ],
+        "properties": {
+          "capability_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "kind": {
+            "enum": [
+              "skill",
+              "reviewer",
+              "tool",
+              "adapter"
+            ]
+          },
+          "state": {
+            "enum": [
+              "AVAILABLE",
+              "DEPRECATED"
+            ]
+          },
+          "capability_contract_version": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "eval_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "primary_skill": {
+            "type": "string",
+            "minLength": 1
+          },
+          "grants_authority": {
+            "const": false
+          }
+        }
+      }
+    }
+  }
+}
