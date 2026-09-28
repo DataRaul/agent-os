@@ -93,6 +93,12 @@ The scorer reports `ELIGIBLE_FOR_ROLE_IMPLEMENTATION_REVIEW` or `NO_INCREMENTAL_
 
 Eligibility still does not create execution authority or require that a reviewer be added. Semantic review should also consider tool/latency overhead and whether the observed gain is likely to generalize.
 
+## Scorer verification
+
+CI runs `scripts/test_specialist_reviewer_eval.py` after repository validation. The smoke test exercises both an eligible fixture and a no-incremental-value fixture so the scorer's two terminal dispositions are executed rather than merely syntax-checked.
+
+Smoke fixtures are constructed at test time and are not benchmark results or evidence for reviewer admission.
+
 ## Failure boundaries
 
 Do not admit a reviewer because:
@@ -113,7 +119,7 @@ Do not copy private project incidents or fixtures into this benchmark.
 P2 evaluation infrastructure is ready when:
 
 - benchmark cases and oracle validate deterministically;
-- the scorer validates and scores normalized run files;
+- the scorer's eligible and no-value paths pass deterministic smoke tests;
 - CI passes on the exact main candidate.
 
 Reviewer roles remain evaluation-gated until actual comparative runs demonstrate incremental value.
