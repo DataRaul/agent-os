@@ -4,6 +4,8 @@ import json
 import re
 from pathlib import Path
 
+from build_tooling_priority_queue import build_priority_queue
+
 ROOT = Path(__file__).resolve().parents[1]
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 ALLOWED_EVAL_LEVELS = {"easy", "normal", "deceptive", "control", "adversarial"}
@@ -447,6 +449,43 @@ def validate_tooling_inventory(catalog: dict) -> None:
             fail(f"tooling inventory summary {key} mismatch")
 
 
+
+def validate_tooling_priority_queue() -> None:
+    inventory = load_json(ROOT / "catalog" / "tooling-inventory.json")
+    queue = load_json(ROOT / "catalog" / "tooling-priority-queue.json")
+    if not isinstance(inventory, dict):
+        fail("tooling inventory must contain an object")
+    if not isinstance(queue, dict):
+        fail("catalog/tooling-priority-queue.json must contain a JSON object")
+    if queue.get("schema_version") != 1:
+        fail("catalog/tooling-priority-queue.json unsupported schema_version")
+
+    expected = build_priority_queue(inventory)
+    if queue != expected:
+        fail("tooling priority queue does not match deterministic builder")
+
+    candidates = queue.get("candidates")
+    if not isinstance(candidates, list) or not candidates:
+        fail("tooling priority queue candidates must be non-empty")
+    ids: list[str] = []
+    for position, candidate in enumerate(candidates, start=1):
+        if not isinstance(candidate, dict):
+            fail("tooling priority queue candidate must be object")
+        cap_id = candidate.get("capability_id")
+        if not isinstance(cap_id, str) or not cap_id:
+            fail("tooling priority queue candidate missing capability_id")
+        ids.append(cap_id)
+        if candidate.get("position") != position:
+            fail(f"tooling priority queue candidate {cap_id} position mismatch")
+        if candidate.get("priority_group") not in {1, 2, 3}:
+            fail(f"tooling priority queue candidate {cap_id} outside initial allowed groups")
+        if candidate.get("admission_state") != "REFERENCE_ONLY":
+            fail(f"tooling priority queue candidate {cap_id} must remain reference-only")
+        if candidate.get("audit_action") != "P4_2_NARROW_AUDIT":
+            fail(f"tooling priority queue candidate {cap_id} wrong audit action")
+    if len(ids) != len(set(ids)):
+        fail("tooling priority queue contains duplicate candidates")
+
 def validate_json() -> None:
     catalog_path = ROOT / "catalog" / "trusted-sources.json"
     schema_path = ROOT / "schemas" / "private-overlay-profile.schema.json"
@@ -457,6 +496,7 @@ def validate_json() -> None:
         fail("catalog/trusted-sources.json must contain a JSON object")
     validate_vendor_audits(catalog)
     validate_tooling_inventory(catalog)
+    validate_tooling_priority_queue()
     for source in catalog.get("sources", []):
         for key in ("id", "owner", "canonical_url", "trust_tier", "admission_state", "purpose"):
             if not source.get(key):
