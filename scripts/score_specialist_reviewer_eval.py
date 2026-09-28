@@ -71,7 +71,7 @@ def main() -> None:
     expected_map = oracle.get("expected", {})
     min_reps = oracle.get("minimum_replicates_per_case")
     policy = oracle.get("admission_policy", {})
-    if not isinstance(min_reps, int) or min_reps < 1:
+    if not isinstance(min_reps, int) or isinstance(min_reps, bool) or min_reps < 1:
         die("oracle minimum_replicates_per_case invalid")
 
     runs = result.get("runs")
@@ -98,7 +98,7 @@ def main() -> None:
         replicate = run.get("replicate")
         if case_id not in candidate_cases:
             die(f"result includes unknown or wrong-candidate case: {case_id!r}")
-        if not isinstance(replicate, int) or replicate < 1:
+        if not isinstance(replicate, int) or isinstance(replicate, bool) or replicate < 1:
             die(f"{case_id}: replicate must be a positive integer")
         pair = (case_id, replicate)
         if pair in seen_pairs:

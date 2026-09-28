@@ -3,6 +3,7 @@
   "suite": "specialist-reviewer-evaluation",
   "finding_code_taxonomy": [
     "TEMPORAL_LEAKAGE",
+    "EVALUATION_SELECTION_LEAKAGE",
     "SURVIVORSHIP_BIAS",
     "JOIN_CARDINALITY_EXPANSION",
     "DENOMINATOR_DRIFT",

@@ -19,7 +19,7 @@
     ],
     "rvr-deceptive-03": [
       "SURVIVORSHIP_BIAS",
-      "TEMPORAL_LEAKAGE"
+      "EVALUATION_SELECTION_LEAKAGE"
     ],
     "rvr-control-04": [],
     "rvr-adversarial-05": [

@@ -45,6 +45,14 @@ def load_json(path: Path) -> object:
         fail(f"{path.relative_to(ROOT)} invalid JSON: {exc}")
 
 
+def validate_python_scripts() -> None:
+    for path in sorted((ROOT / "scripts").glob("*.py")):
+        try:
+            compile(path.read_text(encoding="utf-8"), str(path), "exec")
+        except SyntaxError as exc:
+            fail(f"{path.relative_to(ROOT)} syntax error: {exc}")
+
+
 def validate_skills() -> set[str]:
     skills_dir = ROOT / "skills"
     if not skills_dir.is_dir():
@@ -269,6 +277,7 @@ def validate_required_docs() -> None:
 
 def main() -> None:
     validate_required_docs()
+    validate_python_scripts()
     skill_names = validate_skills()
     validate_evals(skill_names)
     validate_specialist_reviewer_benchmark(skill_names)
