@@ -488,7 +488,7 @@ def validate_tooling_priority_queue() -> None:
 
 def validate_p4_narrow_audits() -> None:
     audit_path = ROOT / "catalog" / "p4-narrow-audits.json"
-    cases_path = ROOT / "evals" / "p4-narrow-audits" / "cases.json"
+    cases_path = ROOT / "catalog" / "p4-narrow-audit-cases.json"
     audits = load_json(audit_path)
     cases_doc = load_json(cases_path)
     queue = load_json(ROOT / "catalog" / "tooling-priority-queue.json")
