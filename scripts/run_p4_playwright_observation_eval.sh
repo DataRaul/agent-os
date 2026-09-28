@@ -8,6 +8,7 @@ SNAPSHOT_OUT="$(mktemp)"
 FIND_OUT="$(mktemp)"
 CONSOLE_OUT="$(mktemp)"
 REQUESTS_OUT="$(mktemp)"
+SESSION_DIR="$(mktemp -d)"
 
 cleanup() {
   playwright-cli close >/dev/null 2>&1 || true
@@ -15,6 +16,7 @@ cleanup() {
     kill "$SERVER_PID" >/dev/null 2>&1 || true
   fi
   rm -f "$SERVER_LOG" "$SNAPSHOT_OUT" "$FIND_OUT" "$CONSOLE_OUT" "$REQUESTS_OUT"
+  rm -rf "$SESSION_DIR"
 }
 trap cleanup EXIT
 
@@ -29,6 +31,7 @@ for _ in {1..30}; do
 done
 curl --fail --silent http://127.0.0.1:8765/ >/dev/null
 
+cd "$SESSION_DIR"
 playwright-cli open http://127.0.0.1:8765/ --config="$CONFIG" >/dev/null
 sleep 1
 playwright-cli snapshot >"$SNAPSHOT_OUT"
