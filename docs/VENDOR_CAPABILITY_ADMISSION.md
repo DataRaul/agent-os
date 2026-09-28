@@ -94,4 +94,9 @@ A vendor-audit change must pass:
 
 ## Current program
 
-The first bounded vendor audit is DuckDB's official `duckdb-skills` repository. Its initial audit intentionally evaluates the upstream package without admitting it for automatic execution.
+Completed bounded package audits:
+
+- DuckDB official `duckdb-skills`: `KEEP_REFERENCE_ONLY`.
+- Cloudflare official `cloudflare/skills`: `KEEP_REFERENCE_ONLY`.
+
+Next catalog candidates remain reference-only until separately audited. Package-level audit outcomes do not automatically decide narrower subcapability admission.

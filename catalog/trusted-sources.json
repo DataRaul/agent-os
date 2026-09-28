@@ -38,7 +38,11 @@
       "canonical_url": "https://github.com/cloudflare/skills",
       "trust_tier": "T1",
       "admission_state": "REFERENCE_ONLY",
-      "purpose": "Cloudflare developer-platform skills"
+      "purpose": "Cloudflare developer-platform skills",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "reviewed_version": "1.0.1",
+      "audit_record": "catalog/vendor-audits/cloudflare-skills.json",
+      "audit_disposition": "KEEP_REFERENCE_ONLY"
     },
     {
       "id": "microsoft-playwright-skills",
