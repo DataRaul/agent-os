@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "skill": "research-data-integrity",
+  "cases": [
+    {
+      "id": "rdi-001-easy-clean-aggregate",
+      "level": "easy",
+      "scenario": "A descriptive monthly count uses one immutable event table, a documented date range, unique event IDs, no joins, no missing event dates, and an explicit denominator where relevant.",
+      "expected_focus": [
+        "unit of observation",
+        "duplicate control",
+        "bounded descriptive inference",
+        "RESEARCH_DATA_INTEGRITY_PASS"
+      ]
+    },
+    {
+      "id": "rdi-002-normal-asof-join",
+      "level": "normal",
+      "scenario": "A historical analysis joins daily observations to fundamentals using an as-of join constrained to records published on or before each observation date. Unmatched counts and join cardinality are reported.",
+      "expected_focus": [
+        "publication availability",
+        "as-of direction",
+        "join cardinality",
+        "point-in-time integrity"
+      ]
+    },
+    {
+      "id": "rdi-003-deceptive-survivorship",
+      "level": "deceptive",
+      "scenario": "A ten-year strategy backtest uses the current members of an index for the entire history. Delisted and removed constituents are absent, and performance looks unusually strong.",
+      "expected_focus": [
+        "survivorship bias",
+        "future-conditioned universe",
+        "MATERIAL_DATA_INTEGRITY_FINDINGS"
+      ]
+    },
+    {
+      "id": "rdi-004-control-missing-not-material",
+      "level": "control",
+      "scenario": "A report lists raw record counts by source. One optional descriptive text field is missing in some records, but that field is not used for inclusion, grouping, weighting, or any reported metric.",
+      "expected_focus": [
+        "avoid irrelevant missing-data finding",
+        "metric construction unaffected",
+        "RESEARCH_DATA_INTEGRITY_PASS"
+      ]
+    },
+    {
+      "id": "rdi-005-adversarial-denominator-leakage",
+      "level": "adversarial",
+      "scenario": "A classifier evaluation drops rows whose provider response is missing before calculating accuracy, then tunes the decision threshold on the same reported test set. Tests verify only the final numerator.",
+      "expected_focus": [
+        "denominator shrinkage",
+        "missingness semantics",
+        "test-set tuning",
+        "MATERIAL_DATA_INTEGRITY_FINDINGS"
+      ]
+    }
+  ]
+}
