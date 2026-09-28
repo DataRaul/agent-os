@@ -1,0 +1,28 @@
+name: p4-playwright-observation-eval
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/p4-playwright-observation-eval.yml"
+      - "scripts/p4_playwright_fixture_server.py"
+      - "scripts/run_p4_playwright_observation_eval.sh"
+      - "evals/p4-playwright-observation/config.json"
+
+permissions:
+  contents: read
+
+jobs:
+  p4-playwright-observation-eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Install exact Playwright CLI candidate
+        run: npm install --global @playwright/cli@0.1.21
+      - name: Run isolated loopback observation eval
+        run: bash scripts/run_p4_playwright_observation_eval.sh
