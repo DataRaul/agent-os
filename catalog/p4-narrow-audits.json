@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "status": "P4_2_NARROW_AUDITS_COMPLETE",
+  "audited_at": "2026-09-28",
+  "rules": {
+    "no_installation": true,
+    "no_authentication": true,
+    "no_external_mutation": true,
+    "no_paid_infrastructure_change": true,
+    "audit_does_not_grant_authority": true,
+    "registry_promotion_requires_later_gate": true
+  },
+  "audits": [
+    {
+      "capability_id": "agent-skills-standard:skill-format-specification",
+      "source_id": "agent-skills-standard",
+      "reviewed_commit": "69ef37e9424c0a7ea9dd2293b559e43ec8176379",
+      "reviewed_version": null,
+      "reviewed_paths": [
+        {
+          "path": "docs/specification.mdx",
+          "blob_sha": "d9a2db099d905da8b879a5c6f996728073985279"
+        }
+      ],
+      "observed_positive_effects": [
+        "Provides a portable SKILL.md structure and metadata vocabulary.",
+        "Documents progressive disclosure and relative resource references."
+      ],
+      "observed_negative_or_authority_effects": [
+        "The specification permits executable scripts inside skills.",
+        "The experimental allowed-tools field can express pre-approved tools but support and semantics vary by client.",
+        "A format specification cannot itself establish runtime provenance, safety, or execution authority."
+      ],
+      "required_authority": {
+        "reference_read": "NONE_BEYOND_PUBLIC_SOURCE_READ",
+        "runtime_execution": "NOT_APPLICABLE"
+      },
+      "public_safe_eval_case_ids": [
+        "p4-spec-01",
+        "p4-spec-02"
+      ],
+      "incremental_value_hypothesis": "Useful as a compatibility reference, but not a runtime capability and not a substitute for Agent OS trust/admission controls.",
+      "disposition": "REFERENCE_ONLY",
+      "p4_3_evidence_state": "NOT_REQUIRED_FOR_RUNTIME_ADMISSION",
+      "rationale": "The source is a format/specification reference. Reading it has value for interoperability, but promoting it as an executable capability would misrepresent its role."
+    },
+    {
+      "capability_id": "agent-skills-standard:skills-ref-reference-library",
+      "source_id": "agent-skills-standard",
+      "reviewed_commit": "69ef37e9424c0a7ea9dd2293b559e43ec8176379",
+      "reviewed_version": "0.1.0",
+      "reviewed_paths": [
+        {
+          "path": "skills-ref/README.md",
+          "blob_sha": "9ba700189a98da8fb4433af067aa1ea5a6dbdc33"
+        },
+        {
+          "path": "skills-ref/pyproject.toml",
+          "blob_sha": "26f0bd339ff79a1f51a9dbeb10c424fd9c09cb73"
+        },
+        {
+          "path": "skills-ref/src/skills_ref/cli.py",
+          "blob_sha": "9af9fc3068a6420d8d0715616b11d2628e10a86a"
+        },
+        {
+          "path": "skills-ref/src/skills_ref/parser.py",
+          "blob_sha": "690c14e27b61405e3b1346dc22c8678cd3e79b35"
+        },
+        {
+          "path": "skills-ref/src/skills_ref/validator.py",
+          "blob_sha": "22cf6f8ae5f905d780cb097c0938711cc37016a9"
+        },
+        {
+          "path": "skills-ref/src/skills_ref/prompt.py",
+          "blob_sha": "3a7d714bf60745a04e025764e724e9043791b6e9"
+        }
+      ],
+      "observed_positive_effects": [
+        "The reviewed code performs deterministic local parsing, validation, property reading, and prompt serialization.",
+        "The reviewed runtime code reads local skill files and emits results to stdout; no remote mutation path was found in the inspected implementation."
+      ],
+      "observed_negative_or_authority_effects": [
+        "Upstream explicitly states the library is for demonstration and is not meant for production use.",
+        "Installation creates or modifies a local Python environment and resolves dependencies.",
+        "Its validation scope is narrower than Agent OS admission, provenance, authority, and publication controls."
+      ],
+      "required_authority": {
+        "source_inspection": "NONE_BEYOND_PUBLIC_SOURCE_READ",
+        "runtime_local_reads": "EXPLICIT_ALLOWED_SKILL_PATHS",
+        "installation": "LOCAL_ENVIRONMENT_MUTATION_AND_DEPENDENCY_FETCH"
+      },
+      "public_safe_eval_case_ids": [
+        "p4-skills-ref-01",
+        "p4-skills-ref-02"
+      ],
+      "incremental_value_hypothesis": "Potentially useful as a conformance oracle, but production use is contradicted by upstream guidance and overlaps existing Agent OS validation.",
+      "disposition": "REFERENCE_ONLY",
+      "p4_3_evidence_state": "NOT_ELIGIBLE_WITHOUT_NEW_UPSTREAM_PRODUCTION_CONTRACT",
+      "rationale": "The inspected implementation is narrow and deterministic, but the upstream production disclaimer is decisive for current admission. Agent OS may compare against it as reference evidence without installing or depending on it."
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:browser-observation",
+      "source_id": "microsoft-playwright-skills",
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "reviewed_version": "0.1.21",
+      "reviewed_paths": [
+        {
+          "path": "skills/playwright-cli/SKILL.md",
+          "blob_sha": "155cb960b0b3929e90460965f7f74e478dba051d"
+        },
+        {
+          "path": "README.md",
+          "blob_sha": "64db49877c74216e45e446404407098e85ce2159"
+        }
+      ],
+      "observed_positive_effects": [
+        "Supports page snapshots, snapshot search, console inspection, request inspection, and isolated browser sessions.",
+        "Configuration supports isolated profiles and stdout output, which can avoid persistent profile state and routine evidence-file writes."
+      ],
+      "observed_negative_or_authority_effects": [
+        "The same skill surface also exposes clicks, form submission, file upload, storage mutation, arbitrary Playwright code, WebMCP calls, persistent/attached sessions, screenshots/PDFs/traces/videos, package installation, and other write-capable behavior.",
+        "Navigation performs network requests and page reads; authenticated or state-changing URLs can cross authority boundaries even when the operator intends observation only.",
+        "The skill frontmatter pre-approves broad Bash command families rather than a narrow observation-only command subset."
+      ],
+      "required_authority": {
+        "network": "EXPLICIT_TARGET_ORIGIN_SCOPE",
+        "page_content_read": "EXPLICIT_READ_SCOPE",
+        "local_process": "EPHEMERAL_ISOLATED_BROWSER_SESSION",
+        "local_write": "DENIED_FOR_NARROW_OBSERVATION_PROFILE_EXCEPT_EPHEMERAL_RUNTIME_INTERNALS",
+        "credentials_or_existing_profile": "DENIED",
+        "remote_mutation": "DENIED"
+      },
+      "narrow_candidate_contract": {
+        "package_pin_required": "@playwright/cli@0.1.21",
+        "session": "ISOLATED_EPHEMERAL_ONLY",
+        "output_mode": "STDOUT",
+        "allowed_operations": [
+          "open",
+          "goto",
+          "snapshot",
+          "find",
+          "console",
+          "requests",
+          "request",
+          "tab-list",
+          "close"
+        ],
+        "denied_operation_classes": [
+          "CLICK_OR_FORM_INTERACTION",
+          "FILE_UPLOAD_OR_DOWNLOAD_WORKFLOW",
+          "SCREENSHOT_PDF_TRACE_VIDEO_OR_RECORDING",
+          "STORAGE_OR_COOKIE_READ_WRITE",
+          "RUN_CODE_OR_EVAL",
+          "WEBMCP_CALL",
+          "REQUEST_MOCKING",
+          "PERSISTENT_PROFILE_OR_ATTACH",
+          "PACKAGE_INSTALL_OR_UPDATE",
+          "TEST_GENERATION_OR_HEALING",
+          "GITHUB_ATTACHMENT_OR_PUBLICATION"
+        ]
+      },
+      "public_safe_eval_case_ids": [
+        "p4-playwright-01",
+        "p4-playwright-02",
+        "p4-playwright-03",
+        "p4-playwright-04",
+        "p4-playwright-05"
+      ],
+      "incremental_value_hypothesis": "A narrowly constrained browser observation capability could add runtime evidence that text-only repository checks cannot provide.",
+      "disposition": "PIN_REQUIRED",
+      "p4_3_evidence_state": "RUNTIME_VALUE_EVIDENCE_REQUIRED_BEFORE_ADMISSION",
+      "rationale": "There is a plausible safe observation subset, but the upstream skill is much broader than that subset. No installation or execution occurred in P4.2, so admission is not yet earned."
+    }
+  ]
+}
