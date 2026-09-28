@@ -224,14 +224,15 @@ def validate_specialist_reviewer_benchmark(skill_names: set[str]) -> None:
         ):
             fail(f"{oracle_path.relative_to(ROOT)} invalid expected codes for {case_id}")
 
-    min_reps = oracle.get("minimum_replicates_per_case")
-    if not isinstance(min_reps, int) or isinstance(min_reps, bool) or min_reps < 3:
-        fail(f"{oracle_path.relative_to(ROOT)} minimum_replicates_per_case must be >= 3")
+    reps = oracle.get("replicates_per_case")
+    if not isinstance(reps, int) or isinstance(reps, bool) or reps != 3:
+        fail(f"{oracle_path.relative_to(ROOT)} replicates_per_case must equal 3")
 
     policy = oracle.get("admission_policy")
     required_policy = (
         "minimum_incremental_distinct_cases",
         "minimum_incremental_expected_observations",
+        "minimum_combined_expected_recall",
         "maximum_reviewer_false_positive_observations",
         "require_control_false_positive_free",
         "eligible_disposition",
@@ -239,6 +240,13 @@ def validate_specialist_reviewer_benchmark(skill_names: set[str]) -> None:
     )
     if not isinstance(policy, dict) or any(key not in policy for key in required_policy):
         fail(f"{oracle_path.relative_to(ROOT)} admission_policy incomplete")
+    min_recall = policy.get("minimum_combined_expected_recall")
+    if (
+        not isinstance(min_recall, (int, float))
+        or isinstance(min_recall, bool)
+        or not 0 <= min_recall <= 1
+    ):
+        fail(f"{oracle_path.relative_to(ROOT)} minimum_combined_expected_recall invalid")
 
 
 def validate_json() -> None:

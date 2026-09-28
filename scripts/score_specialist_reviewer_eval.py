@@ -69,10 +69,10 @@ def main() -> None:
         die(f"no benchmark cases found for {candidate}")
 
     expected_map = oracle.get("expected", {})
-    min_reps = oracle.get("minimum_replicates_per_case")
+    required_reps = oracle.get("replicates_per_case")
     policy = oracle.get("admission_policy", {})
-    if not isinstance(min_reps, int) or isinstance(min_reps, bool) or min_reps < 1:
-        die("oracle minimum_replicates_per_case invalid")
+    if not isinstance(required_reps, int) or isinstance(required_reps, bool) or required_reps < 1:
+        die("oracle replicates_per_case invalid")
 
     runs = result.get("runs")
     if not isinstance(runs, list) or not runs:
@@ -81,6 +81,7 @@ def main() -> None:
     seen_pairs: set[tuple[str, int]] = set()
     replicates: Counter[str] = Counter()
     incremental_cases: set[str] = set()
+    expected_material_observations = 0
     incremental_expected_observations = 0
     baseline_true_observations = 0
     reviewer_true_observations = 0
@@ -100,6 +101,8 @@ def main() -> None:
             die(f"result includes unknown or wrong-candidate case: {case_id!r}")
         if not isinstance(replicate, int) or isinstance(replicate, bool) or replicate < 1:
             die(f"{case_id}: replicate must be a positive integer")
+        if replicate > required_reps:
+            die(f"{case_id}: replicate exceeds fixed replicate count {required_reps}")
         pair = (case_id, replicate)
         if pair in seen_pairs:
             die(f"duplicate case/replicate: {case_id} replicate {replicate}")
@@ -122,6 +125,7 @@ def main() -> None:
         reviewer = set(reviewer_codes)
         combined = baseline | reviewer
 
+        expected_material_observations += len(expected)
         baseline_true_observations += len(baseline & expected)
         reviewer_true_observations += len(reviewer & expected)
         combined_true_observations += len(combined & expected)
@@ -143,15 +147,32 @@ def main() -> None:
                 overhead_counts[key] += 1
 
     missing_cases = sorted(set(candidate_cases) - set(replicates))
-    under_replicated = {
-        case_id: count
-        for case_id, count in replicates.items()
-        if count < min_reps
+    wrong_replicate_counts = {
+        case_id: replicates.get(case_id, 0)
+        for case_id in sorted(candidate_cases)
+        if replicates.get(case_id, 0) != required_reps
     }
-    complete = not missing_cases and not under_replicated
+    complete = not missing_cases and not wrong_replicate_counts
+
+    baseline_recall = (
+        baseline_true_observations / expected_material_observations
+        if expected_material_observations
+        else 1.0
+    )
+    reviewer_recall = (
+        reviewer_true_observations / expected_material_observations
+        if expected_material_observations
+        else 1.0
+    )
+    combined_recall = (
+        combined_true_observations / expected_material_observations
+        if expected_material_observations
+        else 1.0
+    )
 
     min_cases = policy.get("minimum_incremental_distinct_cases", 0)
     min_observations = policy.get("minimum_incremental_expected_observations", 0)
+    min_combined_recall = policy.get("minimum_combined_expected_recall", 1.0)
     max_fp = policy.get("maximum_reviewer_false_positive_observations", 0)
     require_control_clean = bool(policy.get("require_control_false_positive_free", False))
 
@@ -159,6 +180,7 @@ def main() -> None:
         complete
         and len(incremental_cases) >= min_cases
         and incremental_expected_observations >= min_observations
+        and combined_recall >= min_combined_recall
         and reviewer_false_positive_observations <= max_fp
         and (not require_control_clean or reviewer_control_false_positive_observations == 0)
     )
@@ -175,11 +197,15 @@ def main() -> None:
         "model_configuration_id": model_config,
         "complete": complete,
         "missing_cases": missing_cases,
-        "under_replicated": under_replicated,
-        "minimum_replicates_per_case": min_reps,
+        "wrong_replicate_counts": wrong_replicate_counts,
+        "replicates_per_case": required_reps,
+        "expected_material_observations": expected_material_observations,
         "baseline_true_observations": baseline_true_observations,
         "reviewer_true_observations": reviewer_true_observations,
         "combined_true_observations": combined_true_observations,
+        "baseline_expected_recall": round(baseline_recall, 6),
+        "reviewer_expected_recall": round(reviewer_recall, 6),
+        "combined_expected_recall": round(combined_recall, 6),
         "incremental_distinct_cases": sorted(incremental_cases),
         "incremental_expected_observations": incremental_expected_observations,
         "baseline_false_positive_observations": baseline_false_positive_observations,

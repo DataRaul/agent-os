@@ -1,10 +1,11 @@
 {
   "schema_version": 1,
   "suite": "specialist-reviewer-evaluation",
-  "minimum_replicates_per_case": 3,
+  "replicates_per_case": 3,
   "admission_policy": {
     "minimum_incremental_distinct_cases": 2,
     "minimum_incremental_expected_observations": 3,
+    "minimum_combined_expected_recall": 0.8,
     "maximum_reviewer_false_positive_observations": 1,
     "require_control_false_positive_free": true,
     "eligible_disposition": "ELIGIBLE_FOR_ROLE_IMPLEMENTATION_REVIEW",

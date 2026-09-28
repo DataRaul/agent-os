@@ -39,7 +39,7 @@ For one candidate reviewer:
 
 1. Select that candidate's five cases.
 2. Use the same declared model/configuration for baseline and reviewer runs.
-3. Run at least three independent replicates per case.
+3. Run exactly three independent replicates per case, as fixed by the oracle.
 4. Baseline run receives the case plus the listed P1 skills. No separate reviewer is used.
 5. Reviewer run receives the same case and relevant evidence independently.
 6. Do not provide the reviewer the baseline answer, author confidence, hidden reasoning, or oracle.
@@ -82,9 +82,10 @@ Tool-call and latency values are optional. When present they must be non-negativ
 
 The initial public admission rule is deliberately conservative and simple. A candidate becomes **eligible for role implementation review**, not automatically admitted, only if all of the following hold:
 
-- every candidate case has at least three valid replicates;
+- every candidate case has exactly three valid replicates;
 - the independent reviewer finds expected material issues missed by baseline in at least two distinct cases;
 - there are at least three incremental expected-finding observations across case/replicate pairs;
+- the combined baseline-plus-reviewer expected-finding recall is at least 80%;
 - the reviewer adds at most one false-positive observation across the full run;
 - reviewer control cases remain false-positive free.
 
@@ -102,6 +103,7 @@ Do not admit a reviewer because:
 - it has access to the oracle;
 - it sees the baseline output before independent review;
 - it increases apparent recall by generating many unsupported findings;
+- extra replicates are added until a favorable result appears;
 - one unusually favorable case drives the result.
 
 Do not copy private project incidents or fixtures into this benchmark.
