@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "source_id": "microsoft-playwright-skills",
+  "verified_as_of": "2026-09-28",
+  "provenance": {
+    "trust_tier": "T1",
+    "upstream_owner": "Microsoft",
+    "documentation_repository": "https://github.com/microsoft/playwright.dev",
+    "implementation_repository": "https://github.com/microsoft/playwright-cli",
+    "official_organization_repositories": true
+  },
+  "reviewed_candidate": {
+    "documentation_commit": "1cc5be996c1785fde93e6ba075ab83e271173008",
+    "implementation_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+    "package": "@playwright/cli",
+    "package_version": "0.1.21",
+    "documentation_license": "CC-BY-4.0",
+    "implementation_license": "Apache-2.0",
+    "commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5"
+  },
+  "repository_shape": {
+    "skill_format": "SKILL.md",
+    "primary_skill": "skills/playwright-cli/SKILL.md",
+    "reference_guides_present": true,
+    "declared_allowed_tools": [
+      "Bash(playwright-cli:*)",
+      "Bash(npx:*)",
+      "Bash(npm:*)"
+    ],
+    "executable_package_present": true,
+    "global_install_path_documented": true
+  },
+  "access_and_side_effects": {
+    "local_filesystem_reads": true,
+    "local_filesystem_writes": true,
+    "network_access": true,
+    "browser_state_access": true,
+    "credential_or_secret_exposure_possible": true,
+    "arbitrary_browser_code_execution": true,
+    "page_registered_tool_calls_supported": true,
+    "external_effects": [
+      "navigates and interacts with arbitrary websites through a real browser",
+      "can submit forms, click controls, upload files and trigger site-side mutations",
+      "can download files and write screenshots, PDFs, snapshots, traces and videos",
+      "can read, set, clear, persist and restore cookies and browser storage state",
+      "can attach to existing browser profiles or CDP endpoints",
+      "can run arbitrary Playwright code and grant browser permissions",
+      "can call page-provided WebMCP tools whose effects are controlled by the page",
+      "can globally install or update @playwright/cli through npm",
+      "can attach generated browser evidence to GitHub pull requests through gh commands"
+    ],
+    "destructive_or_publish_authority_declared": true,
+    "credential_handling": true
+  },
+  "reviewed_subcapabilities": [
+    {
+      "id": "skill-installation",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "LOCAL_WRITE",
+        "HOME_DIRECTORY_WRITE",
+        "SKILL_INSTALL"
+      ],
+      "rationale": "The documented install command copies skills into workspace or home-directory agent skill locations."
+    },
+    {
+      "id": "browser-navigation-and-interaction",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "NETWORK",
+        "BROWSER_AUTOMATION",
+        "REMOTE_MUTATION",
+        "FORM_SUBMISSION",
+        "FILE_UPLOAD"
+      ],
+      "rationale": "Core browser actions can change external application state and upload local files."
+    },
+    {
+      "id": "browser-observation",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "NETWORK",
+        "PAGE_CONTENT_READ",
+        "SCREENSHOT",
+        "LOCAL_WRITE"
+      ],
+      "rationale": "Snapshots, screenshots, requests and console inspection are useful but still expose page data and can write local artifacts."
+    },
+    {
+      "id": "storage-state",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "COOKIE_READ",
+        "COOKIE_WRITE",
+        "COOKIE_DELETE",
+        "AUTH_STATE",
+        "LOCAL_WRITE",
+        "PRIVACY_BOUNDARY"
+      ],
+      "rationale": "The skill can inspect, mutate, persist, restore and delete cookies and browser storage, including authenticated state."
+    },
+    {
+      "id": "run-code",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "ARBITRARY_CODE",
+        "BROWSER_PERMISSION",
+        "FILE_WRITE",
+        "CLIPBOARD",
+        "NETWORK"
+      ],
+      "rationale": "run-code evaluates arbitrary Playwright functions with browser-context access, permissions and file-download capabilities."
+    },
+    {
+      "id": "webmcp",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "UNTRUSTED_PAGE_TOOLING",
+        "REMOTE_MUTATION",
+        "NETWORK"
+      ],
+      "rationale": "Page-registered WebMCP tools are explicitly untrusted and may have remote side effects when called."
+    },
+    {
+      "id": "persistent-and-attached-sessions",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "PERSISTENT_PROFILE",
+        "EXISTING_BROWSER_ACCESS",
+        "CDP",
+        "AUTH_STATE",
+        "PRIVACY_BOUNDARY"
+      ],
+      "rationale": "Attaching to existing browsers or persistent profiles can expose authenticated sessions and unrelated browsing state."
+    },
+    {
+      "id": "request-mocking",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "NETWORK_INTERCEPTION",
+        "BROWSER_STATE_MUTATION"
+      ],
+      "rationale": "Route/unroute commands alter browser network behavior and can materially change application behavior under test."
+    },
+    {
+      "id": "test-generation-and-healing",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "CODE_WRITE",
+        "TEST_MUTATION",
+        "BROWSER_AUTOMATION"
+      ],
+      "rationale": "Generation and healing workflows can write or modify test code based on browser interactions."
+    },
+    {
+      "id": "evidence-capture-and-pr-attachments",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "LOCAL_WRITE",
+        "SCREEN_CAPTURE",
+        "GITHUB_WRITE",
+        "PUBLICATION"
+      ],
+      "rationale": "The skill can generate visual artifacts and instruct attaching them to GitHub pull requests, crossing a publication boundary."
+    },
+    {
+      "id": "npm-installation",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "NPM",
+        "GLOBAL_INSTALL",
+        "SOFTWARE_UPDATE",
+        "NETWORK"
+      ],
+      "rationale": "The skill instructs global installation of the latest CLI when unavailable locally."
+    }
+  ],
+  "narrower_admission_candidates": [
+    {
+      "id": "playwright-readonly-page-observation",
+      "status": "FUTURE_NARROW_AUDIT",
+      "condition": "Consider only isolated-session navigation, snapshots and read-only inspection with uploads, storage mutation, arbitrary code, WebMCP calls, persistent profiles and attached browsers disabled."
+    },
+    {
+      "id": "playwright-local-test-observation",
+      "status": "FUTURE_NARROW_AUDIT",
+      "condition": "Consider local test diagnostics when browser access is isolated, test execution is already authorized, and no external site mutation or code rewriting occurs."
+    }
+  ],
+  "update_strategy": {
+    "mode": "REVIEW_NEW_UPSTREAM_CANDIDATE",
+    "documentation_commit_is_evidence_boundary": true,
+    "implementation_commit_is_evidence_boundary": true,
+    "automatic_latest_install_not_trusted_for_admission": true,
+    "automatic_upstream_updates_allowed": false
+  },
+  "audit_disposition": "KEEP_REFERENCE_ONLY",
+  "admission_state_after_audit": "REFERENCE_ONLY",
+  "rationale": "Official Microsoft provenance and strong browser-automation guidance are established, but the skill grants broad Bash-backed browser control, global package installation, authenticated storage access, arbitrary Playwright code, file upload/download, page-provided WebMCP calls and external publication/mutation surfaces. Package-level automatic admission is too broad."
+}

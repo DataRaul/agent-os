@@ -94,9 +94,10 @@ A vendor-audit change must pass:
 
 ## Current program
 
-Completed bounded package audits:
+Completed bounded package/surface audits:
 
 - DuckDB official `duckdb-skills`: `KEEP_REFERENCE_ONLY`.
 - Cloudflare official `cloudflare/skills`: `KEEP_REFERENCE_ONLY`.
+- Microsoft Playwright CLI skills and installation guidance: `KEEP_REFERENCE_ONLY`.
 
 Next catalog candidates remain reference-only until separately audited. Package-level audit outcomes do not automatically decide narrower subcapability admission.
