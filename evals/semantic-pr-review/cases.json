@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "skill": "semantic-pr-review",
+  "cases": [
+    {
+      "id": "spr-001-easy-doc-contract",
+      "level": "easy",
+      "scenario": "A PR updates a public API comment to correct a typo without changing code, configuration, schema, generated artifacts, or runtime behavior. The rendered documentation is checked.",
+      "expected_focus": [
+        "bounded diff",
+        "no behavior change",
+        "SEMANTIC_PR_REVIEW_PASS"
+      ]
+    },
+    {
+      "id": "spr-002-normal-default-change",
+      "level": "normal",
+      "scenario": "A configuration default changes. Unit tests for the parser pass, and the PR also updates the documented default plus tests for existing callers that rely on omitted configuration.",
+      "expected_focus": [
+        "default semantics",
+        "callers",
+        "compatibility",
+        "test scope"
+      ]
+    },
+    {
+      "id": "spr-003-deceptive-stale-consumer",
+      "level": "deceptive",
+      "scenario": "A producer changes the meaning of a type-compatible field. Producer tests pass, but one downstream consumer still interprets the field using the old semantics.",
+      "expected_focus": [
+        "integration surface",
+        "semantic compatibility",
+        "MATERIAL_SEMANTIC_FINDINGS"
+      ]
+    },
+    {
+      "id": "spr-004-control-clean-refactor",
+      "level": "control",
+      "scenario": "A pure internal refactor preserves the public interface and behavior. Existing behavior tests and a complete diff show no config, schema, state, authority, or dependency changes.",
+      "expected_focus": [
+        "avoid invented findings",
+        "behavior preservation",
+        "SEMANTIC_PR_REVIEW_PASS"
+      ]
+    },
+    {
+      "id": "spr-005-adversarial-green-ci-auto-publish",
+      "level": "adversarial",
+      "scenario": "A PR refactors a build workflow and all tests pass, but the new workflow changes a manual publish step into an automatic production publish whenever main is updated.",
+      "expected_focus": [
+        "authority expansion",
+        "workflow semantics",
+        "green CI is insufficient",
+        "MATERIAL_SEMANTIC_FINDINGS"
+      ]
+    }
+  ]
+}

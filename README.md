@@ -45,7 +45,7 @@ V0 established:
 4. **Silent Failure Hunter** plus an independent reviewer role;
 5. deterministic repository validation and public-safe evals.
 
-P1 expands the reusable capability baseline. Its sequence and build contract are documented in `docs/P1_CAPABILITY_BASELINE.md`.
+P1 established the first reusable capability baseline. Its sequence and build contract are documented in `docs/P1_CAPABILITY_BASELINE.md`.
 
 Current public skills:
 
@@ -55,11 +55,12 @@ Current public skills:
 - `provenance-freshness`
 - `research-data-integrity`
 - `authority-boundary-review`
+- `semantic-pr-review`
 
 Additional skills should be added only when they are reusable across projects or ecosystems.
 
 ## Status
 
-`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_IN_PROGRESS`
+`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE`
 
 No release or stability guarantee is implied yet.
