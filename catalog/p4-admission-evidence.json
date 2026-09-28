@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "status": "P4_3_ADMISSION_EVIDENCE_COMPLETE",
+  "evaluated_at": "2026-09-28",
+  "bounded_tranche_source": "catalog/p4-narrow-audits.json",
+  "rules": {
+    "source_audit_alone_is_not_admission": true,
+    "workflow_success_alone_is_not_completion_evidence": true,
+    "runtime_postcondition_marker_required": true,
+    "registry_promotion_requires_separate_delivery_decision": true,
+    "no_credentials_used": true,
+    "no_external_target_mutation": true,
+    "no_paid_infrastructure_change": true
+  },
+  "candidates": [
+    {
+      "capability_id": "agent-skills-standard:skill-format-specification",
+      "p4_2_disposition": "REFERENCE_ONLY",
+      "p4_3_disposition": "REFERENCE_ONLY",
+      "runtime_evidence": "NOT_APPLICABLE",
+      "incremental_value": "Useful as a portability and compatibility reference, not as an executable runtime capability.",
+      "authority_cost": "PUBLIC_REFERENCE_READ_ONLY",
+      "registry_promotion": false,
+      "closeout": "REFERENCE_ONLY_CLOSED"
+    },
+    {
+      "capability_id": "agent-skills-standard:skills-ref-reference-library",
+      "p4_2_disposition": "REFERENCE_ONLY",
+      "p4_3_disposition": "REFERENCE_ONLY",
+      "runtime_evidence": "NOT_REQUIRED_FOR_CURRENT_DISPOSITION",
+      "incremental_value": "The pinned implementation can act as comparison evidence for skill-format conformance, but upstream explicitly disclaims production use and Agent OS already has independent validation.",
+      "authority_cost": "REFERENCE_SOURCE_READ_ONLY_WITHOUT_INSTALLATION",
+      "registry_promotion": false,
+      "closeout": "REFERENCE_ONLY_CLOSED"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:browser-observation",
+      "p4_2_disposition": "PIN_REQUIRED",
+      "p4_3_disposition": "PIN_REQUIRED",
+      "runtime_evidence": {
+        "upstream_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+        "package": "@playwright/cli",
+        "package_version": "0.1.21",
+        "evaluated_agent_os_commit": "09ad8d4f869ced502032b5043820ca425b9dcf85",
+        "workflow_run_id": 36496133988,
+        "workflow_run_number": 4,
+        "job_id": 109176027754,
+        "workflow_conclusion": "SUCCESS",
+        "required_terminal_marker": "P4_PLAYWRIGHT_OBSERVATION_RUNTIME_EVAL_PASS",
+        "terminal_marker_observed": true,
+        "failure_marker_observed": false,
+        "exact_package_install_observed": true,
+        "target_scope": "LOOPBACK_127_0_0_1_ONLY",
+        "session": "ISOLATED_EPHEMERAL",
+        "runtime_artifact_location": "TEMP_DIRECTORY_OUTSIDE_REPOSITORY",
+        "repository_postcondition": "CLEAN",
+        "functional_observations": [
+          "Dynamic DOM state Runtime Ready was observed by snapshot and find.",
+          "A deliberate console error sentinel was observed by console inspection.",
+          "A deliberate missing-resource request was observed by request inspection."
+        ]
+      },
+      "rejected_or_failed_attempts": [
+        {
+          "workflow_run_id": 36495815821,
+          "run_number": 1,
+          "github_conclusion": "SUCCESS",
+          "evidence_disposition": "REJECTED_FALSE_GREEN",
+          "reason": "The shell file contained literal newline escape sequences, so the runtime check did not execute as intended and the required terminal marker was absent."
+        },
+        {
+          "workflow_run_id": 36495877773,
+          "run_number": 2,
+          "github_conclusion": "FAILURE",
+          "evidence_disposition": "REJECTED_INVALID_INVOCATION",
+          "reason": "The candidate was invoked with an unsupported global config option position for the pinned CLI."
+        },
+        {
+          "workflow_run_id": 36496046712,
+          "run_number": 3,
+          "github_conclusion": "FAILURE",
+          "evidence_disposition": "REJECTED_POSTCONDITION_FAILURE",
+          "reason": "The browser observation commands created .playwright-cli runtime files inside the repository; the repository-clean postcondition detected the local write."
+        }
+      ],
+      "evaluation_dimensions": {
+        "safety_authority": "PASS_FOR_SYNTHETIC_LOOPBACK_PROFILE_ONLY",
+        "functional_correctness": "PASS_FOR_DOM_CONSOLE_REQUEST_OBSERVATION",
+        "incremental_value": "DEMONSTRATED_RUNTIME_EVIDENCE_CHANNEL_BEYOND_STATIC_SOURCE_INSPECTION",
+        "failure_detection": "PASS_REJECTED_FALSE_GREEN_INVALID_INVOCATION_AND_REPOSITORY_WRITE",
+        "postcondition_accuracy": "PASS_TERMINAL_MARKER_AND_REPOSITORY_CLEAN_CHECK",
+        "operational_efficiency": "BOUNDED_EPHEMERAL_PUBLIC_CI_NO_PERSISTENT_SERVICE",
+        "calibration_over_time": "NOT_ESTABLISHED"
+      },
+      "admission_limit": "SYNTHETIC_EVIDENCE_SUPPORTS_ONLY_A_PINNED_NARROW_SHADOW_OR_BOUNDED_EVAL_PROFILE",
+      "registry_promotion": false,
+      "closeout": "NO_RUNTIME_ADMISSION_YET"
+    }
+  ],
+  "tranche_conclusion": {
+    "p4_3_complete": true,
+    "public_registry_changed": false,
+    "runtime_admission_changed": false,
+    "next_gate": "P4_4_DELIVERY_GATE"
+  }
+}

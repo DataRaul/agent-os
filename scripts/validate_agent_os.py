@@ -591,6 +591,118 @@ def validate_p4_narrow_audits() -> None:
         fail("P4.2 eval cases must exactly match audit references")
 
 
+def validate_p4_admission_evidence() -> None:
+    evidence = load_json(ROOT / "catalog" / "p4-admission-evidence.json")
+    audits = load_json(ROOT / "catalog" / "p4-narrow-audits.json")
+
+    if not isinstance(evidence, dict) or evidence.get("schema_version") != 1:
+        fail("catalog/p4-admission-evidence.json invalid")
+    if evidence.get("status") != "P4_3_ADMISSION_EVIDENCE_COMPLETE":
+        fail("P4.3 admission evidence status invalid")
+
+    rules = evidence.get("rules")
+    if not isinstance(rules, dict):
+        fail("P4.3 evidence rules missing")
+    for key in (
+        "source_audit_alone_is_not_admission",
+        "workflow_success_alone_is_not_completion_evidence",
+        "runtime_postcondition_marker_required",
+        "registry_promotion_requires_separate_delivery_decision",
+        "no_credentials_used",
+        "no_external_target_mutation",
+        "no_paid_infrastructure_change",
+    ):
+        if rules.get(key) is not True:
+            fail(f"P4.3 evidence rule {key} must be true")
+
+    audit_items = audits.get("audits")
+    candidates = evidence.get("candidates")
+    if not isinstance(audit_items, list) or not isinstance(candidates, list):
+        fail("P4.3 candidate arrays invalid")
+    audit_ids = [item.get("capability_id") for item in audit_items if isinstance(item, dict)]
+    evidence_ids = [item.get("capability_id") for item in candidates if isinstance(item, dict)]
+    if evidence_ids != audit_ids:
+        fail("P4.3 evidence capability order must match P4.2 audit order")
+
+    by_id = {item.get("capability_id"): item for item in candidates if isinstance(item, dict)}
+    expected_dispositions = {
+        "agent-skills-standard:skill-format-specification": "REFERENCE_ONLY",
+        "agent-skills-standard:skills-ref-reference-library": "REFERENCE_ONLY",
+        "microsoft-playwright-skills:browser-observation": "PIN_REQUIRED",
+    }
+    for cap_id, expected in expected_dispositions.items():
+        item = by_id.get(cap_id)
+        if not isinstance(item, dict):
+            fail(f"P4.3 evidence missing {cap_id}")
+        if item.get("p4_3_disposition") != expected:
+            fail(f"P4.3 evidence {cap_id} disposition mismatch")
+        if item.get("registry_promotion") is not False:
+            fail(f"P4.3 evidence {cap_id} must not promote registry")
+
+    playwright = by_id["microsoft-playwright-skills:browser-observation"]
+    runtime = playwright.get("runtime_evidence")
+    if not isinstance(runtime, dict):
+        fail("P4.3 Playwright runtime evidence missing")
+    expected_runtime = {
+        "upstream_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+        "package": "@playwright/cli",
+        "package_version": "0.1.21",
+        "evaluated_agent_os_commit": "09ad8d4f869ced502032b5043820ca425b9dcf85",
+        "workflow_run_id": 36496133988,
+        "job_id": 109176027754,
+        "workflow_conclusion": "SUCCESS",
+        "required_terminal_marker": "P4_PLAYWRIGHT_OBSERVATION_RUNTIME_EVAL_PASS",
+        "terminal_marker_observed": True,
+        "failure_marker_observed": False,
+        "exact_package_install_observed": True,
+        "target_scope": "LOOPBACK_127_0_0_1_ONLY",
+        "session": "ISOLATED_EPHEMERAL",
+        "runtime_artifact_location": "TEMP_DIRECTORY_OUTSIDE_REPOSITORY",
+        "repository_postcondition": "CLEAN",
+    }
+    for key, expected in expected_runtime.items():
+        if runtime.get(key) != expected:
+            fail(f"P4.3 Playwright runtime evidence {key} mismatch")
+
+    rejected = playwright.get("rejected_or_failed_attempts")
+    if not isinstance(rejected, list) or len(rejected) != 3:
+        fail("P4.3 Playwright rejected-attempt evidence must contain three runs")
+    rejected_ids = [item.get("workflow_run_id") for item in rejected if isinstance(item, dict)]
+    if rejected_ids != [36495815821, 36495877773, 36496046712]:
+        fail("P4.3 Playwright rejected-attempt run IDs mismatch")
+    if rejected[0].get("evidence_disposition") != "REJECTED_FALSE_GREEN":
+        fail("P4.3 must preserve false-green rejection evidence")
+
+    dimensions = playwright.get("evaluation_dimensions")
+    if not isinstance(dimensions, dict):
+        fail("P4.3 Playwright evaluation dimensions missing")
+    required_dimensions = {
+        "safety_authority",
+        "functional_correctness",
+        "incremental_value",
+        "failure_detection",
+        "postcondition_accuracy",
+        "operational_efficiency",
+        "calibration_over_time",
+    }
+    if set(dimensions) != required_dimensions:
+        fail("P4.3 Playwright evaluation dimensions mismatch")
+    if dimensions.get("calibration_over_time") != "NOT_ESTABLISHED":
+        fail("P4.3 Playwright calibration must remain not established")
+
+    conclusion = evidence.get("tranche_conclusion")
+    if not isinstance(conclusion, dict):
+        fail("P4.3 tranche conclusion missing")
+    if conclusion.get("p4_3_complete") is not True:
+        fail("P4.3 tranche must be complete")
+    if conclusion.get("public_registry_changed") is not False:
+        fail("P4.3 must not claim registry change")
+    if conclusion.get("runtime_admission_changed") is not False:
+        fail("P4.3 must not claim runtime admission change")
+    if conclusion.get("next_gate") != "P4_4_DELIVERY_GATE":
+        fail("P4.3 next gate must be P4.4")
+
+
 def validate_json() -> None:
     catalog_path = ROOT / "catalog" / "trusted-sources.json"
     schema_path = ROOT / "schemas" / "private-overlay-profile.schema.json"
@@ -603,6 +715,7 @@ def validate_json() -> None:
     validate_tooling_inventory(catalog)
     validate_tooling_priority_queue()
     validate_p4_narrow_audits()
+    validate_p4_admission_evidence()
     for source in catalog.get("sources", []):
         for key in ("id", "owner", "canonical_url", "trust_tier", "admission_state", "purpose"):
             if not source.get(key):
@@ -623,6 +736,7 @@ def validate_required_docs() -> None:
         "docs/P1_CAPABILITY_BASELINE.md",
         "docs/SPECIALIST_REVIEWER_EVALUATION.md",
         "docs/P4_NARROW_AUDITS.md",
+        "docs/P4_ADMISSION_EVIDENCE.md",
         "agents/silent-failure-reviewer.md",
         "scripts/score_specialist_reviewer_eval.py",
     ]

@@ -96,6 +96,8 @@ For a selected candidate:
 
 ### P4.3 — admission evidence
 
+Status: completed for the bounded initial tranche. See `catalog/p4-admission-evidence.json` and `docs/P4_ADMISSION_EVIDENCE.md`.
+
 No capability is admitted merely because a narrow audit found no obvious hazard.
 
 Where practical, compare the candidate against the existing Agent OS baseline for:
@@ -129,4 +131,4 @@ Upstream changes require a new bounded inventory candidate. Do not silently refr
 
 ## Terminal for this step
 
-`P4_2_BOUNDED_NARROW_AUDITS_COMPLETE__P4_3_ADMISSION_EVIDENCE_NEXT`
+`P4_3_ADMISSION_EVIDENCE_COMPLETE__P4_4_DELIVERY_GATE_NEXT`
