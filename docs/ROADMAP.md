@@ -40,13 +40,13 @@ Official/vendor provenance is catalogued and audited without granting blanket ex
 
 ## P4 — Tooling layer expansion
 
-Status: `P4_4_DELIVERY_GATE_NEXT`
+Status: `P4_BOUNDED_TRANCHE_COMPLETE`
 
 - P4.0 inventory — complete;
 - P4.1 deterministic prioritization — complete;
 - P4.2 bounded narrow audits — complete;
 - P4.3 admission/value evidence — complete;
-- P4.4 delivery gate — next.
+- P4.4 delivery gate — complete for the initial bounded tranche.
 
 P4 is bounded capability evaluation, not a mandate to exhaust every marketplace entry.
 
@@ -70,7 +70,7 @@ P4R may evolve alongside P4; it does not widen tool admission.
 
 ## P5 — Generic capability router / adapter contract
 
-Status: `PLANNED_AFTER_BOUNDED_P4_AND_CONSUMER_SELECTION_EVIDENCE`
+Status: `AWAITS_CONSUMER_SELECTION_EVIDENCE`
 
 Define a public, vendor-neutral interface for selecting and composing registered capabilities without embedding any consumer-specific project mappings.
 

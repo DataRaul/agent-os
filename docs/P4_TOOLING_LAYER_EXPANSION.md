@@ -110,6 +110,8 @@ Where practical, compare the candidate against the existing Agent OS baseline fo
 
 ### P4.4 — delivery gate
 
+Status: complete for the initial bounded tranche. See `catalog/p4-delivery-closeout.json` and `docs/P4_DELIVERY_CLOSEOUT.md`.
+
 Every inventory/admission mutation must pass:
 
 - deterministic Agent OS validation;
@@ -131,4 +133,4 @@ Upstream changes require a new bounded inventory candidate. Do not silently refr
 
 ## Terminal for this step
 
-`P4_3_ADMISSION_EVIDENCE_COMPLETE__P4_4_DELIVERY_GATE_NEXT`
+`P4_BOUNDED_TRANCHE_COMPLETE__P5_AWAITS_CONSUMER_SELECTION_EVIDENCE`
