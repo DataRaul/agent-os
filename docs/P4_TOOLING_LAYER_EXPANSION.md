@@ -83,6 +83,8 @@ No admission state changes in P4.1.
 
 ### P4.2 — narrow audits
 
+Status: completed for the bounded initial three-candidate queue. See `catalog/p4-narrow-audits.json`, `evals/p4-narrow-audits/cases.json`, and `docs/P4_NARROW_AUDITS.md`.
+
 For a selected candidate:
 
 - bind exact upstream commit/path/version;
@@ -127,4 +129,4 @@ Upstream changes require a new bounded inventory candidate. Do not silently refr
 
 ## Terminal for this step
 
-`P4_TOOLING_PRIORITIZATION_V1_READY__P4_2_NARROW_AUDITS_NEXT`
+`P4_2_BOUNDED_NARROW_AUDITS_COMPLETE__P4_3_ADMISSION_EVIDENCE_NEXT`
