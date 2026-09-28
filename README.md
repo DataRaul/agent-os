@@ -57,6 +57,8 @@ P3 completed the initial provenance/authority audit baseline for the public tool
 
 P4 expands the tooling layer by normalizing and evaluating narrow capabilities from those audited sources, prioritizing bounded read-only/reference capabilities before write-capable integrations. Tooling Inventory V1 is defined in `catalog/tooling-inventory.json`; deterministic P4.1 prioritization is defined in `catalog/tooling-priority-queue.json` and `docs/P4_TOOLING_PRIORITIZATION.md`.
 
+The public machine-readable capability interface is `catalog/capability-registry.json`, governed by `docs/CAPABILITY_REGISTRY.md`. Consumers pin an exact Agent OS commit SHA and reference stable capability IDs; registry membership never grants execution authority. Public Agent OS never reads or depends on a private overlay. See `docs/ROADMAP.md` for the public-safe phase sequence.
+
 Additional skills or reviewer roles should be added only when they are reusable across projects or ecosystems and the added coordination cost is justified.
 
 ## Status
