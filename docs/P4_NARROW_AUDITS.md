@@ -6,7 +6,7 @@ This tranche audits only the three candidates selected by the deterministic P4.1
 
 No package was installed, no account was authenticated, no external system was mutated, no MCP server was connected, and no paid infrastructure was introduced.
 
-Machine-readable evidence is in `catalog/p4-narrow-audits.json`. Public-safe cases are in `evals/p4-narrow-audits/cases.json`.
+Machine-readable evidence is in `catalog/p4-narrow-audits.json`. Public-safe cases are in `catalog/p4-narrow-audit-cases.json`.
 
 ## Results
 
