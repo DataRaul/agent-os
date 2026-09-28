@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "source_id": "cloudflare-skills",
+  "verified_as_of": "2026-09-28",
+  "provenance": {
+    "trust_tier": "T1",
+    "upstream_owner": "Cloudflare",
+    "upstream_repository": "https://github.com/cloudflare/skills",
+    "official_organization_repository": true
+  },
+  "reviewed_candidate": {
+    "commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+    "plugin_version": "1.0.1",
+    "default_branch": "main",
+    "license": "Apache-2.0"
+  },
+  "repository_shape": {
+    "skill_format": "SKILL.md",
+    "skill_count": 14,
+    "plugin_metadata_present": true,
+    "remote_mcp_bundled": true,
+    "bundled_mcp_endpoint": "https://mcp.cloudflare.com/mcp",
+    "executable_scripts_present": true,
+    "executable_scripts": [
+      "skills/turnstile-spin/scripts/auth-probe.sh",
+      "skills/turnstile-spin/scripts/persist-skill.sh",
+      "skills/turnstile-spin/scripts/validate.sh",
+      "skills/turnstile-spin/scripts/widget-create.sh"
+    ]
+  },
+  "access_and_side_effects": {
+    "local_filesystem_reads": true,
+    "local_filesystem_writes": true,
+    "network_access": true,
+    "credential_handling": true,
+    "external_account_access": true,
+    "credential_patterns": [
+      "Cloudflare API tokens and Wrangler authentication",
+      "Worker/application secrets and secret-store configuration",
+      "remote MCP access to Cloudflare account/API and documentation workflows"
+    ],
+    "external_effects": [
+      "deploys and manages Workers and Cloudflare resources through Wrangler",
+      "may create or modify Turnstile widgets and persist generated configuration",
+      "may enable Email Sending or Email Routing and send transactional email",
+      "may configure Cloudflare One access, network and security policies",
+      "may install or invoke external packages and skills through npx",
+      "may configure additional MCP servers such as Chrome DevTools",
+      "may create, update or delete remote Cloudflare resources depending on task"
+    ],
+    "destructive_or_publish_authority_declared": true
+  },
+  "reviewed_subcapabilities": [
+    {
+      "id": "cloudflare",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "NETWORK",
+        "MCP",
+        "PRODUCT_ROUTING",
+        "DEPLOYMENT_REFERENCES",
+        "SECRETS"
+      ],
+      "rationale": "Primarily architecture and product selection guidance, but routes into deployment, secrets, shell, MCP and account-management surfaces."
+    },
+    {
+      "id": "agents-sdk",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "MCP",
+        "DEPLOYMENT",
+        "CODE_WRITE"
+      ],
+      "rationale": "Useful SDK guidance but includes MCP and deployment-oriented workflows."
+    },
+    {
+      "id": "cloudflare-email-service",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "NETWORK",
+        "WRANGLER",
+        "API_TOKEN",
+        "EMAIL_SEND",
+        "REMOTE_CONFIGURATION"
+      ],
+      "rationale": "Can enable email services, use API tokens and send external email."
+    },
+    {
+      "id": "cloudflare-one-migrations",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "SECURITY_POLICY",
+        "NETWORK_CONFIGURATION",
+        "MIGRATION"
+      ],
+      "rationale": "Migration planning is useful, but the skill covers high-impact security and network configuration changes."
+    },
+    {
+      "id": "cloudflare-one",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "MCP",
+        "SECURITY_POLICY",
+        "NETWORK_CONFIGURATION",
+        "REMOTE_MUTATION",
+        "SECRETS"
+      ],
+      "rationale": "Can inspect and configure identity, access, Gateway, network and security policies; broad production authority is explicitly discussed."
+    },
+    {
+      "id": "durable-objects",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "CODE_WRITE",
+        "STATEFUL_RUNTIME",
+        "WRANGLER"
+      ],
+      "rationale": "Mostly implementation guidance but includes stateful production patterns and Wrangler configuration."
+    },
+    {
+      "id": "nextjs-on-cloudflare",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "NPX",
+        "UPSTREAM_SKILL_INSTALL",
+        "DEPLOYMENT"
+      ],
+      "rationale": "Explicitly instructs installing upstream skills and supports project migration/deployment."
+    },
+    {
+      "id": "sandbox-migrate-to-next",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "SHELL",
+        "MIGRATION",
+        "DEPLOYMENT",
+        "SECRET_HANDLING",
+        "DELETE"
+      ],
+      "rationale": "Migration path includes shell/runtime changes, deployment and potentially destructive edits."
+    },
+    {
+      "id": "sandbox-next",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "SHELL",
+        "DEPLOYMENT",
+        "SECRET_HANDLING"
+      ],
+      "rationale": "Sandbox applications expose shell/runtime execution and deployment surfaces."
+    },
+    {
+      "id": "sandbox-stable",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "SHELL",
+        "DEPLOYMENT",
+        "SECRET_HANDLING",
+        "LOCAL_WRITE"
+      ],
+      "rationale": "Stable sandbox guidance still covers execution, deployment and secret/configuration changes."
+    },
+    {
+      "id": "turnstile-spin",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "SHELL",
+        "EXECUTABLE_SCRIPTS",
+        "API_TOKEN",
+        "SECRET_HANDLING",
+        "REMOTE_CREATE",
+        "LOCAL_WRITE"
+      ],
+      "rationale": "Contains executable shell scripts, token/secret handling and remote widget creation/configuration."
+    },
+    {
+      "id": "web-perf",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "BROWSER_TOOLING",
+        "MCP_INSTALL_OPTION",
+        "NETWORK"
+      ],
+      "rationale": "Audit guidance is comparatively narrow, but it can install/configure Chrome DevTools MCP and operates browser/network tooling."
+    },
+    {
+      "id": "workers-best-practices",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "CODE_WRITE",
+        "WRANGLER",
+        "SECRET_CONFIGURATION"
+      ],
+      "rationale": "Mostly guidance, but directly affects production Worker code/configuration and secret-related practices."
+    },
+    {
+      "id": "wrangler",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "CLI",
+        "NETWORK",
+        "API_TOKEN",
+        "SECRET_HANDLING",
+        "REMOTE_CREATE",
+        "REMOTE_DELETE",
+        "DEPLOYMENT",
+        "LOCAL_WRITE"
+      ],
+      "rationale": "Wrangler is a broad resource-management and deployment surface with account credentials and remote mutations."
+    }
+  ],
+  "narrower_admission_candidates": [
+    {
+      "id": "cloudflare-discovery-readonly",
+      "status": "FUTURE_NARROW_AUDIT",
+      "condition": "Consider only product-selection and documentation-routing guidance with no MCP, CLI, installation, deployment or account mutation authority."
+    },
+    {
+      "id": "workers-best-practices-guidance",
+      "status": "FUTURE_NARROW_AUDIT",
+      "condition": "Consider code-review guidance without executing Wrangler, changing secrets or mutating remote resources."
+    },
+    {
+      "id": "web-perf-readonly",
+      "status": "FUTURE_NARROW_AUDIT",
+      "condition": "Consider analysis-only browser performance guidance when browser tooling is already authorized and no MCP installation/configuration is performed."
+    }
+  ],
+  "update_strategy": {
+    "mode": "REVIEW_NEW_UPSTREAM_CANDIDATE",
+    "reviewed_commit_is_evidence_boundary": true,
+    "automatic_upstream_updates_allowed": false
+  },
+  "audit_disposition": "KEEP_REFERENCE_ONLY",
+  "admission_state_after_audit": "REFERENCE_ONLY",
+  "rationale": "Official provenance and strong reusable guidance are established, but the package bundles a remote MCP server, executable scripts, Wrangler deployment/resource management, credentials, email sending, security-policy mutation, package installation and other write-capable surfaces. Package-level automatic admission would be broader than the minimum-authority model."
+}
