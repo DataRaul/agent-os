@@ -249,6 +249,89 @@ def validate_specialist_reviewer_benchmark(skill_names: set[str]) -> None:
         fail(f"{oracle_path.relative_to(ROOT)} minimum_combined_expected_recall invalid")
 
 
+def validate_vendor_audits(catalog: dict) -> None:
+    allowed_catalog_states = {
+        "REFERENCE_ONLY",
+        "SKILL_ALLOWED",
+        "PLUGIN_ALLOWED",
+        "PIN_REQUIRED",
+        "REJECTED",
+    }
+    allowed_audit_dispositions = {
+        "KEEP_REFERENCE_ONLY",
+        "ADMIT_SKILL",
+        "ADMIT_PLUGIN",
+        "PIN_REQUIRED",
+        "REJECT",
+    }
+
+    source_ids: set[str] = set()
+    for source in catalog.get("sources", []):
+        source_id = source.get("id")
+        if not isinstance(source_id, str) or not source_id:
+            fail("catalog source missing id")
+        if source_id in source_ids:
+            fail(f"duplicate catalog source id: {source_id}")
+        source_ids.add(source_id)
+
+        state = source.get("admission_state")
+        if state not in allowed_catalog_states:
+            fail(f"catalog source {source_id} invalid admission_state: {state!r}")
+
+        audit_rel = source.get("audit_record")
+        if not audit_rel:
+            continue
+        if not isinstance(audit_rel, str) or not audit_rel.startswith("catalog/vendor-audits/"):
+            fail(f"catalog source {source_id} invalid audit_record path")
+        audit = load_json(ROOT / audit_rel)
+        if not isinstance(audit, dict):
+            fail(f"{audit_rel} must contain a JSON object")
+        if audit.get("schema_version") != 1:
+            fail(f"{audit_rel} unsupported schema_version")
+        if audit.get("source_id") != source_id:
+            fail(f"{audit_rel} source_id mismatch")
+        if audit.get("admission_state_after_audit") != state:
+            fail(f"{audit_rel} admission state does not match catalog")
+        if audit.get("audit_disposition") not in allowed_audit_dispositions:
+            fail(f"{audit_rel} invalid audit_disposition")
+
+        candidate = audit.get("reviewed_candidate")
+        if not isinstance(candidate, dict):
+            fail(f"{audit_rel} missing reviewed_candidate")
+        commit = candidate.get("commit")
+        if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}", commit):
+            fail(f"{audit_rel} invalid reviewed commit")
+        if source.get("reviewed_commit") != commit:
+            fail(f"catalog source {source_id} reviewed_commit mismatch")
+
+        access = audit.get("access_and_side_effects")
+        if not isinstance(access, dict):
+            fail(f"{audit_rel} missing access_and_side_effects")
+        for key in (
+            "local_filesystem_reads",
+            "local_filesystem_writes",
+            "network_access",
+            "credential_handling",
+        ):
+            if not isinstance(access.get(key), bool):
+                fail(f"{audit_rel} access field {key} must be boolean")
+
+        subcaps = audit.get("reviewed_subcapabilities")
+        if not isinstance(subcaps, list) or not subcaps:
+            fail(f"{audit_rel} reviewed_subcapabilities must be non-empty")
+        seen_subcaps: set[str] = set()
+        for subcap in subcaps:
+            if not isinstance(subcap, dict):
+                fail(f"{audit_rel} subcapability must be an object")
+            subcap_id = subcap.get("id")
+            disposition = subcap.get("disposition")
+            if not isinstance(subcap_id, str) or not subcap_id or subcap_id in seen_subcaps:
+                fail(f"{audit_rel} invalid/duplicate subcapability id")
+            seen_subcaps.add(subcap_id)
+            if disposition not in allowed_catalog_states:
+                fail(f"{audit_rel} subcapability {subcap_id} invalid disposition")
+
+
 def validate_json() -> None:
     catalog_path = ROOT / "catalog" / "trusted-sources.json"
     schema_path = ROOT / "schemas" / "private-overlay-profile.schema.json"
@@ -257,6 +340,7 @@ def validate_json() -> None:
 
     if not isinstance(catalog, dict):
         fail("catalog/trusted-sources.json must contain a JSON object")
+    validate_vendor_audits(catalog)
     for source in catalog.get("sources", []):
         for key in ("id", "owner", "canonical_url", "trust_tier", "admission_state", "purpose"):
             if not source.get(key):
@@ -273,6 +357,7 @@ def validate_required_docs() -> None:
         "docs/PRIVATE_OVERLAY_CONTRACT.md",
         "docs/COMPLEXITY_ROUTING.md",
         "docs/TRUST_MODEL.md",
+        "docs/VENDOR_CAPABILITY_ADMISSION.md",
         "docs/P1_CAPABILITY_BASELINE.md",
         "docs/SPECIALIST_REVIEWER_EVALUATION.md",
         "agents/silent-failure-reviewer.md",

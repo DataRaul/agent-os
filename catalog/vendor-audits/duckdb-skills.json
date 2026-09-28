@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "source_id": "duckdb-skills",
+  "verified_as_of": "2026-09-28",
+  "provenance": {
+    "trust_tier": "T1",
+    "upstream_owner": "DuckDB",
+    "upstream_repository": "https://github.com/duckdb/duckdb-skills",
+    "official_organization_repository": true
+  },
+  "reviewed_candidate": {
+    "commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+    "plugin_version": "0.2.4",
+    "default_branch": "main",
+    "license": "MIT"
+  },
+  "repository_shape": {
+    "skill_format": "SKILL.md",
+    "declared_primary_tool": "Bash",
+    "executable_scripts_present": true,
+    "executable_scripts": [
+      "skills/install-duckdb/eval.sh"
+    ],
+    "plugin_metadata_present": true
+  },
+  "access_and_side_effects": {
+    "local_filesystem_reads": true,
+    "local_filesystem_writes": true,
+    "network_access": true,
+    "credential_handling": true,
+    "credential_patterns": [
+      "AWS/GCS/Azure/R2 credential-chain discovery",
+      "explicit S3-compatible key/secret configuration is supported by s3-explore"
+    ],
+    "external_effects": [
+      "creates or appends DuckDB session state files",
+      "may create output data files",
+      "installs or updates DuckDB extensions",
+      "install-duckdb may offer DuckDB CLI upgrade commands",
+      "reads remote object storage and HTTPS resources",
+      "read-memories reads local Claude Code session logs"
+    ],
+    "destructive_or_publish_authority_declared": false
+  },
+  "reviewed_subcapabilities": [
+    {
+      "id": "attach-db",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "BASH",
+        "LOCAL_READ",
+        "LOCAL_WRITE",
+        "STATE_FILE",
+        "POTENTIAL_DATABASE_CREATE"
+      ],
+      "rationale": "Useful database attachment workflow, but it writes shared state and can create a database after user confirmation."
+    },
+    {
+      "id": "convert-file",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "BASH",
+        "LOCAL_READ",
+        "LOCAL_WRITE",
+        "NETWORK_OPTIONAL",
+        "CREDENTIAL_CHAIN_OPTIONAL",
+        "EXTENSION_LOAD"
+      ],
+      "rationale": "Conversion writes user-selected outputs and can access remote sources or install/load extensions."
+    },
+    {
+      "id": "duckdb-docs",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "BASH",
+        "NETWORK",
+        "LOCAL_CACHE_WRITE",
+        "EXTENSION_INSTALL"
+      ],
+      "rationale": "Documentation lookup is narrow in purpose but installs extensions, downloads indexes, and writes a local cache."
+    },
+    {
+      "id": "install-duckdb",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "BASH",
+        "NETWORK",
+        "SOFTWARE_INSTALL",
+        "SOFTWARE_UPDATE",
+        "COMMUNITY_EXTENSION",
+        "CLI_UPGRADE"
+      ],
+      "rationale": "Installer/updater authority is materially broader than a reference skill and includes community-extension and CLI-upgrade paths."
+    },
+    {
+      "id": "query",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "BASH",
+        "LOCAL_READ",
+        "SESSION_STATE",
+        "POTENTIAL_SECRET_REUSE"
+      ],
+      "rationale": "Ad-hoc mode contains useful path/external-access restrictions, but session mode restores shared state that may include secrets and attached databases."
+    },
+    {
+      "id": "read-file",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "BASH",
+        "LOCAL_READ",
+        "NETWORK_OPTIONAL",
+        "CREDENTIAL_CHAIN_OPTIONAL",
+        "EXTENSION_INSTALL_OPTIONAL"
+      ],
+      "rationale": "Broad file readers and remote credential-chain support exceed a default reference-only trust boundary."
+    },
+    {
+      "id": "read-memories",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "BASH",
+        "LOCAL_SESSION_HISTORY_READ",
+        "PRIVACY_BOUNDARY"
+      ],
+      "rationale": "Reads historical Claude Code session logs and therefore crosses a private-context boundary unsuitable for generic automatic admission."
+    },
+    {
+      "id": "s3-explore",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "BASH",
+        "NETWORK",
+        "REMOTE_STORAGE",
+        "CREDENTIAL_CHAIN",
+        "EXPLICIT_SECRET_OPTION"
+      ],
+      "rationale": "Remote object-store exploration requires network and may use credentials or explicit access secrets."
+    },
+    {
+      "id": "spatial",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "BASH",
+        "NETWORK_OPTIONAL",
+        "COMMUNITY_EXTENSION_OPTIONAL",
+        "LOCAL_WRITE_OPTIONAL"
+      ],
+      "rationale": "Can query remote public datasets, install community extensions, and export local spatial files."
+    }
+  ],
+  "narrower_admission_candidates": [
+    {
+      "id": "query-local-adhoc",
+      "status": "FUTURE_NARROW_AUDIT",
+      "condition": "Consider only the local ad-hoc query path with external access disabled, persistent secrets disabled, and explicit allowed paths."
+    },
+    {
+      "id": "duckdb-docs-reference",
+      "status": "FUTURE_NARROW_AUDIT",
+      "condition": "Consider a documentation-only path after deciding whether extension installation, network fetch, and cache writes are acceptable."
+    }
+  ],
+  "update_strategy": {
+    "mode": "REVIEW_NEW_UPSTREAM_CANDIDATE",
+    "reviewed_commit_is_evidence_boundary": true,
+    "automatic_upstream_updates_allowed": false
+  },
+  "audit_disposition": "KEEP_REFERENCE_ONLY",
+  "admission_state_after_audit": "REFERENCE_ONLY",
+  "rationale": "Official provenance and useful public capabilities are established, but the package-level Bash, installation/update, credential, network, filesystem, and session-history surfaces are too broad for automatic plugin or skill admission as a unit."
+}

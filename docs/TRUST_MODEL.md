@@ -51,6 +51,12 @@ For any external capability record:
 - `PIN_REQUIRED` — usable only at an explicitly reviewed version/commit.
 - `REJECTED` — not approved.
 
+## Audit records
+
+Vendor capabilities considered beyond initial discovery must use the generic audit contract in `docs/VENDOR_CAPABILITY_ADMISSION.md` and, when audited, link a machine-readable record under `catalog/vendor-audits/`.
+
+A completed audit does not imply admission. `KEEP_REFERENCE_ONLY` is a valid audit outcome when the package has useful reference value but requests broader execution, network, credential, filesystem, installer, or privacy authority than Agent OS should grant by default.
+
 ## Update rule
 
 Upstream updates are new candidates. They do not inherit prior approval automatically when scripts, hooks, permissions, tool surfaces, or material instructions changed.

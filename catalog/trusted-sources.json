@@ -26,7 +26,11 @@
       "canonical_url": "https://github.com/duckdb/duckdb-skills",
       "trust_tier": "T1",
       "admission_state": "REFERENCE_ONLY",
-      "purpose": "DuckDB data exploration and documentation skills"
+      "purpose": "DuckDB data exploration and documentation skills",
+      "reviewed_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "reviewed_version": "0.2.4",
+      "audit_record": "catalog/vendor-audits/duckdb-skills.json",
+      "audit_disposition": "KEEP_REFERENCE_ONLY"
     },
     {
       "id": "cloudflare-skills",
