@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "source_id": "agent-skills-standard",
+  "verified_as_of": "2026-09-28",
+  "provenance": {
+    "trust_tier": "T1",
+    "upstream_owner": "Agent Skills",
+    "upstream_repository": "https://github.com/agentskills/agentskills",
+    "specification_site": "https://agentskills.io/specification",
+    "open_standard_repository": true
+  },
+  "reviewed_candidate": {
+    "commit": "69ef37e9424c0a7ea9dd2293b559e43ec8176379",
+    "default_branch": "main",
+    "repository_license": "Apache-2.0",
+    "documentation_license": "CC-BY-4.0",
+    "reference_library_version": "0.1.0"
+  },
+  "repository_shape": {
+    "specification_present": true,
+    "skill_creation_guidance_present": true,
+    "reference_library_present": true,
+    "reference_library_production_status": "DEMONSTRATION_ONLY",
+    "bundled_runtime_skill_catalog": false
+  },
+  "access_and_side_effects": {
+    "local_filesystem_reads": true,
+    "local_filesystem_writes": false,
+    "network_access": false,
+    "credential_handling": false,
+    "specification_allows_executable_scripts": true,
+    "specification_allows_experimental_allowed_tools": true,
+    "guidance_describes_on_demand_package_execution": true,
+    "external_effects": [
+      "the specification can describe skills that themselves execute scripts or use pre-approved tools",
+      "skill-creation guidance documents package runners such as uvx, pipx, npx, bunx, deno and go run",
+      "the reference validator reads local skill directories and validates or serializes skill metadata"
+    ],
+    "destructive_or_publish_authority_declared": false
+  },
+  "reviewed_subcapabilities": [
+    {
+      "id": "skill-format-specification",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "FORMAT_REFERENCE",
+        "CLIENT_VARIANCE"
+      ],
+      "rationale": "The specification defines portable structure and metadata but is not itself an execution capability. Client behavior, especially experimental allowed-tools handling, remains implementation-specific."
+    },
+    {
+      "id": "skills-ref-reference-library",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "LOCAL_READ",
+        "REFERENCE_IMPLEMENTATION",
+        "DEMONSTRATION_ONLY"
+      ],
+      "rationale": "The upstream README explicitly states that skills-ref is for demonstration and is not meant for production use."
+    },
+    {
+      "id": "executable-script-convention",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "SCRIPT_EXECUTION",
+        "DEPENDENCY_FETCH",
+        "SUPPLY_CHAIN"
+      ],
+      "rationale": "The format permits bundled executable code and the authoring guidance recommends package runners that may fetch and execute dependencies; each concrete skill still needs its own authority and provenance review."
+    },
+    {
+      "id": "allowed-tools-field",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "EXPERIMENTAL",
+        "TOOL_PREAPPROVAL",
+        "CLIENT_VARIANCE"
+      ],
+      "rationale": "The allowed-tools field is explicitly experimental and its support varies across agent implementations, so Agent OS must not treat it as a portable authority grant."
+    }
+  ],
+  "narrower_admission_candidates": [
+    {
+      "id": "agent-skills-format-compatibility",
+      "status": "LOCAL_CONVENTION_ALREADY_USED",
+      "condition": "Continue using compatible SKILL.md structure for portability while retaining Agent OS authority, provenance and validation rules as independent controls."
+    }
+  ],
+  "update_strategy": {
+    "mode": "REVIEW_SPECIFICATION_CHANGES",
+    "reviewed_commit_is_evidence_boundary": true,
+    "runtime_admission_inherited_from_specification": false,
+    "automatic_upstream_updates_allowed": false
+  },
+  "audit_disposition": "KEEP_REFERENCE_ONLY",
+  "admission_state_after_audit": "REFERENCE_ONLY",
+  "rationale": "The Agent Skills repository is primarily a format/specification and demonstration reference, not a bounded runtime capability package. Agent OS can remain format-compatible without treating the specification, experimental allowed-tools metadata, example script guidance, or demonstration reference library as execution authority."
+}

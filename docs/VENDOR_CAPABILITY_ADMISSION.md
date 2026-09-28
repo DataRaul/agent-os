@@ -43,6 +43,8 @@ A repository-level label such as "official" does not prove that every contained 
 
 Curated marketplaces require an additional provenance boundary: marketplace inclusion is evidence of curation, not proof that every bundled or externally referenced capability should inherit the marketplace publisher's trust tier.
 
+A format specification is also not runtime authority. Compatibility with a skill format does not imply that scripts, allowed-tools declarations, dependencies, or external side effects in a concrete skill are trusted.
+
 ## Admission states
 
 The canonical catalog states remain:
@@ -97,11 +99,12 @@ A vendor-audit change must pass:
 
 ## Current program
 
-Completed bounded package/surface audits:
+P3 completed the initial source catalog baseline:
 
+- Agent Skills specification: `KEEP_REFERENCE_ONLY`.
+- OpenAI `openai/plugins` curated marketplace: `KEEP_REFERENCE_ONLY` at repository/marketplace level.
 - DuckDB official `duckdb-skills`: `KEEP_REFERENCE_ONLY`.
 - Cloudflare official `cloudflare/skills`: `KEEP_REFERENCE_ONLY`.
 - Microsoft Playwright CLI skills and installation guidance: `KEEP_REFERENCE_ONLY`.
-- OpenAI `openai/plugins` curated marketplace: `KEEP_REFERENCE_ONLY` at repository/marketplace level; individual plugins remain separately auditable.
 
-The remaining catalog item is the Agent Skills format specification, which is a standards/reference surface rather than a runtime capability package. Package-level audit outcomes do not automatically decide narrower subcapability admission.
+P4 expands the tooling layer by inventorying and evaluating narrow capabilities from these evidence-bound sources. Package-level audit outcomes do not automatically decide narrower subcapability admission.

@@ -53,12 +53,14 @@ Current public skills:
 
 P2 evaluates whether proposed specialist reviewer roles add measurable value beyond one capable primary agent plus the P1 skills. See `docs/SPECIALIST_REVIEWER_EVALUATION.md`.
 
-Vendor capability admission is audit-gated by the active publication boundary. Current bounded audits cover DuckDB, Cloudflare, Microsoft Playwright, and the OpenAI curated plugin marketplace; all remain `REFERENCE_ONLY` at broad package/marketplace level while narrower capabilities remain candidates for future review. See `docs/VENDOR_CAPABILITY_ADMISSION.md`.
+P3 completed the initial provenance/authority audit baseline for the public tooling sources. See `docs/P3_VENDOR_CATALOG_BASELINE.md` and `docs/VENDOR_CAPABILITY_ADMISSION.md`.
+
+P4 expands the tooling layer by normalizing and evaluating narrow capabilities from those audited sources, prioritizing bounded read-only/reference capabilities before write-capable integrations.
 
 Additional skills or reviewer roles should be added only when they are reusable across projects or ecosystems and the added coordination cost is justified.
 
 ## Status
 
-`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_REVIEWER_EVALUATION_HARNESS__P3_VENDOR_AUDIT_IN_PROGRESS`
+`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_REVIEWER_EVALUATION_HARNESS__P3_VENDOR_CATALOG_BASELINE_COMPLETE__P4_TOOLING_INVENTORY_NEXT`
 
 No release or stability guarantee is implied yet.
