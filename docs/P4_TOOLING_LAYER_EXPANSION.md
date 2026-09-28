@@ -83,7 +83,7 @@ No admission state changes in P4.1.
 
 ### P4.2 — narrow audits
 
-Status: completed for the bounded initial three-candidate queue. See `catalog/p4-narrow-audits.json`, `evals/p4-narrow-audits/cases.json`, and `docs/P4_NARROW_AUDITS.md`.
+Status: completed for the bounded initial three-candidate queue. See `catalog/p4-narrow-audits.json`, `catalog/p4-narrow-audit-cases.json`, and `docs/P4_NARROW_AUDITS.md`.
 
 For a selected candidate:
 
