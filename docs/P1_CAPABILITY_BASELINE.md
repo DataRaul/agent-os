@@ -11,7 +11,7 @@ P1 expands the public reusable capability library while preserving the public/pr
 | 3 | `provenance-freshness` | skill | IMPLEMENTED | Verify evidence provenance, source hierarchy, timestamps, and stale-state risk. |
 | 4 | `research-data-integrity` | skill | IMPLEMENTED | Detect leakage, invalid joins, survivorship/look-ahead errors, duplicate observations, and unsupported inference. |
 | 5 | `authority-boundary-review` | skill | IMPLEMENTED | Ensure capability availability is not mistaken for permission or execution authority. |
-| 6 | `semantic-pr-review` | skill | PLANNED | Review pull requests for semantic correctness and system effects beyond lint/tests/CI. |
+| 6 | `semantic-pr-review` | skill | IMPLEMENTED | Review pull requests for semantic correctness and system effects beyond lint/tests/CI. |
 
 ## Build contract
 
@@ -36,10 +36,16 @@ When comparing a capability with a primary-agent-only baseline, measure where pr
 - tool/latency overhead;
 - whether C2/C3 escalation is justified.
 
-## Specialist reviewers planned after sufficient skill evidence
+## Specialist reviewer gate
+
+The planned reviewer roles remain candidates, not automatic additions:
 
 - `research-validity-reviewer`
 - `evidence-provenance-reviewer`
 - `runtime-postcondition-verifier`
 
-Reviewer roles should be added only when independent context or evidence creates measurable value.
+Before adding them, run capability-level evaluation that demonstrates independent context or evidence provides measurable incremental value beyond one capable agent plus the relevant public skills and deterministic validation.
+
+## Terminal state
+
+`P1_CAPABILITY_BASELINE_COMPLETE__SPECIALIST_REVIEWER_EVALUATION_PENDING`
