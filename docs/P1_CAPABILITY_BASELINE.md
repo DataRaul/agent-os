@@ -10,7 +10,7 @@ P1 expands the public reusable capability library while preserving the public/pr
 | 2 | `state-mutation-idempotency` | skill | IMPLEMENTED | Review retries, partial writes, duplicates, overwrite/delete hazards, and recovery semantics. |
 | 3 | `provenance-freshness` | skill | IMPLEMENTED | Verify evidence provenance, source hierarchy, timestamps, and stale-state risk. |
 | 4 | `research-data-integrity` | skill | IMPLEMENTED | Detect leakage, invalid joins, survivorship/look-ahead errors, duplicate observations, and unsupported inference. |
-| 5 | `authority-boundary-review` | skill | PLANNED | Ensure capability availability is not mistaken for permission or execution authority. |
+| 5 | `authority-boundary-review` | skill | IMPLEMENTED | Ensure capability availability is not mistaken for permission or execution authority. |
 | 6 | `semantic-pr-review` | skill | PLANNED | Review pull requests for semantic correctness and system effects beyond lint/tests/CI. |
 
 ## Build contract

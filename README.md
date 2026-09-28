@@ -54,6 +54,7 @@ Current public skills:
 - `state-mutation-idempotency`
 - `provenance-freshness`
 - `research-data-integrity`
+- `authority-boundary-review`
 
 Additional skills should be added only when they are reusable across projects or ecosystems.
 
