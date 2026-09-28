@@ -49,6 +49,6 @@ Additional skills should be added only when they are reusable across projects or
 
 ## Status
 
-`BOOTSTRAP_V0_IN_PROGRESS`
+`V0_PUBLIC_CORE`
 
 No release or stability guarantee is implied yet.

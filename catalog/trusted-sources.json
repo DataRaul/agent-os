@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "verified_as_of": "2026-09-28",
+  "policy": "Official provenance is evidence of ownership, not automatic execution authority. Capabilities remain reference-only until their requested tools and side effects are reviewed.",
+  "sources": [
+    {
+      "id": "agent-skills-standard",
+      "owner": "Agent Skills",
+      "canonical_url": "https://agentskills.io/specification",
+      "upstream_repo": "https://github.com/agentskills/agentskills",
+      "trust_tier": "T1",
+      "admission_state": "REFERENCE_ONLY",
+      "purpose": "Portable SKILL.md format specification"
+    },
+    {
+      "id": "openai-plugins",
+      "owner": "OpenAI",
+      "canonical_url": "https://github.com/openai/plugins",
+      "trust_tier": "T1",
+      "admission_state": "REFERENCE_ONLY",
+      "purpose": "Current Codex plugin and skill examples"
+    },
+    {
+      "id": "duckdb-skills",
+      "owner": "DuckDB",
+      "canonical_url": "https://github.com/duckdb/duckdb-skills",
+      "trust_tier": "T1",
+      "admission_state": "REFERENCE_ONLY",
+      "purpose": "DuckDB data exploration and documentation skills"
+    },
+    {
+      "id": "cloudflare-skills",
+      "owner": "Cloudflare",
+      "canonical_url": "https://github.com/cloudflare/skills",
+      "trust_tier": "T1",
+      "admission_state": "REFERENCE_ONLY",
+      "purpose": "Cloudflare developer-platform skills"
+    },
+    {
+      "id": "microsoft-playwright-skills",
+      "owner": "Microsoft",
+      "canonical_url": "https://github.com/microsoft/playwright.dev/blob/main/agent-cli/skills.mdx",
+      "trust_tier": "T1",
+      "admission_state": "REFERENCE_ONLY",
+      "purpose": "Playwright CLI skill installation and usage guidance"
+    }
+  ]
+}

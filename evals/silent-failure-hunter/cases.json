@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "skill": "silent-failure-hunter",
+  "cases": [
+    {
+      "id": "sfh-001-green-ci-stale-caller",
+      "level": "normal",
+      "scenario": "A function signature changes and its direct unit tests pass, but an infrequently used caller still sends the old semantic value through a type-compatible parameter.",
+      "expected_focus": [
+        "integration surface",
+        "semantic compatibility",
+        "tests do not cover all callers"
+      ]
+    },
+    {
+      "id": "sfh-002-delete-before-insert",
+      "level": "deceptive",
+      "scenario": "A refresh job deletes existing rows before inserting replacements. Tests cover successful refreshes only. An insertion failure can leave authoritative state empty.",
+      "expected_focus": [
+        "partial write",
+        "atomicity",
+        "recovery",
+        "negative postcondition"
+      ]
+    },
+    {
+      "id": "sfh-003-old-green-new-candidate",
+      "level": "deceptive",
+      "scenario": "CI is green, a repair commit is then pushed for a documentation-linked config change, and only one focused test is rerun before claiming the PR is fully validated.",
+      "expected_focus": [
+        "candidate-specific evidence",
+        "focused test versus terminal validation"
+      ]
+    },
+    {
+      "id": "sfh-004-no-finding",
+      "level": "control",
+      "scenario": "A pure documentation typo is corrected. No behavior, configuration, schema, authority, or runtime contract changes. Diff and rendered docs are verified.",
+      "expected_focus": [
+        "avoid false positive",
+        "NO_MATERIAL_FINDING"
+      ]
+    },
+    {
+      "id": "sfh-005-hidden-denominator-change",
+      "level": "adversarial",
+      "scenario": "A data pipeline now filters rows with missing provider data before calculating success rate. Tests assert the numerator but not the original denominator, so the reported metric improves.",
+      "expected_focus": [
+        "denominator integrity",
+        "missing-data semantics",
+        "plausible green tests"
+      ]
+    }
+  ]
+}
