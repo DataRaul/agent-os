@@ -53,6 +53,8 @@ Current public skills:
 
 P2 evaluates whether proposed specialist reviewer roles add measurable value beyond one capable primary agent plus the P1 skills. See `docs/SPECIALIST_REVIEWER_EVALUATION.md`.
 
+Vendor capability admission is audit-gated by the active publication boundary. The first bounded audit covers DuckDB's official skills package and keeps the package `REFERENCE_ONLY` while narrower subcapabilities remain candidates for future review. See `docs/VENDOR_CAPABILITY_ADMISSION.md`.
+
 Additional skills or reviewer roles should be added only when they are reusable across projects or ecosystems and the added coordination cost is justified.
 
 ## Status
