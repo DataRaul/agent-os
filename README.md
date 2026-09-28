@@ -37,13 +37,7 @@ Existing project repositories
 
 ## Capability program
 
-V0 established:
-
-1. repository governance and the public/private boundary;
-2. trust and vendor-skill admission rules;
-3. reusable complexity routing;
-4. **Silent Failure Hunter** plus an independent reviewer role;
-5. deterministic repository validation and public-safe evals.
+V0 established the public core.
 
 P1 established the first reusable capability baseline. Its sequence and build contract are documented in `docs/P1_CAPABILITY_BASELINE.md`.
 
@@ -57,10 +51,12 @@ Current public skills:
 - `authority-boundary-review`
 - `semantic-pr-review`
 
-Additional skills should be added only when they are reusable across projects or ecosystems.
+P2 evaluates whether proposed specialist reviewer roles add measurable value beyond one capable primary agent plus the P1 skills. See `docs/SPECIALIST_REVIEWER_EVALUATION.md`.
+
+Additional skills or reviewer roles should be added only when they are reusable across projects or ecosystems and the added coordination cost is justified.
 
 ## Status
 
-`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE`
+`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_REVIEWER_EVALUATION_HARNESS`
 
 No release or stability guarantee is implied yet.

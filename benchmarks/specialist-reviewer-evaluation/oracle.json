@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "suite": "specialist-reviewer-evaluation",
+  "replicates_per_case": 3,
+  "admission_policy": {
+    "minimum_incremental_distinct_cases": 2,
+    "minimum_incremental_expected_observations": 3,
+    "minimum_combined_expected_recall": 0.8,
+    "maximum_reviewer_false_positive_observations": 1,
+    "require_control_false_positive_free": true,
+    "eligible_disposition": "ELIGIBLE_FOR_ROLE_IMPLEMENTATION_REVIEW",
+    "noneligible_disposition": "NO_INCREMENTAL_VALUE_DEMONSTRATED"
+  },
+  "expected": {
+    "rvr-easy-01": [
+      "TEMPORAL_LEAKAGE"
+    ],
+    "rvr-normal-02": [
+      "JOIN_CARDINALITY_EXPANSION"
+    ],
+    "rvr-deceptive-03": [
+      "SURVIVORSHIP_BIAS",
+      "EVALUATION_SELECTION_LEAKAGE"
+    ],
+    "rvr-control-04": [],
+    "rvr-adversarial-05": [
+      "DENOMINATOR_DRIFT",
+      "INFERENCE_SCOPE_OVERSTATEMENT"
+    ],
+    "epr-easy-01": [
+      "CANDIDATE_MISMATCH",
+      "STALE_EVIDENCE"
+    ],
+    "epr-normal-02": [
+      "STALE_EVIDENCE",
+      "SOURCE_HIERARCHY_MISMATCH"
+    ],
+    "epr-deceptive-03": [
+      "SOURCE_HIERARCHY_MISMATCH",
+      "STALE_EVIDENCE"
+    ],
+    "epr-control-04": [],
+    "epr-adversarial-05": [
+      "CONFLICTING_AUTHORITATIVE_EVIDENCE"
+    ],
+    "rpv-easy-01": [
+      "MISSING_POSTCONDITION"
+    ],
+    "rpv-normal-02": [
+      "RUNTIME_VERSION_MISMATCH",
+      "MISSING_POSTCONDITION"
+    ],
+    "rpv-deceptive-03": [
+      "CHECKPOINT_ORDERING",
+      "MISSING_POSTCONDITION"
+    ],
+    "rpv-control-04": [],
+    "rpv-adversarial-05": [
+      "PARTIAL_STATE",
+      "AUTHORITY_GATE_BYPASS"
+    ]
+  }
+}
