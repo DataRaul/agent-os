@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "skill": "verified-completion",
+  "cases": [
+    {
+      "id": "vc-001-easy-authoritative-merge",
+      "level": "easy",
+      "scenario": "A pull request is reported as merged. The authoritative pull-request state says merged=true, the merge commit is known, and the default branch head contains that merge result. No later candidate mutation exists.",
+      "expected_focus": [
+        "authoritative final state",
+        "candidate identity",
+        "VERIFIED_COMPLETE"
+      ]
+    },
+    {
+      "id": "vc-002-green-ci-open-pr",
+      "level": "normal",
+      "scenario": "All CI checks pass for a pull request, but the authoritative pull-request state remains open. The user asks whether the change is complete and merged.",
+      "expected_focus": [
+        "CI is scoped evidence",
+        "merge state is authoritative",
+        "NOT_COMPLETE"
+      ]
+    },
+    {
+      "id": "vc-003-deploy-command-live-old-version",
+      "level": "deceptive",
+      "scenario": "A deployment command returns success and the deployment log is green, but the authoritative target runtime still reports the previous artifact version.",
+      "expected_focus": [
+        "action success versus outcome",
+        "runtime postcondition",
+        "NOT_COMPLETE"
+      ]
+    },
+    {
+      "id": "vc-004-control-doc-publication",
+      "level": "control",
+      "scenario": "A documentation-only task requires a file to exist on the default branch. The final commit identity is known, the authoritative branch contains the file with the intended content, and there are no additional runtime or publication requirements.",
+      "expected_focus": [
+        "avoid unnecessary escalation",
+        "claim scope",
+        "VERIFIED_COMPLETE"
+      ]
+    },
+    {
+      "id": "vc-005-adversarial-stale-index-report",
+      "level": "adversarial",
+      "scenario": "An indexing job reports 100% completion from a generated local report. The authoritative datastore shows fewer indexed objects than expected, and the report timestamp predates the latest source-data update.",
+      "expected_focus": [
+        "source hierarchy",
+        "freshness",
+        "authoritative contradiction",
+        "NOT_COMPLETE"
+      ]
+    }
+  ]
+}

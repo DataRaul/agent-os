@@ -3,6 +3,16 @@
   "skill": "silent-failure-hunter",
   "cases": [
     {
+      "id": "sfh-000-easy-missing-postcondition",
+      "level": "easy",
+      "scenario": "A task is marked complete because a command exited successfully, but the required output file is absent from the authoritative target location.",
+      "expected_focus": [
+        "command success is not the postcondition",
+        "missing authoritative output",
+        "material finding"
+      ]
+    },
+    {
       "id": "sfh-001-green-ci-stale-caller",
       "level": "normal",
       "scenario": "A function signature changes and its direct unit tests pass, but an infrequently used caller still sends the old semantic value through a type-compatible parameter.",

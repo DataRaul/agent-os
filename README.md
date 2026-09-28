@@ -35,20 +35,27 @@ Existing project repositories
   └─ remain authoritative for their own code, data, tests, state and permissions
 ```
 
-## Initial roadmap
+## Capability program
 
-V0 establishes:
+V0 established:
 
-1. repository governance and public/private boundary;
+1. repository governance and the public/private boundary;
 2. trust and vendor-skill admission rules;
-3. a reusable complexity routing model;
-4. the first skill: **Silent Failure Hunter**;
-5. evaluator cases that test skills against deceptive as well as normal scenarios.
+3. reusable complexity routing;
+4. **Silent Failure Hunter** plus an independent reviewer role;
+5. deterministic repository validation and public-safe evals.
+
+P1 expands the reusable capability baseline. Its sequence and build contract are documented in `docs/P1_CAPABILITY_BASELINE.md`.
+
+Current public skills:
+
+- `silent-failure-hunter`
+- `verified-completion`
 
 Additional skills should be added only when they are reusable across projects or ecosystems.
 
 ## Status
 
-`V0_PUBLIC_CORE`
+`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_IN_PROGRESS`
 
 No release or stability guarantee is implied yet.
