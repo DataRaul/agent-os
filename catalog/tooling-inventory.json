@@ -1,0 +1,3394 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-09-28",
+  "purpose": "Normalized discovery inventory for P4. Inventory does not grant execution authority.",
+  "rules": {
+    "default_admission_state": "REFERENCE_ONLY",
+    "unknown_write_scope_fails_closed": true,
+    "discovery_must_not_install_or_authenticate": true,
+    "external_marketplace_sources_require_independent_provenance_audit": true,
+    "package_audit_does_not_imply_subcapability_admission": true
+  },
+  "source_evidence": {
+    "agent-skills-standard": {
+      "reviewed_commit": "69ef37e9424c0a7ea9dd2293b559e43ec8176379",
+      "reviewed_version": "skills-ref-0.1.0",
+      "admission_state": "REFERENCE_ONLY",
+      "audit_record": "catalog/vendor-audits/agent-skills-standard.json"
+    },
+    "openai-plugins": {
+      "reviewed_commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+      "reviewed_version": null,
+      "admission_state": "REFERENCE_ONLY",
+      "audit_record": "catalog/vendor-audits/openai-plugins.json"
+    },
+    "duckdb-skills": {
+      "reviewed_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "reviewed_version": "0.2.4",
+      "admission_state": "REFERENCE_ONLY",
+      "audit_record": "catalog/vendor-audits/duckdb-skills.json"
+    },
+    "cloudflare-skills": {
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "reviewed_version": "1.0.1",
+      "admission_state": "REFERENCE_ONLY",
+      "audit_record": "catalog/vendor-audits/cloudflare-skills.json"
+    },
+    "microsoft-playwright-skills": {
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "reviewed_version": "0.1.21",
+      "admission_state": "REFERENCE_ONLY",
+      "audit_record": "catalog/vendor-audits/microsoft-playwright-skills.json"
+    }
+  },
+  "summary": {
+    "catalog_sources": 5,
+    "openai_marketplace_plugins": 65,
+    "openai_marketplace_external_sources": 3,
+    "openai_marketplace_mcp_surfaces": 31,
+    "openai_marketplace_plugins_with_scripts": 27,
+    "audited_source_subcapabilities": 48
+  },
+  "marketplace_plugins": [
+    {
+      "capability_id": "openai-marketplace:linear",
+      "source_id": "openai-plugins",
+      "name": "linear",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Productivity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/linear"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:atlassian-rovo",
+      "source_id": "openai-plugins",
+      "name": "atlassian-rovo",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Productivity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/atlassian-rovo"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:google-calendar",
+      "source_id": "openai-plugins",
+      "name": "google-calendar",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Productivity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/google-calendar"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:gmail",
+      "source_id": "openai-plugins",
+      "name": "gmail",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Communication",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/gmail"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:slack",
+      "source_id": "openai-plugins",
+      "name": "slack",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Communication",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/slack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:teams",
+      "source_id": "openai-plugins",
+      "name": "teams",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Communication",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/teams"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": false,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:sharepoint",
+      "source_id": "openai-plugins",
+      "name": "sharepoint",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Productivity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/sharepoint"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": false,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:outlook-email",
+      "source_id": "openai-plugins",
+      "name": "outlook-email",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Communication",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/outlook-email"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": false,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:outlook-calendar",
+      "source_id": "openai-plugins",
+      "name": "outlook-calendar",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Productivity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/outlook-calendar"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": false,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:canva",
+      "source_id": "openai-plugins",
+      "name": "canva",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Creativity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/canva"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:figma",
+      "source_id": "openai-plugins",
+      "name": "figma",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Creativity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/figma"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": true,
+        "commands_present": true,
+        "hooks_present": true,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE",
+        "LOCAL_SCRIPT_SURFACE",
+        "LOCAL_AUTOMATION_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:stripe",
+      "source_id": "openai-plugins",
+      "name": "stripe",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Finance",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/stripe"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:vercel",
+      "source_id": "openai-plugins",
+      "name": "vercel",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/vercel"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": true,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE",
+        "LOCAL_AUTOMATION_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:game-studio",
+      "source_id": "openai-plugins",
+      "name": "game-studio",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/game-studio"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:superpowers",
+      "source_id": "openai-plugins",
+      "name": "superpowers",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/superpowers"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:github",
+      "source_id": "openai-plugins",
+      "name": "github",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/github"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:circleci",
+      "source_id": "openai-plugins",
+      "name": "circleci",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/circleci"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:google-drive",
+      "source_id": "openai-plugins",
+      "name": "google-drive",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Productivity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/google-drive"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:notion",
+      "source_id": "openai-plugins",
+      "name": "notion",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Productivity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/notion"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:cloudflare",
+      "source_id": "openai-plugins",
+      "name": "cloudflare",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/cloudflare"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": false,
+        "scripts_present": false,
+        "commands_present": true,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE",
+        "LOCAL_AUTOMATION_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:sentry",
+      "source_id": "openai-plugins",
+      "name": "sentry",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/sentry"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:build-ios-apps",
+      "source_id": "openai-plugins",
+      "name": "build-ios-apps",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/build-ios-apps"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:build-macos-apps",
+      "source_id": "openai-plugins",
+      "name": "build-macos-apps",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/build-macos-apps"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": false,
+        "commands_present": true,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_AUTOMATION_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:build-web-apps",
+      "source_id": "openai-plugins",
+      "name": "build-web-apps",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/build-web-apps"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_USE",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:build-web-data-visualization",
+      "source_id": "openai-plugins",
+      "name": "build-web-data-visualization",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/build-web-data-visualization"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_USE",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:test-android-apps",
+      "source_id": "openai-plugins",
+      "name": "test-android-apps",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/test-android-apps"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:life-science-research",
+      "source_id": "openai-plugins",
+      "name": "life-science-research",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Education & Research",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/life-science-research"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:zotero",
+      "source_id": "openai-plugins",
+      "name": "zotero",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Education & Research",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/zotero"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:expo",
+      "source_id": "openai-plugins",
+      "name": "expo",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/expo"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": true,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE",
+        "LOCAL_AUTOMATION_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:coderabbit",
+      "source_id": "openai-plugins",
+      "name": "coderabbit",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/coderabbit"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:remotion",
+      "source_id": "openai-plugins",
+      "name": "remotion",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Creativity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/remotion"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:plugin-eval",
+      "source_id": "openai-plugins",
+      "name": "plugin-eval",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/plugin-eval"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:granola",
+      "source_id": "openai-plugins",
+      "name": "granola",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Productivity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/granola"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:monday-com",
+      "source_id": "openai-plugins",
+      "name": "monday-com",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Productivity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/monday-com"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:temporal",
+      "source_id": "openai-plugins",
+      "name": "temporal",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/temporal"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:hyperframes",
+      "source_id": "openai-plugins",
+      "name": "hyperframes",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Creativity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/hyperframes"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:supabase",
+      "source_id": "openai-plugins",
+      "name": "supabase",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/supabase"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:codex-security",
+      "source_id": "openai-plugins",
+      "name": "codex-security",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Security",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/codex-security"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_USE",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:twilio-developer-kit",
+      "source_id": "openai-plugins",
+      "name": "twilio-developer-kit",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/twilio-developer-kit"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:openai-developers",
+      "source_id": "openai-plugins",
+      "name": "openai-developers",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/openai-developers"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL",
+        "products": [
+          "CODEX"
+        ]
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:datadog",
+      "source_id": "openai-plugins",
+      "name": "datadog",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/datadog"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:zoom",
+      "source_id": "openai-plugins",
+      "name": "zoom",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Communication",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/zoom"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": true,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE",
+        "LOCAL_AUTOMATION_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:mixpanel-headless",
+      "source_id": "openai-plugins",
+      "name": "mixpanel-headless",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Data & Analytics",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/mixpanel-headless"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:airtable",
+      "source_id": "openai-plugins",
+      "name": "airtable",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Productivity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/airtable"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:nvidia",
+      "source_id": "openai-plugins",
+      "name": "nvidia",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/nvidia"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:posthog",
+      "source_id": "openai-plugins",
+      "name": "posthog",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Data & Analytics",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/posthog"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:ngs-analysis",
+      "source_id": "openai-plugins",
+      "name": "ngs-analysis",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Education & Research",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/ngs-analysis"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:shopify",
+      "source_id": "openai-plugins",
+      "name": "shopify",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Business & Operations",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/shopify"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:magicpath",
+      "source_id": "openai-plugins",
+      "name": "magicpath",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/magicpath"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:openai-ads-conversions",
+      "source_id": "openai-plugins",
+      "name": "openai-ads-conversions",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/openai-ads-conversions"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:boltz-api-cli",
+      "source_id": "openai-plugins",
+      "name": "boltz-api-cli",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Scientific Research",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/boltz-api-cli"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:dropbox",
+      "source_id": "openai-plugins",
+      "name": "dropbox",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Productivity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/dropbox"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:product-design",
+      "source_id": "openai-plugins",
+      "name": "product-design",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Creativity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/product-design"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": false,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_USE",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:data-analytics",
+      "source_id": "openai-plugins",
+      "name": "data-analytics",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Data & Analytics",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/data-analytics"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_USE",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:creative-production",
+      "source_id": "openai-plugins",
+      "name": "creative-production",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Creativity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/creative-production"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_USE",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:public-equity-investing",
+      "source_id": "openai-plugins",
+      "name": "public-equity-investing",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Finance",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/public-equity-investing"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": true,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_USE",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:adobe",
+      "source_id": "openai-plugins",
+      "name": "adobe",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Creativity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/adobe"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:lovable",
+      "source_id": "openai-plugins",
+      "name": "lovable",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/lovable"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": false,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:clickup",
+      "source_id": "openai-plugins",
+      "name": "clickup",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Productivity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/clickup"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:consensus",
+      "source_id": "openai-plugins",
+      "name": "consensus",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Education & Research",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/consensus"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": false,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": false
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:chatcut",
+      "source_id": "openai-plugins",
+      "name": "chatcut",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Creativity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/chatcut"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": false,
+        "app_manifest_present": true,
+        "scripts_present": false,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:higgsfield",
+      "source_id": "openai-plugins",
+      "name": "higgsfield",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Creativity",
+      "marketplace_source": {
+        "source": "local",
+        "path": "./plugins/higgsfield"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": true,
+        "mcp_manifest_present": true,
+        "app_manifest_present": true,
+        "scripts_present": true,
+        "commands_present": false,
+        "hooks_present": false,
+        "agents_present": true
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "MCP_SURFACE",
+        "LOCAL_SCRIPT_SURFACE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:crowdstrike-falcon-foundry",
+      "source_id": "openai-plugins",
+      "name": "crowdstrike-falcon-foundry",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "url",
+        "url": "https://github.com/CrowdStrike/foundry-skills.git"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": null,
+        "mcp_manifest_present": null,
+        "app_manifest_present": null,
+        "scripts_present": null,
+        "commands_present": null,
+        "hooks_present": null,
+        "agents_present": null
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "EXTERNAL_REPOSITORY_SOURCE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:crowdstrike-falcon-fusion",
+      "source_id": "openai-plugins",
+      "name": "crowdstrike-falcon-fusion",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "url",
+        "url": "https://github.com/CrowdStrike/fusion-skills.git"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": null,
+        "mcp_manifest_present": null,
+        "app_manifest_present": null,
+        "scripts_present": null,
+        "commands_present": null,
+        "hooks_present": null,
+        "agents_present": null
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "EXTERNAL_REPOSITORY_SOURCE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    },
+    {
+      "capability_id": "openai-marketplace:qodo",
+      "source_id": "openai-plugins",
+      "name": "qodo",
+      "kind": "MARKETPLACE_PLUGIN",
+      "category": "Developer Tools",
+      "marketplace_source": {
+        "source": "git-subdir",
+        "url": "https://github.com/qodo-ai/qodo-skills.git",
+        "path": "codex-packages/qodo"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "structural_signals": {
+        "skill_files_present": null,
+        "mcp_manifest_present": null,
+        "app_manifest_present": null,
+        "scripts_present": null,
+        "commands_present": null,
+        "hooks_present": null,
+        "agents_present": null
+      },
+      "authority_surface": {
+        "authentication": "ON_INSTALL",
+        "remote_write_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "destructive_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "publish_scope": "UNKNOWN_UNTIL_NARROW_AUDIT",
+        "credential_scope": "UNKNOWN_UNTIL_NARROW_AUDIT"
+      },
+      "risk_flags": [
+        "AUTHENTICATION_POLICY",
+        "EXTERNAL_REPOSITORY_SOURCE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "DISCOVERED_NOT_NARROW_AUDITED",
+      "next_action": "NARROW_AUDIT_ON_DEMAND"
+    }
+  ],
+  "audited_subcapabilities": [
+    {
+      "capability_id": "agent-skills-standard:skill-format-specification",
+      "source_id": "agent-skills-standard",
+      "name": "skill-format-specification",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "69ef37e9424c0a7ea9dd2293b559e43ec8176379",
+      "risk_flags": [
+        "FORMAT_REFERENCE",
+        "CLIENT_VARIANCE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "The specification defines portable structure and metadata but is not itself an execution capability. Client behavior, especially experimental allowed-tools handling, remains implementation-specific.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "agent-skills-standard:skills-ref-reference-library",
+      "source_id": "agent-skills-standard",
+      "name": "skills-ref-reference-library",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "69ef37e9424c0a7ea9dd2293b559e43ec8176379",
+      "risk_flags": [
+        "LOCAL_READ",
+        "REFERENCE_IMPLEMENTATION",
+        "DEMONSTRATION_ONLY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "The upstream README explicitly states that skills-ref is for demonstration and is not meant for production use.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "agent-skills-standard:executable-script-convention",
+      "source_id": "agent-skills-standard",
+      "name": "executable-script-convention",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "69ef37e9424c0a7ea9dd2293b559e43ec8176379",
+      "risk_flags": [
+        "SCRIPT_EXECUTION",
+        "DEPENDENCY_FETCH",
+        "SUPPLY_CHAIN"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "The format permits bundled executable code and the authoring guidance recommends package runners that may fetch and execute dependencies; each concrete skill still needs its own authority and provenance review.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "agent-skills-standard:allowed-tools-field",
+      "source_id": "agent-skills-standard",
+      "name": "allowed-tools-field",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "69ef37e9424c0a7ea9dd2293b559e43ec8176379",
+      "risk_flags": [
+        "EXPERIMENTAL",
+        "TOOL_PREAPPROVAL",
+        "CLIENT_VARIANCE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "The allowed-tools field is explicitly experimental and its support varies across agent implementations, so Agent OS must not treat it as a portable authority grant.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "openai-plugins:curated-marketplace",
+      "source_id": "openai-plugins",
+      "name": "curated-marketplace",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+      "risk_flags": [
+        "MIXED_PROVENANCE",
+        "PLUGIN_INSTALL",
+        "AUTHENTICATION",
+        "REMOTE_TOOLS"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "The marketplace mixes local OpenAI-curated bundles with external repository sources and multiple authentication policies; repository curation is not sufficient for blanket runtime admission.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "openai-plugins:remote-mcp-plugins",
+      "source_id": "openai-plugins",
+      "name": "remote-mcp-plugins",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+      "risk_flags": [
+        "NETWORK",
+        "OAUTH",
+        "REMOTE_ACCOUNT",
+        "READ_WRITE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Numerous plugins bind to remote MCP endpoints with authenticated access to SaaS or developer accounts and may expose write-capable tools.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "openai-plugins:local-mcp-and-script-plugins",
+      "source_id": "openai-plugins",
+      "name": "local-mcp-and-script-plugins",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+      "risk_flags": [
+        "LOCAL_EXECUTION",
+        "LOCAL_WRITE",
+        "NETWORK",
+        "CREDENTIALS"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Several plugins launch local Node or script-backed MCP servers and may access credentials, files, networks or generated artifacts.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "openai-plugins:github-plugin",
+      "source_id": "openai-plugins",
+      "name": "github-plugin",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+      "risk_flags": [
+        "OAUTH",
+        "SOURCE_CONTROL_WRITE",
+        "CI",
+        "PUBLICATION"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "The GitHub plugin is explicitly interactive/write capable and supports PR, issue, CI and publishing workflows.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "openai-plugins:communication-and-productivity-plugins",
+      "source_id": "openai-plugins",
+      "name": "communication-and-productivity-plugins",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+      "risk_flags": [
+        "OAUTH",
+        "PERSONAL_DATA",
+        "MESSAGE_SEND",
+        "REMOTE_WRITE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Email, chat, calendar, drive and productivity plugins can access personal or organizational data and perform remote writes.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "openai-plugins:developer-and-infrastructure-plugins",
+      "source_id": "openai-plugins",
+      "name": "developer-and-infrastructure-plugins",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+      "risk_flags": [
+        "CODE_WRITE",
+        "DEPLOYMENT",
+        "INFRA_MUTATION",
+        "SECRETS"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Developer-platform bundles include deployment, infrastructure, observability, security and source-control workflows whose authority must remain task-scoped.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "openai-plugins:finance-commerce-and-investing-plugins",
+      "source_id": "openai-plugins",
+      "name": "finance-commerce-and-investing-plugins",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+      "risk_flags": [
+        "FINANCIAL_DATA",
+        "COMMERCE",
+        "WRITE",
+        "CONSEQUENTIAL_DOMAIN"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Finance, investing, payments and commerce surfaces require independent domain and authority controls rather than marketplace-wide trust.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "openai-plugins:openai-first-party-plugins",
+      "source_id": "openai-plugins",
+      "name": "openai-first-party-plugins",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+      "risk_flags": [
+        "CODE_WRITE",
+        "API_KEYS",
+        "LOCAL_MCP",
+        "DEPLOYMENT",
+        "PROPRIETARY_COMPONENTS"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "First-party provenance does not remove execution risk; reviewed OpenAI plugins can create API keys, write repositories, run local MCP services or instrument applications.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "openai-plugins:plugin-creator",
+      "source_id": "openai-plugins",
+      "name": "plugin-creator",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+      "risk_flags": [
+        "LOCAL_WRITE",
+        "HOME_DIRECTORY_WRITE",
+        "PLUGIN_SCAFFOLD",
+        "MARKETPLACE_MUTATION"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "The creator skill writes plugin trees and marketplace metadata and can add MCP, hooks and scripts, so it requires explicit file-scope authority.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "openai-plugins:external-marketplace-references",
+      "source_id": "openai-plugins",
+      "name": "external-marketplace-references",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+      "risk_flags": [
+        "EXTERNAL_REPOSITORY",
+        "SUPPLY_CHAIN",
+        "UPDATE_DRIFT"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Marketplace entries that install from external repositories require their own provenance and capability audits; OpenAI marketplace inclusion does not substitute for upstream review.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "duckdb-skills:attach-db",
+      "source_id": "duckdb-skills",
+      "name": "attach-db",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "risk_flags": [
+        "BASH",
+        "LOCAL_READ",
+        "LOCAL_WRITE",
+        "STATE_FILE",
+        "POTENTIAL_DATABASE_CREATE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Useful database attachment workflow, but it writes shared state and can create a database after user confirmation.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "duckdb-skills:convert-file",
+      "source_id": "duckdb-skills",
+      "name": "convert-file",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "risk_flags": [
+        "BASH",
+        "LOCAL_READ",
+        "LOCAL_WRITE",
+        "NETWORK_OPTIONAL",
+        "CREDENTIAL_CHAIN_OPTIONAL",
+        "EXTENSION_LOAD"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Conversion writes user-selected outputs and can access remote sources or install/load extensions.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "duckdb-skills:duckdb-docs",
+      "source_id": "duckdb-skills",
+      "name": "duckdb-docs",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "risk_flags": [
+        "BASH",
+        "NETWORK",
+        "LOCAL_CACHE_WRITE",
+        "EXTENSION_INSTALL"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Documentation lookup is narrow in purpose but installs extensions, downloads indexes, and writes a local cache.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "duckdb-skills:install-duckdb",
+      "source_id": "duckdb-skills",
+      "name": "install-duckdb",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "risk_flags": [
+        "BASH",
+        "NETWORK",
+        "SOFTWARE_INSTALL",
+        "SOFTWARE_UPDATE",
+        "COMMUNITY_EXTENSION",
+        "CLI_UPGRADE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Installer/updater authority is materially broader than a reference skill and includes community-extension and CLI-upgrade paths.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "duckdb-skills:query",
+      "source_id": "duckdb-skills",
+      "name": "query",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "risk_flags": [
+        "BASH",
+        "LOCAL_READ",
+        "SESSION_STATE",
+        "POTENTIAL_SECRET_REUSE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Ad-hoc mode contains useful path/external-access restrictions, but session mode restores shared state that may include secrets and attached databases.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "duckdb-skills:read-file",
+      "source_id": "duckdb-skills",
+      "name": "read-file",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "risk_flags": [
+        "BASH",
+        "LOCAL_READ",
+        "NETWORK_OPTIONAL",
+        "CREDENTIAL_CHAIN_OPTIONAL",
+        "EXTENSION_INSTALL_OPTIONAL"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Broad file readers and remote credential-chain support exceed a default reference-only trust boundary.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "duckdb-skills:read-memories",
+      "source_id": "duckdb-skills",
+      "name": "read-memories",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "risk_flags": [
+        "BASH",
+        "LOCAL_SESSION_HISTORY_READ",
+        "PRIVACY_BOUNDARY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Reads historical Claude Code session logs and therefore crosses a private-context boundary unsuitable for generic automatic admission.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "duckdb-skills:s3-explore",
+      "source_id": "duckdb-skills",
+      "name": "s3-explore",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "risk_flags": [
+        "BASH",
+        "NETWORK",
+        "REMOTE_STORAGE",
+        "CREDENTIAL_CHAIN",
+        "EXPLICIT_SECRET_OPTION"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Remote object-store exploration requires network and may use credentials or explicit access secrets.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "duckdb-skills:spatial",
+      "source_id": "duckdb-skills",
+      "name": "spatial",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "risk_flags": [
+        "BASH",
+        "NETWORK_OPTIONAL",
+        "COMMUNITY_EXTENSION_OPTIONAL",
+        "LOCAL_WRITE_OPTIONAL"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Can query remote public datasets, install community extensions, and export local spatial files.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:cloudflare",
+      "source_id": "cloudflare-skills",
+      "name": "cloudflare",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "NETWORK",
+        "MCP",
+        "PRODUCT_ROUTING",
+        "DEPLOYMENT_REFERENCES",
+        "SECRETS"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Primarily architecture and product selection guidance, but routes into deployment, secrets, shell, MCP and account-management surfaces.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:agents-sdk",
+      "source_id": "cloudflare-skills",
+      "name": "agents-sdk",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "MCP",
+        "DEPLOYMENT",
+        "CODE_WRITE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Useful SDK guidance but includes MCP and deployment-oriented workflows.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:cloudflare-email-service",
+      "source_id": "cloudflare-skills",
+      "name": "cloudflare-email-service",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "NETWORK",
+        "WRANGLER",
+        "API_TOKEN",
+        "EMAIL_SEND",
+        "REMOTE_CONFIGURATION"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Can enable email services, use API tokens and send external email.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:cloudflare-one-migrations",
+      "source_id": "cloudflare-skills",
+      "name": "cloudflare-one-migrations",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "SECURITY_POLICY",
+        "NETWORK_CONFIGURATION",
+        "MIGRATION"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Migration planning is useful, but the skill covers high-impact security and network configuration changes.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:cloudflare-one",
+      "source_id": "cloudflare-skills",
+      "name": "cloudflare-one",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "MCP",
+        "SECURITY_POLICY",
+        "NETWORK_CONFIGURATION",
+        "REMOTE_MUTATION",
+        "SECRETS"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Can inspect and configure identity, access, Gateway, network and security policies; broad production authority is explicitly discussed.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:durable-objects",
+      "source_id": "cloudflare-skills",
+      "name": "durable-objects",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "CODE_WRITE",
+        "STATEFUL_RUNTIME",
+        "WRANGLER"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Mostly implementation guidance but includes stateful production patterns and Wrangler configuration.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:nextjs-on-cloudflare",
+      "source_id": "cloudflare-skills",
+      "name": "nextjs-on-cloudflare",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "NPX",
+        "UPSTREAM_SKILL_INSTALL",
+        "DEPLOYMENT"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Explicitly instructs installing upstream skills and supports project migration/deployment.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:sandbox-migrate-to-next",
+      "source_id": "cloudflare-skills",
+      "name": "sandbox-migrate-to-next",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "SHELL",
+        "MIGRATION",
+        "DEPLOYMENT",
+        "SECRET_HANDLING",
+        "DELETE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Migration path includes shell/runtime changes, deployment and potentially destructive edits.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:sandbox-next",
+      "source_id": "cloudflare-skills",
+      "name": "sandbox-next",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "SHELL",
+        "DEPLOYMENT",
+        "SECRET_HANDLING"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Sandbox applications expose shell/runtime execution and deployment surfaces.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:sandbox-stable",
+      "source_id": "cloudflare-skills",
+      "name": "sandbox-stable",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "SHELL",
+        "DEPLOYMENT",
+        "SECRET_HANDLING",
+        "LOCAL_WRITE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Stable sandbox guidance still covers execution, deployment and secret/configuration changes.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:turnstile-spin",
+      "source_id": "cloudflare-skills",
+      "name": "turnstile-spin",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "SHELL",
+        "EXECUTABLE_SCRIPTS",
+        "API_TOKEN",
+        "SECRET_HANDLING",
+        "REMOTE_CREATE",
+        "LOCAL_WRITE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Contains executable shell scripts, token/secret handling and remote widget creation/configuration.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:web-perf",
+      "source_id": "cloudflare-skills",
+      "name": "web-perf",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "BROWSER_TOOLING",
+        "MCP_INSTALL_OPTION",
+        "NETWORK"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Audit guidance is comparatively narrow, but it can install/configure Chrome DevTools MCP and operates browser/network tooling.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:workers-best-practices",
+      "source_id": "cloudflare-skills",
+      "name": "workers-best-practices",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "CODE_WRITE",
+        "WRANGLER",
+        "SECRET_CONFIGURATION"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Mostly guidance, but directly affects production Worker code/configuration and secret-related practices.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "cloudflare-skills:wrangler",
+      "source_id": "cloudflare-skills",
+      "name": "wrangler",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "risk_flags": [
+        "CLI",
+        "NETWORK",
+        "API_TOKEN",
+        "SECRET_HANDLING",
+        "REMOTE_CREATE",
+        "REMOTE_DELETE",
+        "DEPLOYMENT",
+        "LOCAL_WRITE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Wrangler is a broad resource-management and deployment surface with account credentials and remote mutations.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:skill-installation",
+      "source_id": "microsoft-playwright-skills",
+      "name": "skill-installation",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "risk_flags": [
+        "LOCAL_WRITE",
+        "HOME_DIRECTORY_WRITE",
+        "SKILL_INSTALL"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "The documented install command copies skills into workspace or home-directory agent skill locations.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:browser-navigation-and-interaction",
+      "source_id": "microsoft-playwright-skills",
+      "name": "browser-navigation-and-interaction",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "risk_flags": [
+        "NETWORK",
+        "BROWSER_AUTOMATION",
+        "REMOTE_MUTATION",
+        "FORM_SUBMISSION",
+        "FILE_UPLOAD"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Core browser actions can change external application state and upload local files.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:browser-observation",
+      "source_id": "microsoft-playwright-skills",
+      "name": "browser-observation",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "risk_flags": [
+        "NETWORK",
+        "PAGE_CONTENT_READ",
+        "SCREENSHOT",
+        "LOCAL_WRITE"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Snapshots, screenshots, requests and console inspection are useful but still expose page data and can write local artifacts.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:storage-state",
+      "source_id": "microsoft-playwright-skills",
+      "name": "storage-state",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "risk_flags": [
+        "COOKIE_READ",
+        "COOKIE_WRITE",
+        "COOKIE_DELETE",
+        "AUTH_STATE",
+        "LOCAL_WRITE",
+        "PRIVACY_BOUNDARY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "The skill can inspect, mutate, persist, restore and delete cookies and browser storage, including authenticated state.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:run-code",
+      "source_id": "microsoft-playwright-skills",
+      "name": "run-code",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "risk_flags": [
+        "ARBITRARY_CODE",
+        "BROWSER_PERMISSION",
+        "FILE_WRITE",
+        "CLIPBOARD",
+        "NETWORK"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "run-code evaluates arbitrary Playwright functions with browser-context access, permissions and file-download capabilities.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:webmcp",
+      "source_id": "microsoft-playwright-skills",
+      "name": "webmcp",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "risk_flags": [
+        "UNTRUSTED_PAGE_TOOLING",
+        "REMOTE_MUTATION",
+        "NETWORK"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Page-registered WebMCP tools are explicitly untrusted and may have remote side effects when called.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:persistent-and-attached-sessions",
+      "source_id": "microsoft-playwright-skills",
+      "name": "persistent-and-attached-sessions",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "risk_flags": [
+        "PERSISTENT_PROFILE",
+        "EXISTING_BROWSER_ACCESS",
+        "CDP",
+        "AUTH_STATE",
+        "PRIVACY_BOUNDARY"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Attaching to existing browsers or persistent profiles can expose authenticated sessions and unrelated browsing state.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:request-mocking",
+      "source_id": "microsoft-playwright-skills",
+      "name": "request-mocking",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "risk_flags": [
+        "NETWORK_INTERCEPTION",
+        "BROWSER_STATE_MUTATION"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Route/unroute commands alter browser network behavior and can materially change application behavior under test.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:test-generation-and-healing",
+      "source_id": "microsoft-playwright-skills",
+      "name": "test-generation-and-healing",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "risk_flags": [
+        "CODE_WRITE",
+        "TEST_MUTATION",
+        "BROWSER_AUTOMATION"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "Generation and healing workflows can write or modify test code based on browser interactions.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:evidence-capture-and-pr-attachments",
+      "source_id": "microsoft-playwright-skills",
+      "name": "evidence-capture-and-pr-attachments",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "risk_flags": [
+        "LOCAL_WRITE",
+        "SCREEN_CAPTURE",
+        "GITHUB_WRITE",
+        "PUBLICATION"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "The skill can generate visual artifacts and instruct attaching them to GitHub pull requests, crossing a publication boundary.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:npm-installation",
+      "source_id": "microsoft-playwright-skills",
+      "name": "npm-installation",
+      "kind": "AUDITED_SUBCAPABILITY",
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "risk_flags": [
+        "NPM",
+        "GLOBAL_INSTALL",
+        "SOFTWARE_UPDATE",
+        "NETWORK"
+      ],
+      "admission_state": "REFERENCE_ONLY",
+      "inventory_state": "SOURCE_AUDITED",
+      "rationale": "The skill instructs global installation of the latest CLI when unavailable locally.",
+      "next_action": "NARROWER_AUDIT_IF_NEEDED"
+    }
+  ]
+}
