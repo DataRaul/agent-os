@@ -18,7 +18,10 @@
       "canonical_url": "https://github.com/openai/plugins",
       "trust_tier": "T1",
       "admission_state": "REFERENCE_ONLY",
-      "purpose": "Current Codex plugin and skill examples"
+      "purpose": "Current Codex plugin and skill examples",
+      "reviewed_commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+      "audit_record": "catalog/vendor-audits/openai-plugins.json",
+      "audit_disposition": "KEEP_REFERENCE_ONLY"
     },
     {
       "id": "duckdb-skills",

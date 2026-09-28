@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "source_id": "openai-plugins",
+  "verified_as_of": "2026-09-28",
+  "provenance": {
+    "trust_tier": "T1",
+    "upstream_owner": "OpenAI",
+    "upstream_repository": "https://github.com/openai/plugins",
+    "official_organization_repository": true
+  },
+  "reviewed_candidate": {
+    "commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+    "default_branch": "main",
+    "repository_root_license": "UNDECLARED",
+    "licensing_note": "Licensing is plugin-specific; reviewed manifests include both MIT and proprietary entries."
+  },
+  "repository_shape": {
+    "curated_marketplace_name": "openai-curated",
+    "local_plugin_directories": 62,
+    "skill_files": 536,
+    "plugin_manifests": 64,
+    "mcp_manifests": 31,
+    "script_paths": 488,
+    "external_marketplace_sources_present": true,
+    "external_marketplace_source_examples": [
+      "CrowdStrike Foundry skills",
+      "CrowdStrike Fusion skills",
+      "Qodo skills"
+    ],
+    "plugin_creator_skill_present": true
+  },
+  "access_and_side_effects": {
+    "local_filesystem_reads": true,
+    "local_filesystem_writes": true,
+    "network_access": true,
+    "credential_handling": true,
+    "external_account_access": true,
+    "remote_mcp_present": true,
+    "local_mcp_servers_present": true,
+    "external_effects": [
+      "plugins can authenticate to third-party SaaS and developer platforms",
+      "connector-backed plugins can read and write remote application state",
+      "communication plugins can compose or send messages and email",
+      "developer plugins can create, edit, deploy, publish or administer code and infrastructure",
+      "finance and commerce plugins can interact with consequential account and transaction workflows",
+      "local skills and scripts can write project files and execute tool-specific commands",
+      "plugin creator tooling can create plugin directories, manifests, optional scripts, MCP definitions and marketplace entries",
+      "marketplace entries can point at external repositories outside the OpenAI repository"
+    ],
+    "destructive_or_publish_authority_declared": true
+  },
+  "reviewed_subcapabilities": [
+    {
+      "id": "curated-marketplace",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "MIXED_PROVENANCE",
+        "PLUGIN_INSTALL",
+        "AUTHENTICATION",
+        "REMOTE_TOOLS"
+      ],
+      "rationale": "The marketplace mixes local OpenAI-curated bundles with external repository sources and multiple authentication policies; repository curation is not sufficient for blanket runtime admission."
+    },
+    {
+      "id": "remote-mcp-plugins",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "NETWORK",
+        "OAUTH",
+        "REMOTE_ACCOUNT",
+        "READ_WRITE"
+      ],
+      "rationale": "Numerous plugins bind to remote MCP endpoints with authenticated access to SaaS or developer accounts and may expose write-capable tools."
+    },
+    {
+      "id": "local-mcp-and-script-plugins",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "LOCAL_EXECUTION",
+        "LOCAL_WRITE",
+        "NETWORK",
+        "CREDENTIALS"
+      ],
+      "rationale": "Several plugins launch local Node or script-backed MCP servers and may access credentials, files, networks or generated artifacts."
+    },
+    {
+      "id": "github-plugin",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "OAUTH",
+        "SOURCE_CONTROL_WRITE",
+        "CI",
+        "PUBLICATION"
+      ],
+      "rationale": "The GitHub plugin is explicitly interactive/write capable and supports PR, issue, CI and publishing workflows."
+    },
+    {
+      "id": "communication-and-productivity-plugins",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "OAUTH",
+        "PERSONAL_DATA",
+        "MESSAGE_SEND",
+        "REMOTE_WRITE"
+      ],
+      "rationale": "Email, chat, calendar, drive and productivity plugins can access personal or organizational data and perform remote writes."
+    },
+    {
+      "id": "developer-and-infrastructure-plugins",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "CODE_WRITE",
+        "DEPLOYMENT",
+        "INFRA_MUTATION",
+        "SECRETS"
+      ],
+      "rationale": "Developer-platform bundles include deployment, infrastructure, observability, security and source-control workflows whose authority must remain task-scoped."
+    },
+    {
+      "id": "finance-commerce-and-investing-plugins",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "FINANCIAL_DATA",
+        "COMMERCE",
+        "WRITE",
+        "CONSEQUENTIAL_DOMAIN"
+      ],
+      "rationale": "Finance, investing, payments and commerce surfaces require independent domain and authority controls rather than marketplace-wide trust."
+    },
+    {
+      "id": "openai-first-party-plugins",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "CODE_WRITE",
+        "API_KEYS",
+        "LOCAL_MCP",
+        "DEPLOYMENT",
+        "PROPRIETARY_COMPONENTS"
+      ],
+      "rationale": "First-party provenance does not remove execution risk; reviewed OpenAI plugins can create API keys, write repositories, run local MCP services or instrument applications."
+    },
+    {
+      "id": "plugin-creator",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "LOCAL_WRITE",
+        "HOME_DIRECTORY_WRITE",
+        "PLUGIN_SCAFFOLD",
+        "MARKETPLACE_MUTATION"
+      ],
+      "rationale": "The creator skill writes plugin trees and marketplace metadata and can add MCP, hooks and scripts, so it requires explicit file-scope authority."
+    },
+    {
+      "id": "external-marketplace-references",
+      "disposition": "REFERENCE_ONLY",
+      "risk_tags": [
+        "EXTERNAL_REPOSITORY",
+        "SUPPLY_CHAIN",
+        "UPDATE_DRIFT"
+      ],
+      "rationale": "Marketplace entries that install from external repositories require their own provenance and capability audits; OpenAI marketplace inclusion does not substitute for upstream review."
+    }
+  ],
+  "narrower_admission_candidates": [
+    {
+      "id": "openai-plugin-format-reference",
+      "status": "FUTURE_NARROW_AUDIT",
+      "condition": "Consider manifest/schema documentation as read-only reference material without installing plugins, executing scripts or connecting MCP servers."
+    },
+    {
+      "id": "plugin-creator-bounded-workspace",
+      "status": "FUTURE_NARROW_AUDIT",
+      "condition": "Consider scaffolding only within an explicitly authorized workspace path, with marketplace mutation, hooks, scripts and MCP creation separately gated."
+    },
+    {
+      "id": "individual-plugin-audits",
+      "status": "FUTURE_NARROW_AUDIT",
+      "condition": "Audit only plugins needed for a concrete workflow, binding each decision to its exact manifest, skills, MCP endpoints, authentication and write surfaces."
+    }
+  ],
+  "update_strategy": {
+    "mode": "REVIEW_NEW_UPSTREAM_CANDIDATE",
+    "reviewed_commit_is_evidence_boundary": true,
+    "automatic_marketplace_admission_allowed": false,
+    "external_marketplace_sources_require_independent_audit": true,
+    "automatic_upstream_updates_allowed": false
+  },
+  "audit_disposition": "KEEP_REFERENCE_ONLY",
+  "admission_state_after_audit": "REFERENCE_ONLY",
+  "rationale": "The repository is a large curated marketplace rather than one uniform capability. It contains hundreds of skills, dozens of MCP/plugin manifests, hundreds of scripts, authenticated write-capable integrations and external repository sources. Blanket plugin-level admission would violate minimum-authority and provenance boundaries; individual narrow capabilities should be reviewed only when needed."
+}

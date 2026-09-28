@@ -41,6 +41,8 @@ A repository-level label such as "official" does not prove that every contained 
 - session/history access;
 - destructive or publish/deploy actions.
 
+Curated marketplaces require an additional provenance boundary: marketplace inclusion is evidence of curation, not proof that every bundled or externally referenced capability should inherit the marketplace publisher's trust tier.
+
 ## Admission states
 
 The canonical catalog states remain:
@@ -65,7 +67,8 @@ Prefer admitting a narrow subcapability over an entire plugin when:
 - only some skills handle credentials;
 - installers/updaters have broader authority than read/query skills;
 - session/history readers cross a privacy boundary;
-- file writers or remote mutations are not needed for the intended use.
+- file writers or remote mutations are not needed for the intended use;
+- a marketplace entry points to an external repository with an independent update path.
 
 Do not copy vendor instructions into Agent OS merely to avoid upstream review. Reference the reviewed upstream identity and keep local policy separate.
 
@@ -99,5 +102,6 @@ Completed bounded package/surface audits:
 - DuckDB official `duckdb-skills`: `KEEP_REFERENCE_ONLY`.
 - Cloudflare official `cloudflare/skills`: `KEEP_REFERENCE_ONLY`.
 - Microsoft Playwright CLI skills and installation guidance: `KEEP_REFERENCE_ONLY`.
+- OpenAI `openai/plugins` curated marketplace: `KEEP_REFERENCE_ONLY` at repository/marketplace level; individual plugins remain separately auditable.
 
-Next catalog candidates remain reference-only until separately audited. Package-level audit outcomes do not automatically decide narrower subcapability admission.
+The remaining catalog item is the Agent Skills format specification, which is a standards/reference surface rather than a runtime capability package. Package-level audit outcomes do not automatically decide narrower subcapability admission.
