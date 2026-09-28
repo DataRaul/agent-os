@@ -10,7 +10,7 @@ CONSOLE_OUT="$(mktemp)"
 REQUESTS_OUT="$(mktemp)"
 
 cleanup() {
-  playwright-cli --config "$CONFIG" close >/dev/null 2>&1 || true
+  playwright-cli close >/dev/null 2>&1 || true
   if [[ -n "${SERVER_PID:-}" ]]; then
     kill "$SERVER_PID" >/dev/null 2>&1 || true
   fi
@@ -29,12 +29,12 @@ for _ in {1..30}; do
 done
 curl --fail --silent http://127.0.0.1:8765/ >/dev/null
 
-playwright-cli --config "$CONFIG" open http://127.0.0.1:8765/ >/dev/null
+playwright-cli open http://127.0.0.1:8765/ --config="$CONFIG" >/dev/null
 sleep 1
-playwright-cli --config "$CONFIG" snapshot >"$SNAPSHOT_OUT"
-playwright-cli --config "$CONFIG" find "Runtime Ready" >"$FIND_OUT"
-playwright-cli --config "$CONFIG" console >"$CONSOLE_OUT"
-playwright-cli --config "$CONFIG" requests >"$REQUESTS_OUT"
+playwright-cli snapshot >"$SNAPSHOT_OUT"
+playwright-cli find "Runtime Ready" >"$FIND_OUT"
+playwright-cli console >"$CONSOLE_OUT"
+playwright-cli requests >"$REQUESTS_OUT"
 
 grep -F "Runtime Ready" "$SNAPSHOT_OUT" >/dev/null
 grep -F "Runtime Ready" "$FIND_OUT" >/dev/null
