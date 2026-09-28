@@ -6,7 +6,7 @@ on:
       - ".github/workflows/p4-playwright-observation-eval.yml"
       - "scripts/p4_playwright_fixture_server.py"
       - "scripts/run_p4_playwright_observation_eval.sh"
-      - "evals/p4-playwright-observation/config.json"
+      - "catalog/p4-playwright-observation-config.json"
 
 permissions:
   contents: read
