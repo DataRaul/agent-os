@@ -486,6 +486,111 @@ def validate_tooling_priority_queue() -> None:
     if len(ids) != len(set(ids)):
         fail("tooling priority queue contains duplicate candidates")
 
+def validate_p4_narrow_audits() -> None:
+    audit_path = ROOT / "catalog" / "p4-narrow-audits.json"
+    cases_path = ROOT / "evals" / "p4-narrow-audits" / "cases.json"
+    audits = load_json(audit_path)
+    cases_doc = load_json(cases_path)
+    queue = load_json(ROOT / "catalog" / "tooling-priority-queue.json")
+
+    if not isinstance(audits, dict) or audits.get("schema_version") != 1:
+        fail("catalog/p4-narrow-audits.json invalid")
+    if audits.get("status") != "P4_2_NARROW_AUDITS_COMPLETE":
+        fail("P4.2 narrow audit status invalid")
+    rules = audits.get("rules")
+    if not isinstance(rules, dict):
+        fail("P4.2 narrow audit rules missing")
+    for key in (
+        "no_installation",
+        "no_authentication",
+        "no_external_mutation",
+        "no_paid_infrastructure_change",
+        "audit_does_not_grant_authority",
+        "registry_promotion_requires_later_gate",
+    ):
+        if rules.get(key) is not True:
+            fail(f"P4.2 narrow audit rule {key} must be true")
+
+    audit_items = audits.get("audits")
+    if not isinstance(audit_items, list) or not audit_items:
+        fail("P4.2 narrow audits must be non-empty")
+    queue_candidates = queue.get("candidates")
+    if not isinstance(queue_candidates, list):
+        fail("P4 tooling queue candidates invalid during narrow-audit validation")
+    queue_ids = [item.get("capability_id") for item in queue_candidates if isinstance(item, dict)]
+    audit_ids = [item.get("capability_id") for item in audit_items if isinstance(item, dict)]
+    if audit_ids != queue_ids:
+        fail("P4.2 narrow audit capability order must exactly match bounded queue")
+    if len(audit_ids) != len(set(audit_ids)):
+        fail("P4.2 narrow audit capability IDs must be unique")
+
+    allowed_dispositions = {"REFERENCE_ONLY", "SKILL_ALLOWED", "PLUGIN_ALLOWED", "PIN_REQUIRED", "REJECTED"}
+    referenced_case_ids: set[str] = set()
+    for item in audit_items:
+        if not isinstance(item, dict):
+            fail("P4.2 narrow audit entry must be object")
+        cap_id = item.get("capability_id")
+        commit = item.get("reviewed_commit")
+        if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}", commit):
+            fail(f"P4.2 audit {cap_id} reviewed_commit invalid")
+        if item.get("disposition") not in allowed_dispositions:
+            fail(f"P4.2 audit {cap_id} invalid disposition")
+        paths = item.get("reviewed_paths")
+        if not isinstance(paths, list) or not paths:
+            fail(f"P4.2 audit {cap_id} reviewed_paths missing")
+        for source_path in paths:
+            if (
+                not isinstance(source_path, dict)
+                or not isinstance(source_path.get("path"), str)
+                or not source_path.get("path")
+                or not isinstance(source_path.get("blob_sha"), str)
+                or not re.fullmatch(r"[0-9a-f]{40}", source_path["blob_sha"])
+            ):
+                fail(f"P4.2 audit {cap_id} reviewed path invalid")
+        case_ids = item.get("public_safe_eval_case_ids")
+        if (
+            not isinstance(case_ids, list)
+            or not case_ids
+            or any(not isinstance(case_id, str) or not case_id for case_id in case_ids)
+        ):
+            fail(f"P4.2 audit {cap_id} public_safe_eval_case_ids invalid")
+        for case_id in case_ids:
+            if case_id in referenced_case_ids:
+                fail(f"P4.2 eval case {case_id} referenced more than once")
+            referenced_case_ids.add(case_id)
+
+    if not isinstance(cases_doc, dict) or cases_doc.get("schema_version") != 1:
+        fail("P4.2 eval cases invalid")
+    if cases_doc.get("suite") != "p4-narrow-audit-public-safe-cases":
+        fail("P4.2 eval suite invalid")
+    classes = cases_doc.get("case_classes")
+    if set(classes or []) != {"easy", "normal", "deceptive", "control", "adversarial"}:
+        fail("P4.2 eval case_classes must contain the full public-safe class set")
+    cases = cases_doc.get("cases")
+    if not isinstance(cases, list) or not cases:
+        fail("P4.2 eval cases must be non-empty")
+    actual_case_ids: set[str] = set()
+    for case in cases:
+        if not isinstance(case, dict):
+            fail("P4.2 eval case must be object")
+        case_id = case.get("id")
+        cap_id = case.get("capability_id")
+        level = case.get("class")
+        if not isinstance(case_id, str) or not case_id or case_id in actual_case_ids:
+            fail("P4.2 eval case id invalid or duplicate")
+        actual_case_ids.add(case_id)
+        if cap_id not in audit_ids:
+            fail(f"P4.2 eval case {case_id} references unknown capability")
+        if level not in {"easy", "normal", "deceptive", "control", "adversarial"}:
+            fail(f"P4.2 eval case {case_id} invalid class")
+        if not isinstance(case.get("scenario"), str) or not case["scenario"].strip():
+            fail(f"P4.2 eval case {case_id} missing scenario")
+        if not isinstance(case.get("expected"), str) or not case["expected"].strip():
+            fail(f"P4.2 eval case {case_id} missing expected result")
+    if actual_case_ids != referenced_case_ids:
+        fail("P4.2 eval cases must exactly match audit references")
+
+
 def validate_json() -> None:
     catalog_path = ROOT / "catalog" / "trusted-sources.json"
     schema_path = ROOT / "schemas" / "private-overlay-profile.schema.json"
@@ -497,6 +602,7 @@ def validate_json() -> None:
     validate_vendor_audits(catalog)
     validate_tooling_inventory(catalog)
     validate_tooling_priority_queue()
+    validate_p4_narrow_audits()
     for source in catalog.get("sources", []):
         for key in ("id", "owner", "canonical_url", "trust_tier", "admission_state", "purpose"):
             if not source.get(key):
@@ -516,6 +622,7 @@ def validate_required_docs() -> None:
         "docs/VENDOR_CAPABILITY_ADMISSION.md",
         "docs/P1_CAPABILITY_BASELINE.md",
         "docs/SPECIALIST_REVIEWER_EVALUATION.md",
+        "docs/P4_NARROW_AUDITS.md",
         "agents/silent-failure-reviewer.md",
         "scripts/score_specialist_reviewer_eval.py",
     ]
