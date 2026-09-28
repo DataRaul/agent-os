@@ -58,16 +58,28 @@ Status: implemented by Tooling Inventory V1.
 
 ### P4.1 — deterministic prioritization
 
-Build a small candidate queue using explicit filters rather than subjective ranking. Prefer candidates that can be evaluated without credentials or external writes:
+Status: implemented by Tooling Priority Queue V1.
+
+The queue is generated from the inventory by `scripts/build_tooling_priority_queue.py` and committed as `catalog/tooling-priority-queue.json`.
+
+The classifier uses explicit risk-signal precedence rather than subjective scores:
 
 1. specification/reference-only helpers;
 2. local deterministic analysis/validation;
 3. isolated read-only observation;
-4. authenticated remote read;
-5. write-capable integrations;
-6. destructive, publish/deploy, communication-send, financial or broad-administration surfaces.
+4. authenticated or sensitive reads;
+5. write, execution or installation surfaces;
+6. destructive, publish/send, financial, security-policy or broad-administration surfaces.
 
-Later groups are not rejected; they simply require stronger authority and evaluation evidence.
+Broad marketplace entries remain deferred while their authority scopes are unknown. The initial P4.2 queue is limited to source-audited groups 1–3, sorted deterministically and capped at five candidates.
+
+Current queue:
+
+1. `agent-skills-standard:skill-format-specification`;
+2. `agent-skills-standard:skills-ref-reference-library`;
+3. `microsoft-playwright-skills:browser-observation`.
+
+No admission state changes in P4.1.
 
 ### P4.2 — narrow audits
 
@@ -109,4 +121,4 @@ Upstream changes require a new bounded inventory candidate. Do not silently refr
 
 ## Terminal for this step
 
-`P4_TOOLING_INVENTORY_V1_READY__P4_1_PRIORITIZATION_NEXT`
+`P4_TOOLING_PRIORITIZATION_V1_READY__P4_2_NARROW_AUDITS_NEXT`
