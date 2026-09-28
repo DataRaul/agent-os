@@ -55,12 +55,12 @@ P2 evaluates whether proposed specialist reviewer roles add measurable value bey
 
 P3 completed the initial provenance/authority audit baseline for the public tooling sources. See `docs/P3_VENDOR_CATALOG_BASELINE.md` and `docs/VENDOR_CAPABILITY_ADMISSION.md`.
 
-P4 expands the tooling layer by normalizing and evaluating narrow capabilities from those audited sources, prioritizing bounded read-only/reference capabilities before write-capable integrations.
+P4 expands the tooling layer by normalizing and evaluating narrow capabilities from those audited sources, prioritizing bounded read-only/reference capabilities before write-capable integrations. Tooling Inventory V1 is defined in `catalog/tooling-inventory.json` and `docs/P4_TOOLING_LAYER_EXPANSION.md`.
 
 Additional skills or reviewer roles should be added only when they are reusable across projects or ecosystems and the added coordination cost is justified.
 
 ## Status
 
-`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_REVIEWER_EVALUATION_HARNESS__P3_VENDOR_CATALOG_BASELINE_COMPLETE__P4_TOOLING_INVENTORY_NEXT`
+`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_REVIEWER_EVALUATION_HARNESS__P3_VENDOR_CATALOG_BASELINE_COMPLETE__P4_TOOLING_INVENTORY_V1_READY`
 
 No release or stability guarantee is implied yet.

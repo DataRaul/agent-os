@@ -332,6 +332,121 @@ def validate_vendor_audits(catalog: dict) -> None:
                 fail(f"{audit_rel} subcapability {subcap_id} invalid disposition")
 
 
+def validate_tooling_inventory(catalog: dict) -> None:
+    path = ROOT / "catalog" / "tooling-inventory.json"
+    data = load_json(path)
+    if not isinstance(data, dict):
+        fail("catalog/tooling-inventory.json must contain a JSON object")
+    if data.get("schema_version") != 1:
+        fail("catalog/tooling-inventory.json unsupported schema_version")
+
+    sources = {
+        source.get("id"): source
+        for source in catalog.get("sources", [])
+        if isinstance(source, dict) and isinstance(source.get("id"), str)
+    }
+    evidence = data.get("source_evidence")
+    if not isinstance(evidence, dict) or set(evidence) != set(sources):
+        fail("tooling inventory source_evidence must match catalog sources")
+
+    for source_id, entry in evidence.items():
+        if not isinstance(entry, dict):
+            fail(f"tooling inventory source evidence {source_id} invalid")
+        source = sources[source_id]
+        if entry.get("admission_state") != source.get("admission_state"):
+            fail(f"tooling inventory source {source_id} admission_state mismatch")
+        if entry.get("reviewed_commit") != source.get("reviewed_commit"):
+            fail(f"tooling inventory source {source_id} reviewed_commit mismatch")
+        if entry.get("audit_record") != source.get("audit_record"):
+            fail(f"tooling inventory source {source_id} audit_record mismatch")
+
+    allowed_states = {
+        "REFERENCE_ONLY",
+        "SKILL_ALLOWED",
+        "PLUGIN_ALLOWED",
+        "PIN_REQUIRED",
+        "REJECTED",
+    }
+
+    marketplace = data.get("marketplace_plugins")
+    if not isinstance(marketplace, list) or not marketplace:
+        fail("tooling inventory marketplace_plugins must be non-empty")
+    marketplace_ids: set[str] = set()
+    external_count = 0
+    mcp_count = 0
+    script_count = 0
+    for item in marketplace:
+        if not isinstance(item, dict):
+            fail("tooling inventory marketplace item must be object")
+        cap_id = item.get("capability_id")
+        if not isinstance(cap_id, str) or not cap_id or cap_id in marketplace_ids:
+            fail("tooling inventory marketplace capability id invalid/duplicate")
+        marketplace_ids.add(cap_id)
+        if item.get("source_id") != "openai-plugins":
+            fail(f"tooling inventory marketplace item {cap_id} wrong source")
+        if item.get("admission_state") != "REFERENCE_ONLY":
+            fail(f"tooling inventory marketplace item {cap_id} must fail closed")
+        if item.get("inventory_state") != "DISCOVERED_NOT_NARROW_AUDITED":
+            fail(f"tooling inventory marketplace item {cap_id} invalid inventory_state")
+        source = item.get("marketplace_source")
+        if not isinstance(source, dict) or not source.get("source"):
+            fail(f"tooling inventory marketplace item {cap_id} missing source")
+        signals = item.get("structural_signals")
+        if not isinstance(signals, dict):
+            fail(f"tooling inventory marketplace item {cap_id} missing structural_signals")
+        authority = item.get("authority_surface")
+        if not isinstance(authority, dict):
+            fail(f"tooling inventory marketplace item {cap_id} missing authority_surface")
+        for key in ("remote_write_scope", "destructive_scope", "publish_scope", "credential_scope"):
+            if authority.get(key) != "UNKNOWN_UNTIL_NARROW_AUDIT":
+                fail(f"tooling inventory marketplace item {cap_id} must fail closed on {key}")
+        flags = item.get("risk_flags")
+        if not isinstance(flags, list) or any(not isinstance(flag, str) for flag in flags):
+            fail(f"tooling inventory marketplace item {cap_id} invalid risk_flags")
+        if source.get("source") != "local":
+            external_count += 1
+            if "EXTERNAL_REPOSITORY_SOURCE" not in flags:
+                fail(f"tooling inventory external marketplace item {cap_id} missing provenance flag")
+        if signals.get("mcp_manifest_present") is True:
+            mcp_count += 1
+        if signals.get("scripts_present") is True:
+            script_count += 1
+
+    subcaps = data.get("audited_subcapabilities")
+    if not isinstance(subcaps, list) or not subcaps:
+        fail("tooling inventory audited_subcapabilities must be non-empty")
+    subcap_ids: set[str] = set()
+    for item in subcaps:
+        if not isinstance(item, dict):
+            fail("tooling inventory audited subcapability must be object")
+        cap_id = item.get("capability_id")
+        source_id = item.get("source_id")
+        if not isinstance(cap_id, str) or not cap_id or cap_id in subcap_ids:
+            fail("tooling inventory audited capability id invalid/duplicate")
+        subcap_ids.add(cap_id)
+        if source_id not in sources:
+            fail(f"tooling inventory audited capability {cap_id} unknown source")
+        if item.get("admission_state") not in allowed_states:
+            fail(f"tooling inventory audited capability {cap_id} invalid admission_state")
+        if item.get("inventory_state") != "SOURCE_AUDITED":
+            fail(f"tooling inventory audited capability {cap_id} invalid inventory_state")
+
+    summary = data.get("summary")
+    if not isinstance(summary, dict):
+        fail("tooling inventory summary missing")
+    expected_summary = {
+        "catalog_sources": len(sources),
+        "openai_marketplace_plugins": len(marketplace),
+        "openai_marketplace_external_sources": external_count,
+        "openai_marketplace_mcp_surfaces": mcp_count,
+        "openai_marketplace_plugins_with_scripts": script_count,
+        "audited_source_subcapabilities": len(subcaps),
+    }
+    for key, expected in expected_summary.items():
+        if summary.get(key) != expected:
+            fail(f"tooling inventory summary {key} mismatch")
+
+
 def validate_json() -> None:
     catalog_path = ROOT / "catalog" / "trusted-sources.json"
     schema_path = ROOT / "schemas" / "private-overlay-profile.schema.json"
@@ -341,6 +456,7 @@ def validate_json() -> None:
     if not isinstance(catalog, dict):
         fail("catalog/trusted-sources.json must contain a JSON object")
     validate_vendor_audits(catalog)
+    validate_tooling_inventory(catalog)
     for source in catalog.get("sources", []):
         for key in ("id", "owner", "canonical_url", "trust_tier", "admission_state", "purpose"):
             if not source.get(key):
