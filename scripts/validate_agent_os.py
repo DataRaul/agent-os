@@ -703,6 +703,95 @@ def validate_p4_admission_evidence() -> None:
         fail("P4.3 next gate must be P4.4")
 
 
+def validate_p4_delivery_closeout() -> None:
+    closeout = load_json(ROOT / "catalog" / "p4-delivery-closeout.json")
+    evidence = load_json(ROOT / "catalog" / "p4-admission-evidence.json")
+
+    if not isinstance(closeout, dict) or closeout.get("schema_version") != 1:
+        fail("catalog/p4-delivery-closeout.json invalid")
+    if closeout.get("status") != "P4_BOUNDED_TRANCHE_DELIVERED":
+        fail("P4.4 delivery closeout status invalid")
+    if closeout.get("scope") != "INITIAL_DETERMINISTIC_THREE_CANDIDATE_TRANCHE":
+        fail("P4.4 delivery closeout scope invalid")
+    if closeout.get("automatic_marketplace_expansion") is not False:
+        fail("P4.4 must not authorize automatic marketplace expansion")
+    if closeout.get("next_state") != "P5_AWAITS_CONSUMER_SELECTION_EVIDENCE":
+        fail("P4.4 next state mismatch")
+
+    delivery = closeout.get("delivery_evidence")
+    if not isinstance(delivery, list) or len(delivery) != 2:
+        fail("P4.4 delivery evidence must contain P4.2 and P4.3")
+    expected_delivery = [
+        {
+            "phase": "P4_2",
+            "pull_request": 18,
+            "final_candidate_sha": "101d2bb75ff4fda94123340705581cf39323c372",
+            "validate_run_id": 36495571007,
+            "publication_gate_run_id": 36495571003,
+            "merged_main_sha": "2fc6acab51f2298be47016486eecd5966825cfd6",
+        },
+        {
+            "phase": "P4_3",
+            "pull_request": 19,
+            "final_candidate_sha": "e5d298b4d9abf436943f10fc482d246d6a13b1ef",
+            "validate_run_id": 36496341890,
+            "publication_gate_run_id": 36496341884,
+            "merged_main_sha": "ca859d92b497bb37b8c989260a6f51950a9ca020",
+        },
+    ]
+    for actual, expected in zip(delivery, expected_delivery):
+        if not isinstance(actual, dict):
+            fail("P4.4 delivery evidence entry invalid")
+        for key, value in expected.items():
+            if actual.get(key) != value:
+                fail(f"P4.4 delivery evidence {expected['phase']} {key} mismatch")
+        if actual.get("validate_conclusion") != "SUCCESS":
+            fail(f"P4.4 delivery evidence {expected['phase']} validate must be success")
+        if actual.get("publication_gate_conclusion") != "SUCCESS":
+            fail(f"P4.4 delivery evidence {expected['phase']} publication gate must be success")
+        if actual.get("post_merge_verification") != "DIRECT_GITHUB_COMMIT_AND_FILE_VERIFIED":
+            fail(f"P4.4 delivery evidence {expected['phase']} post-merge verification invalid")
+
+    semantic = closeout.get("semantic_closeout")
+    if not isinstance(semantic, dict):
+        fail("P4.4 semantic closeout missing")
+    for key in (
+        "private_information_detected",
+        "capability_registry_changed",
+        "runtime_admission_changed",
+        "external_credentials_introduced",
+        "paid_or_recurring_infrastructure_introduced",
+        "marketplace_scope_widened",
+    ):
+        if semantic.get(key) is not False:
+            fail(f"P4.4 semantic closeout {key} must be false")
+
+    outcomes = closeout.get("candidate_outcomes")
+    candidates = evidence.get("candidates")
+    if not isinstance(outcomes, list) or not isinstance(candidates, list):
+        fail("P4.4 candidate outcome arrays invalid")
+    evidence_ids = [item.get("capability_id") for item in candidates if isinstance(item, dict)]
+    outcome_ids = [item.get("capability_id") for item in outcomes if isinstance(item, dict)]
+    if outcome_ids != evidence_ids:
+        fail("P4.4 candidate outcome IDs must match P4.3 evidence")
+    expected_outcomes = {
+        "agent-skills-standard:skill-format-specification": "REFERENCE_ONLY",
+        "agent-skills-standard:skills-ref-reference-library": "REFERENCE_ONLY",
+        "microsoft-playwright-skills:browser-observation": "PIN_REQUIRED",
+    }
+    for item in outcomes:
+        if not isinstance(item, dict):
+            fail("P4.4 candidate outcome entry invalid")
+        cap_id = item.get("capability_id")
+        if item.get("final_disposition") != expected_outcomes.get(cap_id):
+            fail(f"P4.4 candidate outcome {cap_id} mismatch")
+    playwright = outcomes[-1]
+    if playwright.get("runtime_admission") is not False:
+        fail("P4.4 Playwright runtime admission must remain false")
+    if playwright.get("calibration_over_time") != "NOT_ESTABLISHED":
+        fail("P4.4 Playwright calibration must remain not established")
+
+
 def validate_json() -> None:
     catalog_path = ROOT / "catalog" / "trusted-sources.json"
     schema_path = ROOT / "schemas" / "private-overlay-profile.schema.json"
@@ -716,6 +805,7 @@ def validate_json() -> None:
     validate_tooling_priority_queue()
     validate_p4_narrow_audits()
     validate_p4_admission_evidence()
+    validate_p4_delivery_closeout()
     for source in catalog.get("sources", []):
         for key in ("id", "owner", "canonical_url", "trust_tier", "admission_state", "purpose"):
             if not source.get(key):
@@ -737,6 +827,7 @@ def validate_required_docs() -> None:
         "docs/SPECIALIST_REVIEWER_EVALUATION.md",
         "docs/P4_NARROW_AUDITS.md",
         "docs/P4_ADMISSION_EVIDENCE.md",
+        "docs/P4_DELIVERY_CLOSEOUT.md",
         "agents/silent-failure-reviewer.md",
         "scripts/score_specialist_reviewer_eval.py",
     ]
