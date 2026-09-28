@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "skill": "state-mutation-idempotency",
+  "cases": [
+    {
+      "id": "smi-001-easy-upsert-key",
+      "level": "easy",
+      "scenario": "A sync writes records with a stable source ID into a table with a unique constraint and uses an upsert that replaces only the matching record. Replaying the same batch yields the same final rows.",
+      "expected_focus": [
+        "stable identity",
+        "unique constraint",
+        "IDEMPOTENT_WITH_GUARD"
+      ]
+    },
+    {
+      "id": "smi-002-retry-after-ack-loss",
+      "level": "normal",
+      "scenario": "A worker writes a durable row, then crashes before acknowledging the queue message. The message is redelivered and the worker repeats the operation using the same idempotency key.",
+      "expected_focus": [
+        "durable write before acknowledgement",
+        "retry after ambiguous delivery",
+        "duplicate prevention"
+      ]
+    },
+    {
+      "id": "smi-003-delete-before-rebuild",
+      "level": "deceptive",
+      "scenario": "A refresh job deletes all current rows, fetches replacement data, and then inserts it. Tests cover only successful runs. A provider timeout after deletion leaves the authoritative table empty.",
+      "expected_focus": [
+        "destructive ordering",
+        "partial state",
+        "UNSAFE_MUTATION",
+        "recovery requirement"
+      ]
+    },
+    {
+      "id": "smi-004-control-read-only",
+      "level": "control",
+      "scenario": "A command reads authoritative state, computes a report in memory, and performs no writes or external side effects.",
+      "expected_focus": [
+        "mutation review not applicable",
+        "avoid invented idempotency risk",
+        "no material finding"
+      ]
+    },
+    {
+      "id": "smi-005-adversarial-checkpoint-before-side-effect",
+      "level": "adversarial",
+      "scenario": "A batch processor advances its checkpoint before sending an external notification. A crash after checkpoint advancement but before the send causes restart logic to skip the notification permanently.",
+      "expected_focus": [
+        "checkpoint ordering",
+        "skipped side effect",
+        "recovery ambiguity",
+        "UNSAFE_MUTATION"
+      ]
+    }
+  ]
+}

@@ -4,14 +4,14 @@ P1 expands the public reusable capability library while preserving the public/pr
 
 ## Capability sequence
 
-| Order | Capability | Target | Purpose |
-| --- | --- | --- | --- |
-| 1 | `verified-completion` | skill | Prove that a completion claim matches authoritative final state rather than command success, green CI, or intermediate evidence. |
-| 2 | `state-mutation-idempotency` | skill | Review retries, partial writes, duplicates, overwrite/delete hazards, and recovery semantics. |
-| 3 | `provenance-freshness` | skill | Verify evidence provenance, source hierarchy, timestamps, and stale-state risk. |
-| 4 | `research-data-integrity` | skill | Detect leakage, invalid joins, survivorship/look-ahead errors, duplicate observations, and unsupported inference. |
-| 5 | `authority-boundary-review` | skill | Ensure capability availability is not mistaken for permission or execution authority. |
-| 6 | `semantic-pr-review` | skill | Review pull requests for semantic correctness and system effects beyond lint/tests/CI. |
+| Order | Capability | Target | State | Purpose |
+| --- | --- | --- | --- | --- |
+| 1 | `verified-completion` | skill | IMPLEMENTED | Prove that a completion claim matches authoritative final state rather than command success, green CI, or intermediate evidence. |
+| 2 | `state-mutation-idempotency` | skill | IMPLEMENTED | Review retries, partial writes, duplicates, overwrite/delete hazards, and recovery semantics. |
+| 3 | `provenance-freshness` | skill | PLANNED | Verify evidence provenance, source hierarchy, timestamps, and stale-state risk. |
+| 4 | `research-data-integrity` | skill | PLANNED | Detect leakage, invalid joins, survivorship/look-ahead errors, duplicate observations, and unsupported inference. |
+| 5 | `authority-boundary-review` | skill | PLANNED | Ensure capability availability is not mistaken for permission or execution authority. |
+| 6 | `semantic-pr-review` | skill | PLANNED | Review pull requests for semantic correctness and system effects beyond lint/tests/CI. |
 
 ## Build contract
 

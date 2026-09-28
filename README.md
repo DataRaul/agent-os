@@ -51,6 +51,7 @@ Current public skills:
 
 - `silent-failure-hunter`
 - `verified-completion`
+- `state-mutation-idempotency`
 
 Additional skills should be added only when they are reusable across projects or ecosystems.
 
