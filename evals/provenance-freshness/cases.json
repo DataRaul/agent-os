@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "skill": "provenance-freshness",
+  "cases": [
+    {
+      "id": "pf-001-easy-current-primary",
+      "level": "easy",
+      "scenario": "A status claim is supported by the authoritative system API, retrieved moments ago, and identifies the exact target object and current version.",
+      "expected_focus": [
+        "authoritative source",
+        "fresh retrieval",
+        "candidate binding",
+        "PROVENANCE_FRESHNESS_PASS"
+      ]
+    },
+    {
+      "id": "pf-002-secondary-with-primary-confirmation",
+      "level": "normal",
+      "scenario": "A summary report describes a current system state and links to its primary record. The primary record is checked and matches the summary, with timestamps inside the claim's freshness horizon.",
+      "expected_focus": [
+        "source hierarchy",
+        "derived versus primary evidence",
+        "freshness"
+      ]
+    },
+    {
+      "id": "pf-003-old-report-new-candidate",
+      "level": "deceptive",
+      "scenario": "A validation report is genuine and green but was generated before the latest commit that changed configuration relevant to the validation.",
+      "expected_focus": [
+        "candidate mismatch",
+        "stale evidence",
+        "do not reuse older green result"
+      ]
+    },
+    {
+      "id": "pf-004-control-historical-record",
+      "level": "control",
+      "scenario": "A historical claim about a past release date is supported by the project's immutable signed release record. The record is old because the event itself is historical.",
+      "expected_focus": [
+        "claim-dependent freshness",
+        "avoid false stale finding",
+        "PROVENANCE_FRESHNESS_PASS"
+      ]
+    },
+    {
+      "id": "pf-005-adversarial-cached-live-status",
+      "level": "adversarial",
+      "scenario": "A dashboard says a service is healthy, but its data source is a cache last refreshed before a known deployment. The target service's live health endpoint now reports a different version and degraded status.",
+      "expected_focus": [
+        "cached proxy versus authoritative live state",
+        "freshness failure",
+        "PROVENANCE_MISMATCH"
+      ]
+    }
+  ]
+}
