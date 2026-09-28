@@ -48,9 +48,15 @@
       "id": "microsoft-playwright-skills",
       "owner": "Microsoft",
       "canonical_url": "https://github.com/microsoft/playwright.dev/blob/main/agent-cli/skills.mdx",
+      "upstream_repo": "https://github.com/microsoft/playwright-cli",
       "trust_tier": "T1",
       "admission_state": "REFERENCE_ONLY",
-      "purpose": "Playwright CLI skill installation and usage guidance"
+      "purpose": "Playwright CLI skill installation and usage guidance",
+      "reviewed_documentation_commit": "1cc5be996c1785fde93e6ba075ab83e271173008",
+      "reviewed_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "reviewed_version": "0.1.21",
+      "audit_record": "catalog/vendor-audits/microsoft-playwright-skills.json",
+      "audit_disposition": "KEEP_REFERENCE_ONLY"
     }
   ]
 }
