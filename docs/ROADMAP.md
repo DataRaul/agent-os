@@ -40,12 +40,12 @@ Official/vendor provenance is catalogued and audited without granting blanket ex
 
 ## P4 — Tooling layer expansion
 
-Status: `P4_2_NARROW_AUDITS_NEXT`
+Status: `P4_3_ADMISSION_EVIDENCE_NEXT`
 
 - P4.0 inventory — complete;
 - P4.1 deterministic prioritization — complete;
-- P4.2 narrow audits — next;
-- P4.3 admission/value evidence;
+- P4.2 bounded narrow audits — complete;
+- P4.3 admission/value evidence — next;
 - P4.4 delivery gate.
 
 P4 is bounded capability evaluation, not a mandate to exhaust every marketplace entry.
