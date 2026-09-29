@@ -15,7 +15,7 @@ def validate(request: object, schema: dict) -> bool:
     if set(request) != set(schema["required"]):
         return False
     props = schema["properties"]
-    if request["schema_version"] != 1:
+    if type(request["schema_version"]) is not int or request["schema_version"] != 1:
         return False
     for field in ("public_base_sha", "capability_id"):
         value = request[field]
