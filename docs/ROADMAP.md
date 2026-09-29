@@ -70,7 +70,7 @@ P4R may evolve alongside P4; it does not widen tool admission.
 
 ## P5 — Generic capability router / adapter contract
 
-Status: `DECLARATIVE_CONTRACT_V1_PROPOSED`
+Status: `DECLARATIVE_CONTRACT_V1_COMPLETE`
 
 The first bounded tranche defines a public, vendor-neutral selection-request schema and public-safe structural cases. It performs no selection, composition, adapter execution, or authority grant. See `docs/P5_GENERIC_SELECTION_CONTRACT.md`. Any executable router/adapter work requires a separate bounded selection and approval; private activation remains behind its own portfolio gate.
 
