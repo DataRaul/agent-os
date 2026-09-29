@@ -21,5 +21,7 @@ jobs:
         run: python scripts/validate_agent_os.py
       - name: Validate public capability registry
         run: python scripts/validate_capability_registry.py
+      - name: Validate generic selection request contract
+        run: python scripts/test_capability_selection_contract.py
       - name: Smoke-test specialist reviewer scorer
         run: python scripts/test_specialist_reviewer_eval.py
