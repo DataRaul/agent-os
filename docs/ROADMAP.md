@@ -28,9 +28,9 @@ Public skills:
 
 ## P2 — Specialist reviewer evaluation
 
-Status: `BLINDED_RUN_PACKET_V1_READY`
+Status: `BLINDED_RUN_PACKET_V1_READY__EXECUTION_RECEIPT_V1_READY`
 
-The deterministic benchmark/scorer is paired with oracle-isolated baseline and reviewer run packets. Specialist reviewers are admitted only when actual independent comparative runs demonstrate incremental value over the primary-agent + skills baseline. No specialist candidate is implemented or admitted by the packet protocol.
+The deterministic benchmark/scorer is paired with oracle-isolated baseline and reviewer run packets plus a packet-bound execution-receipt assembler. The assembler requires distinct declared executor sessions, matching model configuration, exact packet digests, and no declared oracle/peer-output exposure before it can produce scorer input. Specialist reviewers are admitted only when actual independent comparative runs demonstrate incremental value over the primary-agent + skills baseline. No specialist candidate is implemented or admitted by packet or receipt infrastructure.
 
 ## P3 — Vendor/source trust baseline
 
