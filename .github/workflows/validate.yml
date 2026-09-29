@@ -33,3 +33,5 @@ jobs:
         run: python scripts/test_specialist_reviewer_eval.py
       - name: Validate blinded specialist reviewer packets
         run: python scripts/test_specialist_reviewer_run_packets.py
+      - name: Validate specialist reviewer execution receipts
+        run: python scripts/test_specialist_reviewer_execution_receipts.py

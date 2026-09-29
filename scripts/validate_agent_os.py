@@ -830,6 +830,7 @@ def validate_required_docs() -> None:
         "docs/P4_DELIVERY_CLOSEOUT.md",
         "agents/silent-failure-reviewer.md",
         "scripts/score_specialist_reviewer_eval.py",
+        "scripts/assemble_specialist_reviewer_eval_result.py",
     ]
     for rel in paths:
         if not (ROOT / rel).is_file():

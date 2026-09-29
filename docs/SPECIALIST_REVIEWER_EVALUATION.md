@@ -46,6 +46,31 @@ python scripts/build_specialist_reviewer_run_packets.py research-validity-review
 
 Execute the two packets in independent model/agent sessions with the same declared model configuration. Do not merge the packets, expose one side's output to the other, or add the oracle to either execution context. The packet builder is an input-preparation utility only; it does not call a model, score results, or implement a specialist reviewer.
 
+## Independent execution receipts
+
+Actual comparative evidence must come from separately executed baseline and reviewer sessions, not from a single process fabricating both sides. Each execution produces a receipt bound to the exact blinded packet by canonical SHA-256.
+
+Required receipt fields include:
+
+- candidate, mode, and model-configuration ID matching the packet;
+- exact `packet_sha256`;
+- a non-empty `executor_session_id`;
+- `oracle_supplied: false`;
+- `peer_output_supplied: false`;
+- one ordered result row for every packet case/replicate with normalized finding codes;
+- optional non-negative tool-call and latency measurements.
+
+After the two sessions finish, assemble them with:
+
+```bash
+python scripts/assemble_specialist_reviewer_eval_result.py \
+  baseline-packet.json baseline-receipt.json \
+  reviewer-packet.json reviewer-receipt.json > combined-result.json
+python scripts/score_specialist_reviewer_eval.py combined-result.json
+```
+
+The assembler does not read `oracle.json`. It rejects packet-digest mismatch, model-configuration mismatch, different case/replicate coverage, invalid finding codes, declared oracle/peer-output exposure, and reuse of the same executor-session ID for both sides. These checks strengthen evidence provenance but do not prove physical or provider-level session isolation; the executor remains responsible for truthful receipt declarations.
+
 ## Fair comparison protocol
 
 For one candidate reviewer:
@@ -56,11 +81,12 @@ For one candidate reviewer:
 4. Baseline run receives the case plus the listed P1 skills. No separate reviewer is used.
 5. Reviewer run receives the same case and relevant evidence independently.
 6. Do not provide the reviewer the baseline answer, author confidence, hidden reasoning, or oracle.
-7. Record only normalized finding codes plus optional tool-call/latency measurements.
-8. Score with:
+7. Record each side independently as a packet-bound execution receipt containing only normalized finding codes plus optional tool-call/latency measurements.
+8. Assemble the two receipts with `scripts/assemble_specialist_reviewer_eval_result.py`; the assembler must accept them without weakening any independence invariant.
+9. Score the assembled result with:
 
 ```bash
-python scripts/score_specialist_reviewer_eval.py path/to/result.json
+python scripts/score_specialist_reviewer_eval.py path/to/combined-result.json
 ```
 
 The scorer combines baseline and independent reviewer findings only for measurement. The reviewer itself must remain independent.
@@ -112,6 +138,8 @@ CI runs `scripts/test_specialist_reviewer_eval.py` after repository validation. 
 
 CI also runs `scripts/test_specialist_reviewer_run_packets.py`. That check verifies exact five-case × three-replicate coverage, identical baseline/reviewer case material, candidate baseline-skill loading, reviewer independence flags, and that the packet builder never reads `oracle.json`.
 
+CI additionally runs `scripts/test_specialist_reviewer_execution_receipts.py`. That check verifies packet binding, distinct declared sessions, no oracle/peer-output exposure, exact run identity, finding-code taxonomy enforcement, and fail-closed rejection of tampered receipts.
+
 Smoke fixtures are constructed at test time and are not benchmark results or evidence for reviewer admission.
 
 ## Failure boundaries
@@ -137,6 +165,8 @@ P2 blinded evaluation infrastructure is ready when:
 - the scorer's eligible and no-value paths pass deterministic smoke tests;
 - blinded baseline/reviewer run packets are generated without oracle access;
 - packet symmetry, replicate coverage, skill loading, and independence invariants pass deterministically;
+- packet-bound baseline/reviewer execution receipts can be assembled only when declared sessions are distinct and packet/configuration identity matches;
+- receipt tampering and declared oracle/peer-output exposure fail closed;
 - CI passes on the exact main candidate.
 
-This establishes `BLINDED_RUN_PACKET_V1_READY`, not reviewer admission. Reviewer roles remain evaluation-gated until actual independent comparative runs demonstrate incremental value.
+This establishes `BLINDED_RUN_PACKET_V1_READY__EXECUTION_RECEIPT_V1_READY`, not reviewer admission. Reviewer roles remain evaluation-gated until actual independent comparative runs demonstrate incremental value.
