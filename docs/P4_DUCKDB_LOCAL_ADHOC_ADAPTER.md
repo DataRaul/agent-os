@@ -15,4 +15,6 @@ The adapter rejects symlink inputs, resolves the allowed file to an absolute pat
 
 Local synthetic verification with DuckDB CLI v1.4.1 returned two rows and sum 18 for an input containing 7 and 11. It rejected a symlink, unsupported operation and malformed column, and left test files unchanged. The separate [bounded evaluation](P4_DUCKDB_LOCAL_ADHOC_EVALUATION.md) records CLI boundary probes and the upstream session-state risk.
 
+CI also runs `scripts/test_query_local_csv_adapter.py` with an inert fake CLI. That deterministic contract test verifies the direct no-shell invocation shape, explicit `:memory:` mode, absence of `-init`, exact v1.4.1 pin enforcement, allowed-path/external-access/secret/config-lock SQL boundaries, simple-column restriction, symlink rejection, input immutability, and output-size cap. The fake-CLI test does not replace the real DuckDB v1.4.1 evaluation and grants no runtime admission.
+
 This is a narrow candidate, not a claim of general DuckDB sandboxing or vendor-skill admission. Registry promotion, private mapping, and real-project use require the applicable selection, authority and calibration gates.
