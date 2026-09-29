@@ -50,7 +50,7 @@ Status: `P4_BOUNDED_TRANCHE_COMPLETE`
 
 P4 is bounded capability evaluation, not a mandate to exhaust every marketplace entry.
 
-A local CSV query adapter candidate is documented in `docs/P4_DUCKDB_LOCAL_ADHOC_ADAPTER.md`. It is evaluation-only, outside the capability registry and without runtime admission.
+A local CSV query adapter candidate is documented in `docs/P4_DUCKDB_LOCAL_ADHOC_ADAPTER.md`. Its narrow invocation and fail-closed boundaries are deterministically contract-tested in CI; it remains evaluation-only, outside the capability registry and without runtime admission.
 
 ## P4R — Public capability registry
 
