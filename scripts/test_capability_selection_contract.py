@@ -6,7 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = ROOT / "schemas" / "capability-selection-request.schema.json"
-CASES = ROOT / "evals" / "capability-selection-contract" / "cases.json"
+CASES = ROOT / "benchmarks" / "capability-selection-contract" / "cases.json"
 
 
 def validate(request: object, schema: dict) -> bool:
@@ -25,7 +25,7 @@ def validate(request: object, schema: dict) -> bool:
     if type(version) is not int or version < 1:
         return False
     for field in ("work_class", "complexity_class", "declared_authority_class"):
-        if request[field] not in props[field]["enum"]:
+        if not isinstance(request[field], str) or request[field] not in props[field]["enum"]:
             return False
     preconditions = request["required_preconditions"]
     if not valid_strings(preconditions, allow_empty=True):
