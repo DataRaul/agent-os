@@ -40,7 +40,7 @@ Official/vendor provenance is catalogued and audited without granting blanket ex
 
 ## P4 — Tooling layer expansion
 
-Status: `P4_BOUNDED_TRANCHE_COMPLETE`
+Status: `P4_BOUNDED_TRANCHE_COMPLETE__MARKETPLACE_REFERENCE_AUDIT_V1`
 
 - P4.0 inventory — complete;
 - P4.1 deterministic prioritization — complete;
@@ -51,6 +51,8 @@ Status: `P4_BOUNDED_TRANCHE_COMPLETE`
 P4 is bounded capability evaluation, not a mandate to exhaust every marketplace entry.
 
 A local CSV query adapter candidate is documented in `docs/P4_DUCKDB_LOCAL_ADHOC_ADAPTER.md`. Its narrow invocation and fail-closed boundaries are deterministically contract-tested in CI; it remains evaluation-only, outside the capability registry and without runtime admission.
+
+A bounded OpenAI plugin-format reference audit is documented in `docs/P4_OPENAI_PLUGIN_FORMAT_REFERENCE_AUDIT.md`. It admits only read-only manifest/marketplace format evidence as `REFERENCE_ONLY`; plugin installation, authentication, MCP connection, creator-script execution, filesystem writes, and marketplace mutation remain excluded.
 
 ## P4R — Public capability registry
 

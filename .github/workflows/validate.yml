@@ -27,6 +27,8 @@ jobs:
         run: python scripts/test_capability_selection_binding.py
       - name: Validate local CSV adapter contract
         run: python scripts/test_query_local_csv_adapter.py
+      - name: Validate plugin format reference audit
+        run: python scripts/test_openai_plugin_format_reference_audit.py
       - name: Smoke-test specialist reviewer scorer
         run: python scripts/test_specialist_reviewer_eval.py
       - name: Validate blinded specialist reviewer packets

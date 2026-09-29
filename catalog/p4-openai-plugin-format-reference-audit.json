@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "status": "P4_MARKETPLACE_FORMAT_REFERENCE_AUDIT_COMPLETE",
+  "source_id": "openai-plugins",
+  "upstream_commit": "5fd93af4cd0c623e020d0cc7e9ce178b4ac1f70f",
+  "reviewed_files": [
+    {
+      "path": "README.md",
+      "blob_sha": "e901b40b9d643a5f878157158759fa0a6d3e2909"
+    },
+    {
+      "path": ".agents/skills/plugin-creator/references/plugin-json-spec.md",
+      "blob_sha": "ee66dfe4f68b7ebc0dea8b60a642608601bc59f6"
+    },
+    {
+      "path": ".agents/skills/plugin-creator/SKILL.md",
+      "blob_sha": "4a90165c0708ca7967bb5a23c0b1a8f521a3479c"
+    }
+  ],
+  "candidate": "openai-plugin-format-reference",
+  "authority_profile": {
+    "installation": false,
+    "authentication": false,
+    "mcp_connection": false,
+    "script_execution": false,
+    "local_write": false,
+    "marketplace_mutation": false,
+    "reference_read_only": true
+  },
+  "observed_contract": {
+    "plugin_manifest_path": ".codex-plugin/plugin.json",
+    "marketplace_paths": [
+      "~/.agents/plugins/marketplace.json",
+      "<repo-root>/.agents/plugins/marketplace.json"
+    ],
+    "marketplace_policy_fields": [
+      "installation",
+      "authentication"
+    ],
+    "source_path_relative": true
+  },
+  "disposition": "REFERENCE_ONLY",
+  "registry_promotion": false,
+  "runtime_admission": false,
+  "rationale": "The manifest and marketplace field guides are useful public reference material, but the adjacent creator workflow performs filesystem and marketplace mutations. This tranche admits only the documentation reference as evidence, not the creator skill or any plugin runtime."
+}
