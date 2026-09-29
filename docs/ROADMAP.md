@@ -28,9 +28,9 @@ Public skills:
 
 ## P2 — Specialist reviewer evaluation
 
-Status: `EVALUATION_HARNESS_READY`
+Status: `BLINDED_RUN_PACKET_V1_READY`
 
-Specialist reviewers are admitted only when controlled evaluation demonstrates incremental value over the primary-agent + skills baseline.
+The deterministic benchmark/scorer is paired with oracle-isolated baseline and reviewer run packets. Specialist reviewers are admitted only when actual independent comparative runs demonstrate incremental value over the primary-agent + skills baseline. No specialist candidate is implemented or admitted by the packet protocol.
 
 ## P3 — Vendor/source trust baseline
 

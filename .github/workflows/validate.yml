@@ -25,3 +25,5 @@ jobs:
         run: python scripts/test_capability_selection_contract.py
       - name: Smoke-test specialist reviewer scorer
         run: python scripts/test_specialist_reviewer_eval.py
+      - name: Validate blinded specialist reviewer packets
+        run: python scripts/test_specialist_reviewer_run_packets.py

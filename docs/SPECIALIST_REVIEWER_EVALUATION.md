@@ -33,6 +33,19 @@ The case file contains only the material presented to the evaluated runs. The or
 
 The benchmark is public, so it is not a secret holdout. The separation is procedural: runner inputs must exclude the oracle.
 
+## Blinded run packets
+
+`scripts/build_specialist_reviewer_run_packets.py` materializes one mode at a time from `cases.json` only. It does not read `oracle.json`. Baseline packets embed the exact public skill texts listed for the candidate; reviewer packets contain only the independent specialist objective. Both modes contain the same five cases, three replicates per case, model-configuration ID, normalized finding-code taxonomy, and an explicit independence contract.
+
+Example:
+
+```bash
+python scripts/build_specialist_reviewer_run_packets.py research-validity-reviewer baseline --model-configuration-id MODEL_CONFIG > baseline.json
+python scripts/build_specialist_reviewer_run_packets.py research-validity-reviewer reviewer --model-configuration-id MODEL_CONFIG > reviewer.json
+```
+
+Execute the two packets in independent model/agent sessions with the same declared model configuration. Do not merge the packets, expose one side's output to the other, or add the oracle to either execution context. The packet builder is an input-preparation utility only; it does not call a model, score results, or implement a specialist reviewer.
+
 ## Fair comparison protocol
 
 For one candidate reviewer:
@@ -97,6 +110,8 @@ Eligibility still does not create execution authority or require that a reviewer
 
 CI runs `scripts/test_specialist_reviewer_eval.py` after repository validation. The smoke test exercises both an eligible fixture and a no-incremental-value fixture so the scorer's two terminal dispositions are executed rather than merely syntax-checked.
 
+CI also runs `scripts/test_specialist_reviewer_run_packets.py`. That check verifies exact five-case × three-replicate coverage, identical baseline/reviewer case material, candidate baseline-skill loading, reviewer independence flags, and that the packet builder never reads `oracle.json`.
+
 Smoke fixtures are constructed at test time and are not benchmark results or evidence for reviewer admission.
 
 ## Failure boundaries
@@ -116,10 +131,12 @@ Do not copy private project incidents or fixtures into this benchmark.
 
 ## Terminal condition
 
-P2 evaluation infrastructure is ready when:
+P2 blinded evaluation infrastructure is ready when:
 
 - benchmark cases and oracle validate deterministically;
 - the scorer's eligible and no-value paths pass deterministic smoke tests;
+- blinded baseline/reviewer run packets are generated without oracle access;
+- packet symmetry, replicate coverage, skill loading, and independence invariants pass deterministically;
 - CI passes on the exact main candidate.
 
-Reviewer roles remain evaluation-gated until actual comparative runs demonstrate incremental value.
+This establishes `BLINDED_RUN_PACKET_V1_READY`, not reviewer admission. Reviewer roles remain evaluation-gated until actual independent comparative runs demonstrate incremental value.
