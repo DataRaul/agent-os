@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Agent OS Generic Capability Selection Request V1",
+  "description": "Declarative public interface only. Validation never selects, loads, invokes, or authorizes a capability.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "public_base_sha",
+    "capability_id",
+    "capability_contract_version",
+    "work_class",
+    "complexity_class",
+    "declared_authority_class",
+    "required_preconditions",
+    "output_postcondition_contract"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "public_base_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "capability_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "capability_contract_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "work_class": {
+      "type": "string",
+      "enum": [
+        "code-change",
+        "research-evidence",
+        "browser-observation",
+        "document-evidence",
+        "state-mutation",
+        "other"
+      ]
+    },
+    "complexity_class": {
+      "type": "string",
+      "enum": [
+        "C0",
+        "C1",
+        "C2",
+        "C3"
+      ]
+    },
+    "declared_authority_class": {
+      "type": "string",
+      "enum": [
+        "read-only",
+        "local-write",
+        "external-write",
+        "destructive",
+        "publish-deploy",
+        "spend"
+      ]
+    },
+    "required_preconditions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "output_postcondition_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "output_type",
+        "postconditions"
+      ],
+      "properties": {
+        "output_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "postconditions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}
