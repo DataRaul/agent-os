@@ -17,5 +17,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Self-test publication boundary
+        run: python scripts/test_publication_gate.py
       - name: Validate public publication boundary
         run: python scripts/validate_publication_gate.py
