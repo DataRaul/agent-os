@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Agent OS P5 Declarative Decision Contracts V1",
+  "description": "Declarative evidence shapes only. These contracts do not select, load, execute, compose, or authorize capabilities.",
+  "type": "object",
+  "oneOf": [
+    { "$ref": "#/$defs/selectionDecision" },
+    { "$ref": "#/$defs/checkResult" },
+    { "$ref": "#/$defs/compositionDeclaration" }
+  ],
+  "$defs": {
+    "sha40": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "digest64": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "capabilityId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "reasonCode": {
+      "type": "string",
+      "enum": [
+        "NO_MATCH",
+        "AMBIGUOUS_MATCH",
+        "STALE_PIN",
+        "REGISTRY_DIGEST_MISMATCH",
+        "CAPABILITY_NOT_AVAILABLE",
+        "CONTRACT_VERSION_MISMATCH",
+        "MALFORMED_REQUEST",
+        "REGISTRY_AUTHORITY_VIOLATION",
+        "PRECONDITION_FAILED",
+        "PRECONDITION_UNKNOWN",
+        "POSTCONDITION_FAILED",
+        "POSTCONDITION_UNKNOWN",
+        "AUTHORITY_CEILING_EXCEEDED",
+        "PRECONDITION_CONFLICT"
+      ]
+    },
+    "selectionDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "contract_type",
+        "disposition",
+        "public_base_sha",
+        "registry_sha256",
+        "request_sha256",
+        "capability_id",
+        "capability_contract_version",
+        "reason_codes",
+        "authority_granted",
+        "executable"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "contract_type": { "const": "DECLARED_CAPABILITY_BINDING_DECISION" },
+        "disposition": {
+          "enum": ["BOUND", "NO_MATCH", "AMBIGUOUS_MATCH", "REJECTED"]
+        },
+        "public_base_sha": { "$ref": "#/$defs/sha40" },
+        "registry_sha256": { "$ref": "#/$defs/digest64" },
+        "request_sha256": { "$ref": "#/$defs/digest64" },
+        "capability_id": { "$ref": "#/$defs/capabilityId" },
+        "capability_contract_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "reason_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/reasonCode" }
+        },
+        "authority_granted": { "const": false },
+        "executable": { "const": false }
+      }
+    },
+    "check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["check_id", "status", "evidence"],
+      "properties": {
+        "check_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": ["PASS", "FAIL", "UNKNOWN"]
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "checkResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "contract_type",
+        "status",
+        "public_base_sha",
+        "registry_sha256",
+        "capability_id",
+        "capability_contract_version",
+        "checks",
+        "reason_codes",
+        "authority_granted",
+        "executable"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "contract_type": {
+          "enum": ["PRECONDITION_VALIDATION_RESULT", "POSTCONDITION_VERIFICATION_RESULT"]
+        },
+        "status": {
+          "enum": ["PASS", "FAIL", "UNKNOWN"]
+        },
+        "public_base_sha": { "$ref": "#/$defs/sha40" },
+        "registry_sha256": { "$ref": "#/$defs/digest64" },
+        "capability_id": { "$ref": "#/$defs/capabilityId" },
+        "capability_contract_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "output_sha256": { "$ref": "#/$defs/digest64" },
+        "checks": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/check" }
+        },
+        "reason_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/reasonCode" }
+        },
+        "authority_granted": { "const": false },
+        "executable": { "const": false }
+      }
+    },
+    "compositionMember": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capability_id",
+        "capability_contract_version",
+        "request_sha256",
+        "declared_authority_class",
+        "required_preconditions"
+      ],
+      "properties": {
+        "capability_id": { "$ref": "#/$defs/capabilityId" },
+        "capability_contract_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "request_sha256": { "$ref": "#/$defs/digest64" },
+        "declared_authority_class": {
+          "enum": [
+            "read-only",
+            "local-write",
+            "external-write",
+            "destructive",
+            "publish-deploy",
+            "spend"
+          ]
+        },
+        "required_preconditions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "compositionDeclaration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "contract_type",
+        "public_base_sha",
+        "registry_sha256",
+        "authority_ceiling",
+        "members",
+        "contract_consistent",
+        "reason_codes",
+        "authority_granted",
+        "executable"
+      ],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "contract_type": { "const": "MULTI_CAPABILITY_COMPOSITION_DECLARATION" },
+        "public_base_sha": { "$ref": "#/$defs/sha40" },
+        "registry_sha256": { "$ref": "#/$defs/digest64" },
+        "authority_ceiling": {
+          "enum": [
+            "read-only",
+            "local-write",
+            "external-write",
+            "destructive",
+            "publish-deploy",
+            "spend"
+          ]
+        },
+        "members": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "$ref": "#/$defs/compositionMember" }
+        },
+        "contract_consistent": { "type": "boolean" },
+        "reason_codes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/reasonCode" }
+        },
+        "authority_granted": { "const": false },
+        "executable": { "const": false }
+      }
+    }
+  }
+}
