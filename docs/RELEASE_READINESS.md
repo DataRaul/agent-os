@@ -63,7 +63,7 @@ Ordinary code or documentation changes that preserve the public semantic contrac
 
 ## Documentation consistency
 
-The readiness gate validates backticked repository-relative references under `docs/`, `scripts/`, `catalog/`, `schemas/`, `skills/`, `agents/`, `evals/`, `benchmarks/`, and `.github/`. Missing referenced paths fail readiness.
+The readiness gate validates backticked repository-relative references under `docs/`, `scripts/`, `catalog/`, `schemas/`, `benchmarks/`, and `.github/`. These namespaces are treated as local documentation/control-plane references; missing referenced paths fail readiness. Skill, reviewer, and eval membership/path consistency is enforced separately by the Agent OS and capability-registry validators so documentation may still quote upstream `skills/...` paths without falsely treating them as local.
 
 ## Boundary
 
