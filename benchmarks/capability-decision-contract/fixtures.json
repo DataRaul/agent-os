@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "public_base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "registry_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "binding_request": {
+    "schema_version": 1,
+    "public_base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "capability_id": "verified-completion",
+    "capability_contract_version": 1,
+    "work_class": "code-change",
+    "complexity_class": "C1",
+    "declared_authority_class": "read-only",
+    "required_preconditions": [
+      "authoritative state identified"
+    ],
+    "output_postcondition_contract": {
+      "output_type": "verification record",
+      "postconditions": [
+        "claimed state checked against authority"
+      ]
+    }
+  },
+  "precondition_checks": [
+    {
+      "check_id": "authority-state-known",
+      "status": "PASS",
+      "evidence": "authoritative state locator is declared"
+    },
+    {
+      "check_id": "required-input-present",
+      "status": "PASS",
+      "evidence": "required input declaration is present"
+    }
+  ],
+  "postcondition_checks": [
+    {
+      "check_id": "output-shape",
+      "status": "PASS",
+      "evidence": "output shape conforms to declared contract"
+    }
+  ],
+  "composition_members": [
+    {
+      "capability_id": "verified-completion",
+      "capability_contract_version": 1,
+      "request_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "declared_authority_class": "read-only",
+      "required_preconditions": {
+        "authority-source": "identified"
+      }
+    },
+    {
+      "capability_id": "provenance-freshness",
+      "capability_contract_version": 1,
+      "request_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "declared_authority_class": "read-only",
+      "required_preconditions": {
+        "authority-source": "identified",
+        "as-of-policy": "declared"
+      }
+    }
+  ]
+}
