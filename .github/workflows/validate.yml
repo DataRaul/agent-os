@@ -35,3 +35,5 @@ jobs:
         run: python scripts/test_specialist_reviewer_run_packets.py
       - name: Validate specialist reviewer execution receipts
         run: python scripts/test_specialist_reviewer_execution_receipts.py
+      - name: Validate specialist reviewer per-run receipt collection
+        run: python scripts/test_specialist_reviewer_run_fragments.py

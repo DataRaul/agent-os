@@ -51,7 +51,7 @@ Current public skills:
 - `authority-boundary-review`
 - `semantic-pr-review`
 
-P2 evaluates whether proposed specialist reviewer roles add measurable value beyond one capable primary agent plus the P1 skills. Blinded packets and packet-bound independent execution receipts are ready; actual comparative model runs remain required before any role can be considered. See `docs/SPECIALIST_REVIEWER_EVALUATION.md`.
+P2 evaluates whether proposed specialist reviewer roles add measurable value beyond one capable primary agent plus the P1 skills. Blinded packets, packet-bound independent execution receipts, and deterministic one-run-per-session fragment collection are ready; actual comparative model runs remain required before any role can be considered. See `docs/SPECIALIST_REVIEWER_EVALUATION.md`.
 
 P3 completed the initial provenance/authority audit baseline for the public tooling sources. See `docs/P3_VENDOR_CATALOG_BASELINE.md` and `docs/VENDOR_CAPABILITY_ADMISSION.md`.
 
@@ -63,6 +63,6 @@ Additional skills or reviewer roles should be added only when they are reusable 
 
 ## Status
 
-`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_BLINDED_PACKETS_AND_EXECUTION_RECEIPTS_READY__P3_VENDOR_CATALOG_BASELINE_COMPLETE__P4_BOUNDED_TRANCHE_COMPLETE__P5_DECLARATIVE_CONTRACT_AND_PIN_BINDING_READY`
+`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_BLINDED_PACKETS_RECEIPTS_AND_PER_RUN_COLLECTION_READY__P3_VENDOR_CATALOG_BASELINE_COMPLETE__P4_BOUNDED_TRANCHE_COMPLETE__P5_DECLARATIVE_CONTRACT_AND_PIN_BINDING_READY`
 
 No release or stability guarantee is implied yet.

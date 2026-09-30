@@ -44,7 +44,7 @@ python scripts/build_specialist_reviewer_run_packets.py research-validity-review
 python scripts/build_specialist_reviewer_run_packets.py research-validity-reviewer reviewer --model-configuration-id MODEL_CONFIG > reviewer.json
 ```
 
-Execute the two packets in independent model/agent sessions with the same declared model configuration. Do not merge the packets, expose one side's output to the other, or add the oracle to either execution context. The packet builder is an input-preparation utility only; it does not call a model, score results, or implement a specialist reviewer.
+Execute baseline and reviewer work independently with the same declared model configuration. A whole 15-run packet may use one isolated executor session, or each case/replicate may use its own fresh session. Do not merge baseline and reviewer contexts, expose one side's output to the other, or add the oracle to either execution context. The packet builder is an input-preparation utility only; it does not call a model, score results, or implement a specialist reviewer.
 
 ## Independent execution receipts
 
@@ -54,13 +54,25 @@ Required receipt fields include:
 
 - candidate, mode, and model-configuration ID matching the packet;
 - exact `packet_sha256`;
-- a non-empty `executor_session_id`;
 - `oracle_supplied: false`;
 - `peer_output_supplied: false`;
 - one ordered result row for every packet case/replicate with normalized finding codes;
 - optional non-negative tool-call and latency measurements.
 
-After the two sessions finish, assemble them with:
+Receipt schema v1 represents one executor session for the whole packet and requires one top-level `executor_session_id`. Receipt schema v2 represents `PER_RUN_SESSIONS`: each result row carries its own `executor_session_id`, every run in that receipt must use a distinct session, and baseline/reviewer session sets must be disjoint.
+
+For manual or other one-run-per-session execution, save each completed run as an oracle-free fragment and collect the 15 fragments deterministically:
+
+```bash
+python scripts/collect_specialist_reviewer_run_fragments.py \
+  baseline-packet.json baseline-fragment-*.json > baseline-receipt.json
+python scripts/collect_specialist_reviewer_run_fragments.py \
+  reviewer-packet.json reviewer-fragment-*.json > reviewer-receipt.json
+```
+
+Each fragment records packet identity, case/replicate identity, the actual executor-session reference, normalized finding codes, and truthful oracle/peer-output declarations. The collector rejects missing/duplicate runs, duplicate session references, packet/configuration mismatch, invalid finding codes, and declared exposure. It does not inspect `oracle.json` and does not prove provider-level model settings; the operator remains responsible for preserving evidence that the declared configuration was actually used.
+
+After the two receipts are ready, assemble them with:
 
 ```bash
 python scripts/assemble_specialist_reviewer_eval_result.py \
@@ -69,7 +81,7 @@ python scripts/assemble_specialist_reviewer_eval_result.py \
 python scripts/score_specialist_reviewer_eval.py combined-result.json
 ```
 
-The assembler does not read `oracle.json`. It rejects packet-digest mismatch, model-configuration mismatch, different case/replicate coverage, invalid finding codes, declared oracle/peer-output exposure, and reuse of the same executor-session ID for both sides. These checks strengthen evidence provenance but do not prove physical or provider-level session isolation; the executor remains responsible for truthful receipt declarations.
+The assembler does not read `oracle.json`. It rejects packet-digest mismatch, model-configuration mismatch, different case/replicate coverage, invalid finding codes, declared oracle/peer-output exposure, duplicate per-run sessions, and any baseline/reviewer session overlap. These checks strengthen evidence provenance but do not prove physical or provider-level session isolation or model-setting truth; the executor remains responsible for truthful receipt declarations.
 
 ## Fair comparison protocol
 
@@ -138,7 +150,7 @@ CI runs `scripts/test_specialist_reviewer_eval.py` after repository validation. 
 
 CI also runs `scripts/test_specialist_reviewer_run_packets.py`. That check verifies exact five-case × three-replicate coverage, identical baseline/reviewer case material, candidate baseline-skill loading, reviewer independence flags, and that the packet builder never reads `oracle.json`.
 
-CI additionally runs `scripts/test_specialist_reviewer_execution_receipts.py`. That check verifies packet binding, distinct declared sessions, no oracle/peer-output exposure, exact run identity, finding-code taxonomy enforcement, and fail-closed rejection of tampered receipts.
+CI additionally runs `scripts/test_specialist_reviewer_execution_receipts.py` and `scripts/test_specialist_reviewer_run_fragments.py`. These checks verify packet binding, legacy single-session compatibility, per-run session provenance, disjoint baseline/reviewer sessions, no oracle/peer-output exposure, exact run identity, finding-code taxonomy enforcement, complete 15-run collection, and fail-closed rejection of tampered or incomplete evidence.
 
 Smoke fixtures are constructed at test time and are not benchmark results or evidence for reviewer admission.
 
@@ -165,8 +177,9 @@ P2 blinded evaluation infrastructure is ready when:
 - the scorer's eligible and no-value paths pass deterministic smoke tests;
 - blinded baseline/reviewer run packets are generated without oracle access;
 - packet symmetry, replicate coverage, skill loading, and independence invariants pass deterministically;
-- packet-bound baseline/reviewer execution receipts can be assembled only when declared sessions are distinct and packet/configuration identity matches;
-- receipt tampering and declared oracle/peer-output exposure fail closed;
+- packet-bound baseline/reviewer execution receipts can be assembled only when declared sessions are disjoint and packet/configuration identity matches;
+- one-run-per-session fragments can be collected without collapsing or inventing executor-session provenance;
+- receipt/fragment tampering, missing/duplicate runs, session reuse, and declared oracle/peer-output exposure fail closed;
 - CI passes on the exact main candidate.
 
-This establishes `BLINDED_RUN_PACKET_V1_READY__EXECUTION_RECEIPT_V1_READY`, not reviewer admission. Reviewer roles remain evaluation-gated until actual independent comparative runs demonstrate incremental value.
+This establishes `BLINDED_RUN_PACKET_V1_READY__EXECUTION_RECEIPT_V1_READY__PER_RUN_COLLECTION_V1_READY`, not reviewer admission. Reviewer roles remain evaluation-gated until actual independent comparative runs demonstrate incremental value.
