@@ -43,3 +43,5 @@ jobs:
         run: python scripts/test_specialist_reviewer_run_fragments.py
       - name: Validate specialist reviewer resumable attempt ledger
         run: python scripts/test_specialist_reviewer_attempt_ledger.py
+      - name: Validate specialist reviewer execution operations
+        run: python scripts/test_specialist_reviewer_execution_ops.py
