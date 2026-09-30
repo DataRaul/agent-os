@@ -107,6 +107,6 @@ A private observation may motivate a generic capability, but public evolution us
 
 ## Cross-cutting public hardening
 
-Status: `VALIDATION_PUBLICATION_REGISTRY_AND_P2_RESUME_HARDENING_V1`
+Status: `VALIDATION_PUBLICATION_REGISTRY_P2_RESUME_AND_RELEASE_READINESS_V1`
 
-The bounded hardening tranche strengthens publication-gate self-tests and credential-path detection, registry/path/version invariants, optional exact registry-digest binding, and resumable P2 manual-attempt evidence. It adds no reviewer admission, executable routing, private dependency, external installation, authentication, or paid model execution.
+The bounded hardening tranche strengthens publication-gate self-tests and credential-path detection, registry/path/version invariants, optional exact registry-digest binding, and resumable P2 manual-attempt evidence. A deterministic release-readiness gate now cross-checks core validators, public documentation paths, exact-SHA capability snapshots, registry digests, changelog treatment, and compatibility rules for capability evolution without publishing or advancing any consumer pin. It adds no reviewer admission, executable routing, private dependency, external installation, authentication, or paid model execution.

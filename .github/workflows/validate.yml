@@ -25,6 +25,10 @@ jobs:
         run: python scripts/validate_capability_registry.py
       - name: Test capability registry hardening
         run: python scripts/test_capability_registry.py
+      - name: Test public release readiness
+        run: python scripts/test_release_readiness.py
+      - name: Validate public release readiness
+        run: python scripts/release_readiness.py check
       - name: Validate generic selection request contract
         run: python scripts/test_capability_selection_contract.py
       - name: Validate pinned capability binding

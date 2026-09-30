@@ -828,6 +828,8 @@ def validate_required_docs() -> None:
         "docs/P2_MANUAL_EXECUTION_LEDGER.md",
         "docs/P2_EXECUTION_OPERATIONS.md",
         "docs/PUBLICATION_GATE.md",
+        "docs/RELEASE_READINESS.md",
+        "catalog/capability-changelog.json",
         "docs/CAPABILITY_REGISTRY.md",
         "docs/P4_NARROW_AUDITS.md",
         "docs/P4_ADMISSION_EVIDENCE.md",
@@ -838,6 +840,7 @@ def validate_required_docs() -> None:
         "scripts/collect_specialist_reviewer_run_fragments.py",
         "scripts/summarize_specialist_reviewer_attempt_ledger.py",
         "scripts/specialist_reviewer_execution_ops.py",
+        "scripts/release_readiness.py",
     ]
     for rel in paths:
         if not (ROOT / rel).is_file():
