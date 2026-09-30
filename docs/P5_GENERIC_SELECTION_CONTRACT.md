@@ -25,9 +25,10 @@ Example:
 
 ```bash
 python scripts/verify_capability_selection_binding.py request.json \
-  --expected-public-base-sha <40-character-reviewed-sha>
+  --expected-public-base-sha <40-character-reviewed-sha> \
+  --expected-registry-sha256 <64-character-reviewed-registry-digest>
 ```
 
-The verifier performs no network lookup and cannot prove that the caller actually checked out the supplied SHA. That checkout/pin verification remains a consumer responsibility. It also does not select a capability, decide whether the capability should run, satisfy declared preconditions, authorize tools, load credentials, execute an adapter, or grant any requested authority. A successful result therefore reports `authority_granted: false`.
+The verifier performs no network lookup and cannot prove that the caller actually checked out the supplied SHA. That checkout/pin verification remains a consumer responsibility. When the optional reviewed registry digest is supplied, the verifier also requires the exact canonical registry SHA-256 and always emits the observed registry digest in its result. This prevents a caller from silently swapping a different local registry while keeping the same declared public SHA. It also does not select a capability, decide whether the capability should run, satisfy declared preconditions, authorize tools, load credentials, execute an adapter, or grant any requested authority. A successful result therefore reports `authority_granted: false`.
 
-CI exercises successful binding plus fail-closed SHA mismatch, unknown capability, contract-version mismatch, unavailable capability, duplicate registry entry, malformed request, and any registry entry that purports to grant authority.
+CI exercises successful binding plus fail-closed public-SHA mismatch, registry-digest mismatch, malformed registry identity/version, unknown capability, contract-version mismatch, unavailable capability, duplicate registry entry, malformed request, and any registry entry that purports to grant authority.
