@@ -840,6 +840,10 @@ def validate_required_docs() -> None:
         "scripts/collect_specialist_reviewer_run_fragments.py",
         "scripts/summarize_specialist_reviewer_attempt_ledger.py",
         "scripts/specialist_reviewer_execution_ops.py",
+        "docs/P5_DECLARATIVE_DECISION_CONTRACTS.md",
+        "schemas/capability-decision-contracts.schema.json",
+        "benchmarks/capability-decision-contract/fixtures.json",
+        "scripts/capability_decision_contracts.py",
         "scripts/release_readiness.py",
     ]
     for rel in paths:
