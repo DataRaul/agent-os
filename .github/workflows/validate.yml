@@ -19,8 +19,12 @@ jobs:
           python-version: "3.11"
       - name: Validate Agent OS
         run: python scripts/validate_agent_os.py
+      - name: Self-test publication safety gate
+        run: python scripts/test_publication_gate.py
       - name: Validate public capability registry
         run: python scripts/validate_capability_registry.py
+      - name: Test capability registry hardening
+        run: python scripts/test_capability_registry.py
       - name: Validate generic selection request contract
         run: python scripts/test_capability_selection_contract.py
       - name: Validate pinned capability binding
@@ -37,3 +41,5 @@ jobs:
         run: python scripts/test_specialist_reviewer_execution_receipts.py
       - name: Validate specialist reviewer per-run receipt collection
         run: python scripts/test_specialist_reviewer_run_fragments.py
+      - name: Validate specialist reviewer resumable attempt ledger
+        run: python scripts/test_specialist_reviewer_attempt_ledger.py
