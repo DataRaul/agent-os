@@ -44,8 +44,11 @@ A material capability-contract change increments `capability_contract_version`. 
 
 An entry may be `AVAILABLE` only when:
 
-- its public implementation path exists;
+- its public implementation path exists and is a normalized repository-relative path;
 - required public-safe eval material exists for skills;
+- capability IDs, kinds, states and contract versions satisfy the public schema;
+- skill/reviewer registry membership matches the implemented files on disk;
+- reviewer primary-skill references resolve to registered skills;
 - deterministic Agent OS validation covers it;
 - it grants no authority merely by being present;
 - it is understandable without private context.
@@ -85,4 +88,4 @@ The registry is additive by default.
 
 Deprecation/removal requires an explicit compatibility path and should not silently break consumers pinned to an older public SHA.
 
-Consumers are expected to review a public diff before advancing their adopted SHA.
+Consumers are expected to review a public diff before advancing their adopted SHA. The deterministic validator also rejects unknown top-level fields, duplicate IDs/paths, path traversal, malformed positive-version fields, kind/path mismatches, and registry/disk membership drift.

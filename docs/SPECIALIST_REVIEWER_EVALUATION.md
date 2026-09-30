@@ -61,7 +61,9 @@ Required receipt fields include:
 
 Receipt schema v1 represents one executor session for the whole packet and requires one top-level `executor_session_id`. Receipt schema v2 represents `PER_RUN_SESSIONS`: each result row carries its own `executor_session_id`, every run in that receipt must use a distinct session, and baseline/reviewer session sets must be disjoint.
 
-For manual or other one-run-per-session execution, save each completed run as an oracle-free fragment and collect the 15 fragments deterministically:
+For manual or other one-run-per-session execution, use the append-only attempt-ledger contract in `docs/P2_MANUAL_EXECUTION_LEDGER.md` when interruption/resume tracking is needed. It preserves interrupted/invalid attempts, forbids reruns after a completed case/replicate, and can emit a schema-v2 receipt once all 15 packet runs are complete.
+
+If only completed fragments need to be collected, save each completed run as an oracle-free fragment and collect the 15 fragments deterministically:
 
 ```bash
 python scripts/collect_specialist_reviewer_run_fragments.py \
@@ -150,7 +152,7 @@ CI runs `scripts/test_specialist_reviewer_eval.py` after repository validation. 
 
 CI also runs `scripts/test_specialist_reviewer_run_packets.py`. That check verifies exact five-case × three-replicate coverage, identical baseline/reviewer case material, candidate baseline-skill loading, reviewer independence flags, and that the packet builder never reads `oracle.json`.
 
-CI additionally runs `scripts/test_specialist_reviewer_execution_receipts.py` and `scripts/test_specialist_reviewer_run_fragments.py`. These checks verify packet binding, legacy single-session compatibility, per-run session provenance, disjoint baseline/reviewer sessions, no oracle/peer-output exposure, exact run identity, finding-code taxonomy enforcement, complete 15-run collection, and fail-closed rejection of tampered or incomplete evidence.
+CI additionally runs `scripts/test_specialist_reviewer_execution_receipts.py`, `scripts/test_specialist_reviewer_run_fragments.py`, and `scripts/test_specialist_reviewer_attempt_ledger.py`. These checks verify packet binding, legacy single-session compatibility, per-run session provenance, resumable interruption tracking, no post-completion reruns, disjoint baseline/reviewer sessions, no oracle/peer-output exposure, exact run identity, finding-code taxonomy enforcement, complete 15-run collection, and fail-closed rejection of tampered or incomplete evidence.
 
 Smoke fixtures are constructed at test time and are not benchmark results or evidence for reviewer admission.
 
@@ -179,7 +181,8 @@ P2 blinded evaluation infrastructure is ready when:
 - packet symmetry, replicate coverage, skill loading, and independence invariants pass deterministically;
 - packet-bound baseline/reviewer execution receipts can be assembled only when declared sessions are disjoint and packet/configuration identity matches;
 - one-run-per-session fragments can be collected without collapsing or inventing executor-session provenance;
+- manual attempts can be resumed with interruptions preserved and without accepting post-completion reruns;
 - receipt/fragment tampering, missing/duplicate runs, session reuse, and declared oracle/peer-output exposure fail closed;
 - CI passes on the exact main candidate.
 
-This establishes `BLINDED_RUN_PACKET_V1_READY__EXECUTION_RECEIPT_V1_READY__PER_RUN_COLLECTION_V1_READY`, not reviewer admission. Reviewer roles remain evaluation-gated until actual independent comparative runs demonstrate incremental value.
+This establishes `BLINDED_RUN_PACKET_V1_READY__EXECUTION_RECEIPT_V1_READY__PER_RUN_COLLECTION_V1_READY__ATTEMPT_LEDGER_V1_READY`, not reviewer admission. Reviewer roles remain evaluation-gated until actual independent comparative runs demonstrate incremental value.

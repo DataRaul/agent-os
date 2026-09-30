@@ -19,9 +19,9 @@ The automated scan is intentionally conservative. A pass is necessary, not suffi
 
 ## Automated public-boundary scan
 
-The publication scanner checks repository text for high-confidence publication hazards, including secret/token material, private-key blocks, and project-specific same-owner repository references other than the public Agent OS repository itself.
+The publication scanner checks repository text and committed paths for high-confidence publication hazards, including secret/token material, private-key blocks, sensitive credential/key filenames, and project-specific same-owner repository references other than the public Agent OS repository itself.
 
-The scan runs in CI on pull requests and on updates to the default branch.
+The scanner has deterministic self-tests covering clean content, the allowed public self-reference, forbidden same-owner repository references, representative secret material, and sensitive credential paths. The scan and its self-tests run in CI; the publication scan itself runs on pull requests and on updates to the default branch.
 
 ## Private-derived work
 

@@ -13,13 +13,35 @@ SAME_OWNER_REPO = re.compile(
     rf"(?<![A-Za-z0-9_.-]){re.escape(OWNER)}/([A-Za-z0-9_.-]+)"
 )
 
+SENSITIVE_BASENAMES = {
+    ".env",
+    ".env.local",
+    ".env.production",
+    ".env.staging",
+    ".env.development",
+    "credentials.json",
+    "service-account.json",
+    "id_rsa",
+    "id_ed25519",
+}
+SENSITIVE_SUFFIXES = {".pem", ".p12", ".pfx"}
+
 SECRET_PATTERNS = {
     "private-key-block": re.compile(
         r"-----BEGIN " + r"(?:RSA |EC |OPENSSH )?" + r"PRIVATE KEY-----"
     ),
+    "pgp-private-key-block": re.compile(
+        r"-----BEGIN PGP " + r"PRIVATE KEY BLOCK-----"
+    ),
     "github-classic-token": re.compile(r"gh" + r"p_[A-Za-z0-9]{30,}"),
     "github-fine-grained-token": re.compile(r"github" + r"_pat_[A-Za-z0-9_]{40,}"),
+    "github-oauth-or-app-token": re.compile(
+        r"gh" + r"(?:o|u|s|r)_[A-Za-z0-9]{30,}"
+    ),
     "aws-access-key": re.compile(r"AK" + r"IA[0-9A-Z]{16}"),
+    "google-api-key": re.compile(r"AI" + r"za[0-9A-Za-z_-]{35}"),
+    "slack-token": re.compile(r"xox" + r"[aboprs]-[A-Za-z0-9-]{20,}"),
+    "stripe-live-secret": re.compile(r"sk" + r"_live_[A-Za-z0-9]{20,}"),
     "api-secret": re.compile(r"sk" + r"-[A-Za-z0-9_-]{32,}"),
 }
 
@@ -28,14 +50,30 @@ def fail(message: str) -> None:
     raise SystemExit(f"PUBLICATION_GATE_FAIL: {message}")
 
 
-def main() -> None:
+def _is_sensitive_path(path: Path) -> bool:
+    name = path.name.lower()
+    if name in SENSITIVE_BASENAMES:
+        return True
+    return path.suffix.lower() in SENSITIVE_SUFFIXES
+
+
+def find_hazards(root: Path) -> list[str]:
+    root = root.resolve()
     hazards: list[str] = []
 
-    for path in sorted(ROOT.rglob("*")):
+    for path in sorted(root.rglob("*")):
         if not path.is_file():
             continue
-        if any(part in SKIP_DIRS for part in path.parts):
+        try:
+            relative = path.relative_to(root)
+        except ValueError:
             continue
+        if any(part in SKIP_DIRS for part in relative.parts):
+            continue
+
+        if _is_sensitive_path(path):
+            hazards.append(f"{relative}: sensitive credential/key path")
+
         if path.suffix.lower() not in TEXT_SUFFIXES:
             continue
 
@@ -46,17 +84,21 @@ def main() -> None:
 
         for name, pattern in SECRET_PATTERNS.items():
             if pattern.search(text):
-                hazards.append(f"{path.relative_to(ROOT)}: {name}")
+                hazards.append(f"{relative}: {name}")
 
         for match in SAME_OWNER_REPO.finditer(text):
             if match.group(1) != PUBLIC_REPO:
                 hazards.append(
-                    f"{path.relative_to(ROOT)}: project-specific same-owner repository reference"
+                    f"{relative}: project-specific same-owner repository reference"
                 )
 
-    if hazards:
-        fail("; ".join(sorted(set(hazards))))
+    return sorted(set(hazards))
 
+
+def main() -> None:
+    hazards = find_hazards(ROOT)
+    if hazards:
+        fail("; ".join(hazards))
     print("PUBLICATION_GATE_PASS")
 
 

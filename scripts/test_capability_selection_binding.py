@@ -57,13 +57,44 @@ def main() -> None:
     verifier = load_verifier()
     registry = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
 
-    result = verifier.verify_binding(request(), registry, PIN)
+    digest = verifier.canonical_sha256(registry)
+    result = verifier.verify_binding(request(), registry, PIN, digest)
     if result["binding"] != "CAPABILITY_BINDING_VERIFIED":
         fail("valid binding did not verify")
     if result["authority_granted"] is not False:
         fail("binding verification must never grant authority")
+    if result["registry_sha256"] != digest:
+        fail("binding result did not preserve exact registry digest")
 
     expect_failure(verifier, request(), registry, "b" * 40, "does not match")
+
+    try:
+        verifier.verify_binding(request(), registry, PIN, "0" * 64)
+    except verifier.BindingError as exc:
+        if "registry SHA-256" not in str(exc):
+            fail(f"wrong registry digest failure: {exc}")
+    else:
+        fail("wrong registry digest was accepted")
+
+    bad_registry_version = copy.deepcopy(registry)
+    bad_registry_version["registry_version"] = True
+    expect_failure(
+        verifier,
+        request(),
+        bad_registry_version,
+        PIN,
+        "positive integer",
+    )
+
+    bad_registry_status = copy.deepcopy(registry)
+    bad_registry_status["status"] = "UNEXPECTED"
+    expect_failure(
+        verifier,
+        request(),
+        bad_registry_status,
+        PIN,
+        "status mismatch",
+    )
 
     unknown = request()
     unknown["capability_id"] = "unknown-capability"

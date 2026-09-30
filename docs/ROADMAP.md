@@ -28,9 +28,9 @@ Public skills:
 
 ## P2 — Specialist reviewer evaluation
 
-Status: `BLINDED_RUN_PACKET_V1_READY__EXECUTION_RECEIPT_V1_READY__PER_RUN_COLLECTION_V1_READY`
+Status: `BLINDED_RUN_PACKET_V1_READY__EXECUTION_RECEIPT_V1_READY__PER_RUN_COLLECTION_V1_READY__ATTEMPT_LEDGER_V1_READY`
 
-The deterministic benchmark/scorer is paired with oracle-isolated baseline and reviewer run packets plus packet-bound execution-receipt tooling. Whole-packet single-session receipts remain supported; a deterministic oracle-free collector now also preserves one fresh executor-session reference per case/replicate for manual or otherwise split execution. The assembler requires disjoint baseline/reviewer executor sessions, matching model configuration labels, exact packet digests, and no declared oracle/peer-output exposure before it can produce scorer input. Specialist reviewers are admitted only when actual independent comparative runs demonstrate incremental value over the primary-agent + skills baseline. No specialist candidate is implemented or admitted by packet or receipt infrastructure.
+The deterministic benchmark/scorer is paired with oracle-isolated baseline and reviewer run packets plus packet-bound execution-receipt tooling. Whole-packet single-session receipts remain supported; deterministic oracle-free tooling now preserves one fresh executor-session reference per case/replicate and an append-only attempt ledger can safely resume interrupted manual execution without erasing failed attempts or accepting post-completion reruns. The assembler requires disjoint baseline/reviewer executor sessions, matching model configuration labels, exact packet digests, and no declared oracle/peer-output exposure before it can produce scorer input. Specialist reviewers are admitted only when actual independent comparative runs demonstrate incremental value over the primary-agent + skills baseline. No specialist candidate is implemented or admitted by packet or receipt infrastructure.
 
 ## P3 — Vendor/source trust baseline
 
@@ -56,7 +56,7 @@ A bounded OpenAI plugin-format reference audit is documented in `docs/P4_OPENAI_
 
 ## P4R — Public capability registry
 
-Status: `FOUNDATION_V1`
+Status: `FOUNDATION_V1__STRUCTURAL_VALIDATION_HARDENED`
 
 Maintain `catalog/capability-registry.json` as the public machine-readable interface for reusable capabilities.
 
@@ -74,7 +74,7 @@ P4R may evolve alongside P4; it does not widen tool admission.
 
 ## P5 — Generic capability router / adapter contract
 
-Status: `DECLARATIVE_CONTRACT_V1_COMPLETE__PIN_BINDING_VERIFIER_V1_COMPLETE`
+Status: `DECLARATIVE_CONTRACT_V1_COMPLETE__PIN_AND_REGISTRY_DIGEST_BINDING_V1_COMPLETE`
 
 The first bounded tranche defines a public, vendor-neutral selection-request schema and public-safe structural cases. A deterministic pinned-registry verifier now confirms SHA/ID/contract-version binding against an already reviewed local registry while explicitly granting no authority. It performs no selection, composition, adapter execution, network lookup, or authority grant. See `docs/P5_GENERIC_SELECTION_CONTRACT.md`. Any executable router/adapter work requires a separate bounded selection and approval; private activation remains behind its own portfolio gate.
 
@@ -103,3 +103,10 @@ Never reverse this arrow. Public development, CI, tests and runtime must not dep
 ## Public evolution rule
 
 A private observation may motivate a generic capability, but public evolution uses only a sanitized generic candidate plus public-safe evals. Public changes become consumable only after public validation, publication safety review and exact-main verification.
+
+
+## Cross-cutting public hardening
+
+Status: `VALIDATION_PUBLICATION_REGISTRY_AND_P2_RESUME_HARDENING_V1`
+
+The bounded hardening tranche strengthens publication-gate self-tests and credential-path detection, registry/path/version invariants, optional exact registry-digest binding, and resumable P2 manual-attempt evidence. It adds no reviewer admission, executable routing, private dependency, external installation, authentication, or paid model execution.
