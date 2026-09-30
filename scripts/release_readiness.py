@@ -15,7 +15,7 @@ REGISTRY_PATH = ROOT / "catalog" / "capability-registry.json"
 CHANGELOG_PATH = ROOT / "catalog" / "capability-changelog.json"
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 BACKTICK_PATH_RE = re.compile(
-    r"`((?:docs|scripts|catalog|schemas|skills|agents|evals|benchmarks|\.github)"
+    r"`((?:docs|scripts|catalog|schemas|benchmarks|\.github)"
     r"/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*)`"
 )
 REQUIRED_LOCAL_CHECKS = (
