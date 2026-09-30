@@ -68,7 +68,7 @@ def main() -> None:
     capability(duplicate_path, "provenance-freshness")["path"] = capability(
         duplicate_path, "verified-completion"
     )["path"]
-    expect_rejected(validator, duplicate_path, "skill path must equal")
+    expect_rejected(validator, duplicate_path, "duplicate capability path")
 
     wrong_eval = copy.deepcopy(base)
     capability(wrong_eval, "verified-completion")["eval_path"] = "README.md"
