@@ -1,0 +1,5 @@
+{
+  "schema_version": 1,
+  "policy": "Capability additions, deprecations, removals, reactivations, and capability_contract_version changes require an explicit entry tied to the resulting registry_version. Repository SHA remains the implementation identity; ordinary implementation changes that preserve the public capability contract do not require a capability-contract version bump.",
+  "entries": []
+}
