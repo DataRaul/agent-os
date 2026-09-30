@@ -2,7 +2,7 @@
 
 This module deliberately does not read the benchmark oracle. It verifies that each
 result receipt is bound to the exact blinded packet that was executed and that the
-baseline and reviewer executions declare distinct sessions before producing the
+baseline and reviewer executions declare disjoint sessions before producing the
 combined scorer input.
 """
 
@@ -15,6 +15,9 @@ from pathlib import Path
 
 
 ALLOWED_MODES = {"baseline", "reviewer"}
+SINGLE_SESSION_SCHEMA = 1
+PER_RUN_SESSION_SCHEMA = 2
+PER_RUN_LAYOUT = "PER_RUN_SESSIONS"
 
 
 class ReceiptError(ValueError):
@@ -92,9 +95,44 @@ def _validate_packet(packet: dict, expected_mode: str) -> None:
         seen.add(pair)
 
 
-def _validate_receipt(packet: dict, receipt: dict, expected_mode: str) -> None:
-    if receipt.get("schema_version") != 1:
-        raise ReceiptError(f"{expected_mode} receipt schema_version must equal 1")
+def _validate_result_run(
+    packet_run: dict,
+    result_run: dict,
+    taxonomy: set[str],
+    expected_mode: str,
+) -> None:
+    if (
+        result_run.get("case_id") != packet_run.get("case_id")
+        or result_run.get("replicate") != packet_run.get("replicate")
+    ):
+        raise ReceiptError(f"{expected_mode} receipt run ordering/identity mismatch")
+    codes = result_run.get("finding_codes")
+    if (
+        not isinstance(codes, list)
+        or len(codes) != len(set(codes))
+        or any(not isinstance(code, str) or code not in taxonomy for code in codes)
+    ):
+        raise ReceiptError(
+            f"{expected_mode} receipt {packet_run['case_id']} finding_codes invalid"
+        )
+    for key in ("tool_calls", "latency_ms"):
+        value = result_run.get(key)
+        if value is not None and (
+            not isinstance(value, (int, float)) or isinstance(value, bool) or value < 0
+        ):
+            raise ReceiptError(
+                f"{expected_mode} receipt {packet_run['case_id']} {key} invalid"
+            )
+
+
+def _validate_receipt(
+    packet: dict,
+    receipt: dict,
+    expected_mode: str,
+) -> tuple[str, list[str]]:
+    schema_version = receipt.get("schema_version")
+    if schema_version not in {SINGLE_SESSION_SCHEMA, PER_RUN_SESSION_SCHEMA}:
+        raise ReceiptError(f"{expected_mode} receipt schema_version must equal 1 or 2")
     if receipt.get("suite") != "specialist-reviewer-evaluation":
         raise ReceiptError(f"{expected_mode} receipt suite mismatch")
     if receipt.get("mode") != expected_mode:
@@ -105,7 +143,6 @@ def _validate_receipt(packet: dict, receipt: dict, expected_mode: str) -> None:
     if receipt.get("packet_sha256") != canonical_sha256(packet):
         raise ReceiptError(f"{expected_mode} receipt packet digest mismatch")
 
-    _require_nonempty_string(receipt.get("executor_session_id"), "executor_session_id")
     if receipt.get("oracle_supplied") is not False:
         raise ReceiptError(f"{expected_mode} receipt must declare oracle_supplied=false")
     if receipt.get("peer_output_supplied") is not False:
@@ -117,31 +154,53 @@ def _validate_receipt(packet: dict, receipt: dict, expected_mode: str) -> None:
         raise ReceiptError(f"{expected_mode} receipt run count mismatch")
 
     taxonomy = set(packet["output_contract"]["allowed_finding_codes"])
+    session_ids: list[str] = []
+    if schema_version == SINGLE_SESSION_SCHEMA:
+        if "execution_layout" in receipt:
+            raise ReceiptError(
+                f"{expected_mode} schema v1 receipt must not declare execution_layout"
+            )
+        session_id = _require_nonempty_string(
+            receipt.get("executor_session_id"), "executor_session_id"
+        )
+        session_ids = [session_id]
+    else:
+        if receipt.get("execution_layout") != PER_RUN_LAYOUT:
+            raise ReceiptError(
+                f"{expected_mode} schema v2 receipt execution_layout must equal {PER_RUN_LAYOUT}"
+            )
+        if "executor_session_id" in receipt:
+            raise ReceiptError(
+                f"{expected_mode} schema v2 receipt must not declare top-level executor_session_id"
+            )
+
     for packet_run, result_run in zip(packet_runs, receipt_runs):
         if not isinstance(result_run, dict):
             raise ReceiptError(f"{expected_mode} receipt run must be object")
-        if (
-            result_run.get("case_id") != packet_run.get("case_id")
-            or result_run.get("replicate") != packet_run.get("replicate")
-        ):
-            raise ReceiptError(f"{expected_mode} receipt run ordering/identity mismatch")
-        codes = result_run.get("finding_codes")
-        if (
-            not isinstance(codes, list)
-            or len(codes) != len(set(codes))
-            or any(not isinstance(code, str) or code not in taxonomy for code in codes)
-        ):
-            raise ReceiptError(
-                f"{expected_mode} receipt {packet_run['case_id']} finding_codes invalid"
-            )
-        for key in ("tool_calls", "latency_ms"):
-            value = result_run.get(key)
-            if value is not None and (
-                not isinstance(value, (int, float)) or isinstance(value, bool) or value < 0
-            ):
-                raise ReceiptError(
-                    f"{expected_mode} receipt {packet_run['case_id']} {key} invalid"
+        _validate_result_run(packet_run, result_run, taxonomy, expected_mode)
+        if schema_version == PER_RUN_SESSION_SCHEMA:
+            session_ids.append(
+                _require_nonempty_string(
+                    result_run.get("executor_session_id"),
+                    f"{expected_mode} receipt {packet_run['case_id']} executor_session_id",
                 )
+            )
+        elif "executor_session_id" in result_run:
+            raise ReceiptError(
+                f"{expected_mode} schema v1 receipt run must not declare executor_session_id"
+            )
+
+    if schema_version == PER_RUN_SESSION_SCHEMA and len(session_ids) != len(set(session_ids)):
+        raise ReceiptError(
+            f"{expected_mode} per-run receipt must use a distinct executor session for every run"
+        )
+
+    layout = (
+        "SINGLE_PACKET_SESSION"
+        if schema_version == SINGLE_SESSION_SCHEMA
+        else PER_RUN_LAYOUT
+    )
+    return layout, session_ids
 
 
 def assemble(
@@ -164,11 +223,17 @@ def assemble(
     ):
         raise ReceiptError("baseline/reviewer packet taxonomies differ")
 
-    _validate_receipt(baseline_packet, baseline_receipt, "baseline")
-    _validate_receipt(reviewer_packet, reviewer_receipt, "reviewer")
+    baseline_layout, baseline_sessions = _validate_receipt(
+        baseline_packet, baseline_receipt, "baseline"
+    )
+    reviewer_layout, reviewer_sessions = _validate_receipt(
+        reviewer_packet, reviewer_receipt, "reviewer"
+    )
 
-    if baseline_receipt["executor_session_id"] == reviewer_receipt["executor_session_id"]:
-        raise ReceiptError("baseline and reviewer receipts must use distinct executor sessions")
+    if set(baseline_sessions) & set(reviewer_sessions):
+        raise ReceiptError(
+            "baseline and reviewer receipts must use disjoint executor sessions"
+        )
 
     combined_runs: list[dict] = []
     for baseline_run, reviewer_run in zip(
@@ -190,20 +255,28 @@ def assemble(
             combined["reviewer_latency_ms"] = reviewer_run["latency_ms"]
         combined_runs.append(combined)
 
+    execution_receipts = {
+        "baseline_packet_sha256": baseline_receipt["packet_sha256"],
+        "reviewer_packet_sha256": reviewer_receipt["packet_sha256"],
+        "baseline_execution_layout": baseline_layout,
+        "reviewer_execution_layout": reviewer_layout,
+        "baseline_executor_session_ids": baseline_sessions,
+        "reviewer_executor_session_ids": reviewer_sessions,
+        "oracle_supplied": False,
+        "peer_output_supplied": False,
+    }
+    if len(baseline_sessions) == 1:
+        execution_receipts["baseline_executor_session_id"] = baseline_sessions[0]
+    if len(reviewer_sessions) == 1:
+        execution_receipts["reviewer_executor_session_id"] = reviewer_sessions[0]
+
     return {
         "schema_version": 1,
         "suite": "specialist-reviewer-evaluation",
         "candidate_reviewer": baseline_packet["candidate_reviewer"],
         "model_configuration_id": baseline_packet["model_configuration_id"],
         "reviewer_received_baseline_output": False,
-        "execution_receipts": {
-            "baseline_packet_sha256": baseline_receipt["packet_sha256"],
-            "reviewer_packet_sha256": reviewer_receipt["packet_sha256"],
-            "baseline_executor_session_id": baseline_receipt["executor_session_id"],
-            "reviewer_executor_session_id": reviewer_receipt["executor_session_id"],
-            "oracle_supplied": False,
-            "peer_output_supplied": False,
-        },
+        "execution_receipts": execution_receipts,
         "runs": combined_runs,
     }
 
