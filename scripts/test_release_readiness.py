@@ -88,6 +88,41 @@ def main() -> None:
     if same["status"] != "COMPATIBLE" or same["changes"]:
         fail("identical capability surface should be compatible")
 
+    top_level_authority = copy.deepcopy(identical)
+    top_level_authority["authority_granted"] = True
+    expect_error(
+        module,
+        lambda: module.compare_snapshots(snapshot, top_level_authority, empty_changelog()),
+        "snapshot authority_granted must be false",
+    )
+
+    capability_authority = copy.deepcopy(identical)
+    capability_authority["capabilities"][0]["grants_authority"] = True
+    expect_error(
+        module,
+        lambda: module.compare_snapshots(snapshot, capability_authority, empty_changelog()),
+        "snapshot must not grant authority",
+    )
+
+    malformed_digest = copy.deepcopy(identical)
+    malformed_digest["capabilities"][0]["path_sha256"] = "NOT_A_DIGEST"
+    expect_error(
+        module,
+        lambda: module.compare_snapshots(snapshot, malformed_digest, empty_changelog()),
+        "snapshot path_sha256",
+    )
+
+    missing_eval_digest = copy.deepcopy(identical)
+    skill_with_eval = next(
+        item for item in missing_eval_digest["capabilities"] if item["kind"] == "skill"
+    )
+    skill_with_eval.pop("eval_sha256")
+    expect_error(
+        module,
+        lambda: module.compare_snapshots(snapshot, missing_eval_digest, empty_changelog()),
+        "eval_path/eval_sha256 must be paired",
+    )
+
     added = copy.deepcopy(identical)
     added["repository_sha"] = "c" * 40
     added["registry_version"] += 1
@@ -122,7 +157,9 @@ def main() -> None:
     if module.compare_snapshots(identical, added, add_log)["status"] != "COMPATIBLE":
         fail("documented additive capability change should be compatible")
 
-    current_id = snapshot["capabilities"][0]["capability_id"]
+    current_id = next(
+        item["capability_id"] for item in snapshot["capabilities"] if item["kind"] == "adapter"
+    )
     structural = copy.deepcopy(identical)
     structural["repository_sha"] = "d" * 40
     structural["registry_version"] += 1
@@ -177,7 +214,7 @@ def main() -> None:
     removal_log = empty_changelog()
     removal_log["entries"].append(
         log_entry(
-            current_id,
+            dep_target["capability_id"],
             "REMOVED",
             dep_target["capability_contract_version"],
             None,
