@@ -4,7 +4,7 @@ Status: `RELEASE_READINESS_V1`
 
 The public release-readiness gate is a deterministic, local control-plane check. It does not publish a release, update any consumer pin, grant runtime authority, install tooling, authenticate a service, or make network calls.
 
-For the first stable-release programme, readiness also validates `catalog/release-candidate.json` through `scripts/validate_release_candidate.py`. That check binds the candidate version, registry version/digest, stable capability contracts, stable interface paths, experimental exclusions, and publication boundary.
+For the first stable-release programme, readiness validates the historical RC candidate and publication records plus `catalog/stable-release-candidate.json`. The stable-candidate check binds version `1.0.0`, the RC publication identity, registry version/digest, stable capability contracts, stable interface paths, exact RC Git blob identities, experimental exclusions, and the still-closed stable-publication boundary.
 
 ## Command
 
@@ -71,4 +71,4 @@ The readiness gate validates backticked repository-relative references under `do
 
 A `READY` result means the deterministic checks represented by this gate passed for the evaluated checkout. It does not establish release quality beyond those checks and never implies that a release was published, that a private overlay advanced its pin, or that any capability has execution authority.
 
-`v1.0.0-rc.1` has now been published as a prerelease at exact commit `7bc62182683857c285bb6487d80b1507c4457dd6`. The tagged commit remains the authoritative candidate snapshot. Stable `v1.0.0` publication is a separate action and must fresh-reconcile its intended exact commit and pass this gate immediately before publication.
+`v1.0.0-rc.1` is published at exact commit `7bc62182683857c285bb6487d80b1507c4457dd6`, and stable `1.0.0` is now prepared as the working candidate. Stable `v1.0.0` publication remains a separate explicit action and must fresh-reconcile the final candidate commit and pass this gate immediately before publication.
