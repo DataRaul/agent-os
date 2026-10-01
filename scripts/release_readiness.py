@@ -41,6 +41,11 @@ REQUIRED_LOCAL_CHECKS = (
         "scripts/validate_stable_release_candidate.py",
         "STABLE_RELEASE_CANDIDATE_FAILED",
     ),
+    (
+        "stable_release_publication",
+        "scripts/validate_stable_release_publication.py",
+        "STABLE_RELEASE_PUBLICATION_FAILED",
+    ),
 )
 
 
