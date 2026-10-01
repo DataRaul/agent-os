@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "adapter_id": "fixture-echo-v1",
+  "capability_id": "fixture-echo",
+  "capability_contract_version": 1,
+  "runtime_scope": "SYNTHETIC_BUILTIN_ADAPTER_ONLY",
+  "authority_ceiling": "read-only",
+  "input_contract": {
+    "type": "object",
+    "required": [
+      "payload"
+    ],
+    "additional_properties": false,
+    "max_canonical_json_bytes": 4096
+  },
+  "output_contract": {
+    "output_type": "fixture-echo-result",
+    "postconditions": [
+      "output echoes payload"
+    ]
+  },
+  "side_effects": [],
+  "dynamic_import": false,
+  "subprocess": false,
+  "network": false,
+  "filesystem_mutation": false,
+  "credentials": false
+}

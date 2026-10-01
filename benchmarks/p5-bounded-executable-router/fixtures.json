@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "public_base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "registry": {
+    "schema_version": 1,
+    "registry_version": 1,
+    "status": "PUBLIC_CAPABILITY_REGISTRY_V1",
+    "versioning_policy": "Synthetic fixture registry for bounded executable router tests only.",
+    "authority_policy": "Fixture registry grants no authority.",
+    "privacy_policy": "Contains synthetic public-safe data only.",
+    "capabilities": [
+      {
+        "capability_id": "fixture-echo",
+        "kind": "fixture-adapter",
+        "state": "AVAILABLE",
+        "capability_contract_version": 1,
+        "path": "benchmarks/p5-bounded-executable-router/fixture-adapter-contract.json",
+        "grants_authority": false
+      }
+    ]
+  },
+  "request": {
+    "schema_version": 1,
+    "public_base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "capability_id": "fixture-echo",
+    "capability_contract_version": 1,
+    "work_class": "other",
+    "complexity_class": "C0",
+    "declared_authority_class": "read-only",
+    "required_preconditions": [
+      "fixture input declared"
+    ],
+    "output_postcondition_contract": {
+      "output_type": "fixture-echo-result",
+      "postconditions": [
+        "output echoes payload"
+      ]
+    }
+  },
+  "precondition_checks": [
+    {
+      "check_id": "fixture input declared",
+      "status": "PASS",
+      "evidence": "synthetic fixture input is explicitly declared"
+    }
+  ],
+  "adapter_id": "fixture-echo-v1",
+  "adapter_input": {
+    "payload": {
+      "message": "hello",
+      "count": 2
+    }
+  }
+}

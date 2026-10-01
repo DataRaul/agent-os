@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Agent OS P5 Bounded Execution Receipt V1",
+  "description": "Receipt for the synthetic built-in executable router prototype only.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_type",
+    "execution_status",
+    "runtime_scope",
+    "public_base_sha",
+    "registry_sha256",
+    "request_sha256",
+    "capability_id",
+    "capability_contract_version",
+    "adapter_id",
+    "adapter_input_sha256",
+    "output_sha256",
+    "output",
+    "precondition_result",
+    "postcondition_result",
+    "authority_source",
+    "registry_authority_granted",
+    "external_authority_used",
+    "side_effects",
+    "executable"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_type": {
+      "const": "P5_BOUNDED_EXECUTION_RECEIPT"
+    },
+    "execution_status": {
+      "const": "EXECUTED"
+    },
+    "runtime_scope": {
+      "const": "SYNTHETIC_BUILTIN_ADAPTER_ONLY"
+    },
+    "public_base_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "registry_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "request_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "capability_id": {
+      "const": "fixture-echo"
+    },
+    "capability_contract_version": {
+      "const": 1
+    },
+    "adapter_id": {
+      "const": "fixture-echo-v1"
+    },
+    "adapter_input_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "output_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "output": {
+      "type": "object"
+    },
+    "precondition_result": {
+      "type": "object"
+    },
+    "postcondition_result": {
+      "type": "object"
+    },
+    "authority_source": {
+      "const": "PUBLIC_SAFE_FIXTURE_HARNESS"
+    },
+    "registry_authority_granted": {
+      "const": false
+    },
+    "external_authority_used": {
+      "const": false
+    },
+    "side_effects": {
+      "type": "array",
+      "maxItems": 0
+    },
+    "executable": {
+      "const": true
+    }
+  }
+}
