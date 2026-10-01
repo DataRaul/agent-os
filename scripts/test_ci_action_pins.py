@@ -1,4 +1,4 @@
-"""Deterministic tests for immutable GitHub Action pin validation."""
+"""Deterministic tests for immutable workflow dependency validation."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE_PATH = ROOT / "scripts" / "validate_ci_action_pins.py"
+PIN = "3d3c42e5aac5ba805825da76410c181273ba90b1"
 
 
 def fail(message: str) -> None:
@@ -46,26 +47,40 @@ def main() -> None:
         root = Path(tmp)
         write_workflow(
             root,
-            "steps:\n"
-            "  - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1\n"
-            "  - uses: ./local-action\n",
+            "jobs:\n"
+            "  test:\n"
+            "    steps:\n"
+            f"      - uses: actions/checkout@{PIN} # reviewed\n"
+            "      - uses: './local-action'\n"
+            f"  reusable:\n    uses: owner/repo/.github/workflows/reuse.yml@{PIN}\n",
         )
+        module.validate_workflows(root)
+
+    for value in (
+        "actions/checkout@v7",
+        "actions/checkout@3d3c42e",
+        '"actions/checkout@v7"',
+        "owner/repo/.github/workflows/reuse.yml@main",
+    ):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_workflow(root, f"jobs:\n  test:\n    uses: {value}\n")
+            expect_error(module, root, "exact 40-character lowercase commit SHA")
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        write_workflow(root, "jobs:\n  test:\n    steps:\n      - uses: ./local-action\n")
         module.validate_workflows(root)
 
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
-        write_workflow(root, "steps:\n  - uses: actions/checkout@v7\n")
-        expect_error(module, root, "exact 40-character lowercase commit SHA")
+        write_workflow(root, "jobs:\n  test:\n    steps:\n      - uses: docker://alpine:latest\n")
+        expect_error(module, root, "docker action references are outside")
 
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
-        write_workflow(root, "steps:\n  - uses: actions/checkout@3d3c42e\n")
-        expect_error(module, root, "exact 40-character lowercase commit SHA")
-
-    with tempfile.TemporaryDirectory() as tmp:
-        root = Path(tmp)
-        write_workflow(root, "steps:\n  - uses: ./local-action\n")
-        expect_error(module, root, "no external GitHub Action dependencies found")
+        write_workflow(root, "jobs:\n  test:\n    uses: 'actions/checkout@v7\n")
+        expect_error(module, root, "quoted uses value is unterminated")
 
     print("CI_ACTION_PIN_TEST_PASS")
 
