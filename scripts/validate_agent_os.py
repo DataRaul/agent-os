@@ -591,6 +591,176 @@ def validate_p4_narrow_audits() -> None:
         fail("P4.2 eval cases must exactly match audit references")
 
 
+def validate_p4_second_tooling_tranche() -> None:
+    audits = load_json(ROOT / "catalog" / "p4-second-tooling-tranche-audits.json")
+    cases_doc = load_json(ROOT / "catalog" / "p4-second-tooling-tranche-cases.json")
+    queue = load_json(ROOT / "catalog" / "tooling-priority-queue.json")
+
+    if not isinstance(audits, dict) or audits.get("schema_version") != 1:
+        fail("P4 second tooling tranche audits invalid")
+    if audits.get("status") != "P4_SECOND_TOOLING_TRANCHE_V1_COMPLETE":
+        fail("P4 second tooling tranche status invalid")
+    if audits.get("scope") != "PRIORITY_GROUP_4_SOURCE_AUDITED_CANDIDATES":
+        fail("P4 second tooling tranche scope invalid")
+
+    rules = audits.get("rules")
+    required_rules = {
+        "no_installation",
+        "no_authentication",
+        "no_external_mutation",
+        "no_vendor_code_execution",
+        "no_credentials_used",
+        "no_private_session_data_read",
+        "no_runtime_authority_granted",
+        "no_capability_registry_change",
+        "current_source_reconciliation_required",
+    }
+    if not isinstance(rules, dict) or any(rules.get(key) is not True for key in required_rules):
+        fail("P4 second tooling tranche rules must fail closed")
+
+    reconciliation = audits.get("source_reconciliation")
+    expected_sources = {
+        "cloudflare-skills": ("626547c06881a20b3322bdc2ed6e6451b33a4fb6", "NONE"),
+        "duckdb-skills": ("7feda8e01e22bc0886c86123f3884947e36d8c69", "NONE"),
+        "microsoft-playwright-skills": (
+            "b85c7a736bb473bf55b584e54a09ffa698d6d871",
+            "IMPLEMENTATION_AND_DOCUMENTATION_ADVANCED",
+        ),
+    }
+    if not isinstance(reconciliation, dict) or set(reconciliation) != set(expected_sources):
+        fail("P4 second tooling tranche source reconciliation set invalid")
+    for source_id, (expected_commit, expected_drift) in expected_sources.items():
+        item = reconciliation[source_id]
+        if not isinstance(item, dict):
+            fail(f"P4 second tooling tranche source {source_id} invalid")
+        actual_commit = (
+            item.get("current_implementation_commit")
+            if source_id == "microsoft-playwright-skills"
+            else item.get("current_default_branch_commit")
+        )
+        if actual_commit != expected_commit or item.get("drift") != expected_drift:
+            fail(f"P4 second tooling tranche source {source_id} reconciliation mismatch")
+        paths = item.get("evidence_paths")
+        if not isinstance(paths, list) or not paths:
+            fail(f"P4 second tooling tranche source {source_id} evidence paths missing")
+        for path in paths:
+            if (
+                not isinstance(path, dict)
+                or not isinstance(path.get("path"), str)
+                or not path["path"]
+                or not isinstance(path.get("blob_sha"), str)
+                or not re.fullmatch(r"[0-9a-f]{40}", path["blob_sha"])
+            ):
+                fail(f"P4 second tooling tranche source {source_id} evidence path invalid")
+
+    expected_ids = [
+        "cloudflare-skills:cloudflare",
+        "duckdb-skills:convert-file",
+        "duckdb-skills:query",
+        "duckdb-skills:read-memories",
+        "duckdb-skills:s3-explore",
+        "microsoft-playwright-skills:persistent-and-attached-sessions",
+    ]
+    group4 = queue.get("classified_priority_groups", {}).get("4")
+    if not isinstance(group4, list) or group4 != expected_ids:
+        fail("P4 second tooling tranche must exactly match deterministic priority group 4")
+
+    candidates = audits.get("candidates")
+    if not isinstance(candidates, list):
+        fail("P4 second tooling tranche candidates invalid")
+    ids = [item.get("capability_id") for item in candidates if isinstance(item, dict)]
+    if ids != expected_ids:
+        fail("P4 second tooling tranche candidate order mismatch")
+
+    expected_dispositions = {
+        "cloudflare-skills:cloudflare": "REFERENCE_ONLY__NO_RUNTIME_ADMISSION",
+        "duckdb-skills:convert-file": "EVALUATION_ONLY__LOCAL_WRITE_REQUIRES_SEPARATE_ADMISSION",
+        "duckdb-skills:query": "EXISTING_NARROW_EVALUATION_ONLY__NO_REGISTRY_PROMOTION",
+        "duckdb-skills:read-memories": "REFERENCE_ONLY__PRIVACY_BOUNDARY",
+        "duckdb-skills:s3-explore": "REFERENCE_ONLY__NETWORK_CREDENTIAL_BOUNDARY",
+        "microsoft-playwright-skills:persistent-and-attached-sessions": "REFERENCE_ONLY__AUTH_STATE_PRIVACY_BOUNDARY__UPSTREAM_DRIFT",
+    }
+    for item in candidates:
+        if not isinstance(item, dict):
+            fail("P4 second tooling tranche candidate must be object")
+        cap_id = item.get("capability_id")
+        if item.get("priority_group") != 4:
+            fail(f"P4 second tooling tranche candidate {cap_id} wrong priority group")
+        if item.get("terminal_disposition") != expected_dispositions.get(cap_id):
+            fail(f"P4 second tooling tranche candidate {cap_id} disposition mismatch")
+        contract = item.get("narrow_contract")
+        if not isinstance(contract, dict):
+            fail(f"P4 second tooling tranche candidate {cap_id} contract missing")
+        for key in ("id", "purpose"):
+            if not isinstance(contract.get(key), str) or not contract[key].strip():
+                fail(f"P4 second tooling tranche candidate {cap_id} contract {key} invalid")
+        for key in ("allowed", "prohibited"):
+            values = contract.get(key)
+            if (
+                not isinstance(values, list)
+                or not values
+                or any(not isinstance(value, str) or not value.strip() for value in values)
+            ):
+                fail(f"P4 second tooling tranche candidate {cap_id} contract {key} invalid")
+
+    if not isinstance(cases_doc, dict) or cases_doc.get("schema_version") != 1:
+        fail("P4 second tooling tranche cases invalid")
+    if cases_doc.get("suite") != "p4-second-tooling-tranche-v1":
+        fail("P4 second tooling tranche case suite invalid")
+    case_rules = cases_doc.get("rules")
+    for key in ("synthetic_public_safe_only", "no_network", "no_credentials", "no_vendor_execution", "no_external_mutation"):
+        if not isinstance(case_rules, dict) or case_rules.get(key) is not True:
+            fail(f"P4 second tooling tranche case rule {key} must be true")
+
+    cases = cases_doc.get("cases")
+    if not isinstance(cases, list) or len(cases) != 12:
+        fail("P4 second tooling tranche must contain exactly twelve synthetic cases")
+    counts = {cap_id: {"allow": 0, "reject": 0} for cap_id in expected_ids}
+    seen: set[str] = set()
+    for case in cases:
+        if not isinstance(case, dict):
+            fail("P4 second tooling tranche case must be object")
+        case_id = case.get("id")
+        cap_id = case.get("capability_id")
+        action = case.get("expected_action")
+        if not isinstance(case_id, str) or not case_id or case_id in seen:
+            fail("P4 second tooling tranche case id invalid or duplicate")
+        seen.add(case_id)
+        if cap_id not in counts:
+            fail(f"P4 second tooling tranche case {case_id} unknown capability")
+        if not isinstance(case.get("scenario"), str) or not case["scenario"].strip():
+            fail(f"P4 second tooling tranche case {case_id} scenario missing")
+        risks = case.get("expected_risks")
+        if not isinstance(risks, list) or any(not isinstance(risk, str) for risk in risks):
+            fail(f"P4 second tooling tranche case {case_id} risks invalid")
+        if isinstance(action, str) and action.startswith("ALLOW_"):
+            counts[cap_id]["allow"] += 1
+        elif action == "REJECT_EXECUTION":
+            counts[cap_id]["reject"] += 1
+        else:
+            fail(f"P4 second tooling tranche case {case_id} expected_action invalid")
+    if any(value != {"allow": 1, "reject": 1} for value in counts.values()):
+        fail("P4 second tooling tranche requires one allow and one reject case per candidate")
+
+    conclusion = audits.get("tranche_conclusion")
+    if not isinstance(conclusion, dict):
+        fail("P4 second tooling tranche conclusion missing")
+    for key in (
+        "registry_promotions",
+        "runtime_admissions",
+        "external_executions",
+        "credentials_used",
+        "installations",
+        "external_mutations",
+    ):
+        if conclusion.get(key) != 0:
+            fail(f"P4 second tooling tranche conclusion {key} must remain zero")
+    if conclusion.get("candidates_reviewed") != 6:
+        fail("P4 second tooling tranche candidate count mismatch")
+    if conclusion.get("terminal") != "P4_SECOND_TOOLING_TRANCHE_COMPLETE__ALL_CANDIDATES_REMAIN_NON_RUNTIME":
+        fail("P4 second tooling tranche terminal invalid")
+
+
 def validate_p4_admission_evidence() -> None:
     evidence = load_json(ROOT / "catalog" / "p4-admission-evidence.json")
     audits = load_json(ROOT / "catalog" / "p4-narrow-audits.json")
@@ -804,6 +974,7 @@ def validate_json() -> None:
     validate_tooling_inventory(catalog)
     validate_tooling_priority_queue()
     validate_p4_narrow_audits()
+    validate_p4_second_tooling_tranche()
     validate_p4_admission_evidence()
     validate_p4_delivery_closeout()
     for source in catalog.get("sources", []):
@@ -833,7 +1004,7 @@ def validate_required_docs() -> None:
         "docs/CAPABILITY_REGISTRY.md",
         "docs/P4_NARROW_AUDITS.md",
         "docs/P4_ADMISSION_EVIDENCE.md",
-        "docs/P4_DELIVERY_CLOSEOUT.md",
+        "docs/P4_DELIVERY_CLOSEOUT.md",\n        "docs/P4_SECOND_TOOLING_TRANCHE.md",\n        "catalog/p4-second-tooling-tranche-audits.json",\n        "catalog/p4-second-tooling-tranche-cases.json",
         "agents/silent-failure-reviewer.md",
         "scripts/score_specialist_reviewer_eval.py",
         "scripts/assemble_specialist_reviewer_eval_result.py",
