@@ -35,7 +35,9 @@ Compare two retained public capability snapshots with:
 python scripts/release_readiness.py compare base-snapshot.json head-snapshot.json
 ```
 
-The comparison is local and deterministic. It fails closed when:
+The comparison is local and deterministic. Before comparing compatibility, it revalidates both retained snapshot envelopes and capability rows: exact allowed keys, exact SHA/SHA-256 formats, allowed kinds and states, positive contract versions, paired eval path/digest evidence, reviewer-to-skill references, and `authority_granted: false` at both snapshot and capability level. This prevents malformed or hand-edited retained evidence from bypassing compatibility checks.
+
+It fails closed when:
 
 - `registry_version` decreases;
 - a capability contract version decreases;
