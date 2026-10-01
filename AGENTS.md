@@ -10,6 +10,7 @@ This repository is the public, reusable operating layer for AI-assisted work. Ke
 - Project-specific mappings belong in a separate private overlay that implements the public overlay contract.
 - Do not copy private Knowledge Core objects or private reasoning artifacts here. Public Agent OS may define interfaces for external knowledge systems, but not their private contents.
 - Do not claim that possession of a tool, connector, token, or skill grants authority to use it.
+- Public files may define consumer/private-overlay adoption gates, but must not assert the current adoption, routing, pin, or operational state of any private consumer.
 
 ## Skill rules
 
