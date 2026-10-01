@@ -4,13 +4,19 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TEXT_SUFFIXES = {".md", ".py", ".json", ".yml", ".yaml", ".toml", ".txt", ".ini", ".cfg"}
+TEXT_SUFFIXES = {
+    ".md", ".py", ".json", ".yml", ".yaml", ".toml", ".txt", ".ini", ".cfg",
+    ".sh", ".bash", ".zsh", ".ps1", ".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs",
+    ".sql", ".csv", ".xml", ".html", ".css", ".properties", ".conf", ".lock",
+}
+TEXT_BASENAMES = {"Dockerfile", "Makefile", "Procfile"}
 SKIP_DIRS = {".git", "__pycache__", ".venv", "venv", "node_modules"}
 
 OWNER = "Data" + "Raul"
 PUBLIC_REPO = "agent" + "-os"
 SAME_OWNER_REPO = re.compile(
-    rf"(?<![A-Za-z0-9_.-]){re.escape(OWNER)}/([A-Za-z0-9_.-]+)"
+    rf"(?<![A-Za-z0-9_.-]){re.escape(OWNER)}/([A-Za-z0-9_.-]+)",
+    re.IGNORECASE,
 )
 
 SENSITIVE_BASENAMES = {
@@ -74,7 +80,7 @@ def find_hazards(root: Path) -> list[str]:
         if _is_sensitive_path(path):
             hazards.append(f"{relative}: sensitive credential/key path")
 
-        if path.suffix.lower() not in TEXT_SUFFIXES:
+        if path.suffix.lower() not in TEXT_SUFFIXES and path.name not in TEXT_BASENAMES:
             continue
 
         try:
@@ -87,7 +93,7 @@ def find_hazards(root: Path) -> list[str]:
                 hazards.append(f"{relative}: {name}")
 
         for match in SAME_OWNER_REPO.finditer(text):
-            if match.group(1) != PUBLIC_REPO:
+            if match.group(1).lower() != PUBLIC_REPO.lower():
                 hazards.append(
                     f"{relative}: project-specific same-owner repository reference"
                 )
