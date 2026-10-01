@@ -1,4 +1,4 @@
-"""Deterministic contract tests for the evaluation-only local CSV DuckDB adapter."""
+"""Deterministic contract tests for the bounded public local CSV DuckDB adapter."""
 
 from __future__ import annotations
 
