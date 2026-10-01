@@ -1,4 +1,4 @@
-"""Evaluation-only, bounded DuckDB CLI adapter for a single local CSV."""
+"""Bounded public DuckDB CLI adapter for a single explicitly authorized local CSV."""
 
 from __future__ import annotations
 
