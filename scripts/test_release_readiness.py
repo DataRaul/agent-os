@@ -157,7 +157,9 @@ def main() -> None:
     if module.compare_snapshots(identical, added, add_log)["status"] != "COMPATIBLE":
         fail("documented additive capability change should be compatible")
 
-    current_id = snapshot["capabilities"][0]["capability_id"]
+    current_id = next(
+        item["capability_id"] for item in snapshot["capabilities"] if item["kind"] == "adapter"
+    )
     structural = copy.deepcopy(identical)
     structural["repository_sha"] = "d" * 40
     structural["registry_version"] += 1
