@@ -52,6 +52,33 @@ def main() -> None:
             fail("same-owner non-public repository reference was not detected")
 
         (root / "README.md").write_text(
+            ("data" + "raul" + "/another-repository") + "\n",
+            encoding="utf-8",
+        )
+        labels = hazard_labels(validator, root)
+        if "project-specific same-owner repository reference" not in labels:
+            fail("case-insensitive same-owner repository reference was not detected")
+
+        (root / "README.md").write_text("clean source fixture\n", encoding="utf-8")
+        (root / "script.sh").write_text(
+            ("Data" + "Raul" + "/shell-private-reference") + "\n",
+            encoding="utf-8",
+        )
+        labels = hazard_labels(validator, root)
+        if "project-specific same-owner repository reference" not in labels:
+            fail("shell-script private repository reference was not detected")
+
+        (root / "script.sh").unlink()
+        (root / "Dockerfile").write_text(
+            ("gh" + "p_" + "A" * 40) + "\n",
+            encoding="utf-8",
+        )
+        labels = hazard_labels(validator, root)
+        if "github-classic-token" not in labels:
+            fail("extensionless source credential was not detected")
+        (root / "Dockerfile").unlink()
+
+        (root / "README.md").write_text(
             ("gh" + "p_" + "A" * 40) + "\n",
             encoding="utf-8",
         )
