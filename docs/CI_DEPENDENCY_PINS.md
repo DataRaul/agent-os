@@ -10,8 +10,9 @@ Reviewed from the official upstream repositories on 2026-10-01:
 
 - `actions/checkout` release `v7.0.1` -> `3d3c42e5aac5ba805825da76410c181273ba90b1`
 - `actions/setup-python` release `v7.0.0` -> `5fda3b95a4ea91299a34e894583c3862153e4b97`
+- `actions/setup-node` release `v7.0.0` -> `820762786026740c76f36085b0efc47a31fe5020`
 
-Both reviewed releases use the Node 24 GitHub Actions runtime. Current workflows use checkout defaults plus the existing `python-version` input only. No token permission, credential input, cache setting, external service, or write authority is added; workflow permissions remain `contents: read`.
+All reviewed releases use the Node 24 GitHub Actions runtime. Current workflows keep their existing checkout defaults, `python-version`, and `node-version` inputs only. No token permission, credential input, cache setting, external service, or write authority is added; workflow permissions remain `contents: read`.
 
 ## Update rule
 
