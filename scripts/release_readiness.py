@@ -14,6 +14,29 @@ ROOT = Path(__file__).resolve().parents[1]
 REGISTRY_PATH = ROOT / "catalog" / "capability-registry.json"
 CHANGELOG_PATH = ROOT / "catalog" / "capability-changelog.json"
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
+DIGEST_RE = re.compile(r"^[0-9a-f]{64}$")
+CAPABILITY_ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+ALLOWED_CAPABILITY_KINDS = {"skill", "reviewer", "tool", "adapter"}
+ALLOWED_CAPABILITY_STATES = {"AVAILABLE", "DEPRECATED"}
+SNAPSHOT_TOP_LEVEL_KEYS = {
+    "schema_version",
+    "snapshot_type",
+    "repository_sha",
+    "registry_version",
+    "registry_sha256",
+    "capabilities",
+    "authority_granted",
+}
+SNAPSHOT_CAPABILITY_REQUIRED_KEYS = {
+    "capability_id",
+    "kind",
+    "state",
+    "capability_contract_version",
+    "path",
+    "path_sha256",
+    "grants_authority",
+}
+SNAPSHOT_CAPABILITY_OPTIONAL_KEYS = {"eval_path", "eval_sha256", "primary_skill"}
 BACKTICK_PATH_RE = re.compile(
     r"`((?:docs|scripts|catalog|schemas|benchmarks|\.github)"
     r"/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*)`"
@@ -78,6 +101,81 @@ def _valid_sha(value: object, label: str) -> str:
     if not isinstance(value, str) or SHA_RE.fullmatch(value) is None:
         raise ReadinessError(f"{label} must be an exact 40-character lowercase SHA")
     return value
+
+
+def _valid_digest(value: object, label: str) -> str:
+    if not isinstance(value, str) or DIGEST_RE.fullmatch(value) is None:
+        raise ReadinessError(f"{label} must be an exact 64-character lowercase SHA-256")
+    return value
+
+
+def _nonempty_string(value: object, label: str) -> str:
+    if not isinstance(value, str) or not value.strip():
+        raise ReadinessError(f"{label} must be a non-empty string")
+    return value
+
+
+def _validate_snapshot_capability(cap: object, index: int) -> str:
+    if not isinstance(cap, dict):
+        raise ReadinessError(f"snapshot capability {index} must be an object")
+
+    keys = set(cap)
+    missing = SNAPSHOT_CAPABILITY_REQUIRED_KEYS - keys
+    extra = keys - (SNAPSHOT_CAPABILITY_REQUIRED_KEYS | SNAPSHOT_CAPABILITY_OPTIONAL_KEYS)
+    if missing or extra:
+        raise ReadinessError(
+            f"snapshot capability {index} keys mismatch: "
+            f"missing={sorted(missing)} extra={sorted(extra)}"
+        )
+
+    cid = _nonempty_string(cap.get("capability_id"), f"snapshot capability {index} capability_id")
+    if CAPABILITY_ID_RE.fullmatch(cid) is None:
+        raise ReadinessError(f"snapshot capability_id invalid: {cid!r}")
+
+    kind = cap.get("kind")
+    if kind not in ALLOWED_CAPABILITY_KINDS:
+        raise ReadinessError(f"{cid} snapshot kind invalid: {kind!r}")
+    state = cap.get("state")
+    if state not in ALLOWED_CAPABILITY_STATES:
+        raise ReadinessError(f"{cid} snapshot state invalid: {state!r}")
+
+    version = cap.get("capability_contract_version")
+    if not isinstance(version, int) or isinstance(version, bool) or version < 1:
+        raise ReadinessError(f"{cid} snapshot capability_contract_version invalid")
+
+    path = _nonempty_string(cap.get("path"), f"{cid} snapshot path")
+    _valid_digest(cap.get("path_sha256"), f"{cid} snapshot path_sha256")
+    if cap.get("grants_authority") is not False:
+        raise ReadinessError(f"{cid} snapshot must not grant authority")
+
+    has_eval_path = "eval_path" in cap
+    has_eval_digest = "eval_sha256" in cap
+    if has_eval_path != has_eval_digest:
+        raise ReadinessError(f"{cid} snapshot eval_path/eval_sha256 must be paired")
+    if has_eval_path:
+        _nonempty_string(cap.get("eval_path"), f"{cid} snapshot eval_path")
+        _valid_digest(cap.get("eval_sha256"), f"{cid} snapshot eval_sha256")
+
+    if kind == "skill":
+        expected_path = f"skills/{cid}/SKILL.md"
+        expected_eval = f"evals/{cid}/cases.json"
+        if path != expected_path:
+            raise ReadinessError(f"{cid} snapshot skill path must equal {expected_path}")
+        if cap.get("eval_path") != expected_eval:
+            raise ReadinessError(f"{cid} snapshot eval_path must equal {expected_eval}")
+        if "primary_skill" in cap:
+            raise ReadinessError(f"{cid} snapshot skill must not declare primary_skill")
+    elif kind == "reviewer":
+        expected_path = f"agents/{cid}.md"
+        if path != expected_path:
+            raise ReadinessError(f"{cid} snapshot reviewer path must equal {expected_path}")
+        primary = cap.get("primary_skill")
+        if not isinstance(primary, str) or CAPABILITY_ID_RE.fullmatch(primary) is None:
+            raise ReadinessError(f"{cid} snapshot reviewer primary_skill invalid")
+    elif "primary_skill" in cap:
+        raise ReadinessError(f"{cid} snapshot {kind} must not declare primary_skill")
+
+    return cid
 
 
 def resolve_repository_sha(root: Path = ROOT) -> str:
@@ -223,6 +321,12 @@ def run_readiness(root: Path = ROOT, repository_sha: str | None = None) -> dict:
 
 
 def _snapshot_map(snapshot: dict) -> dict[str, dict]:
+    if set(snapshot) != SNAPSHOT_TOP_LEVEL_KEYS:
+        missing = sorted(SNAPSHOT_TOP_LEVEL_KEYS - set(snapshot))
+        extra = sorted(set(snapshot) - SNAPSHOT_TOP_LEVEL_KEYS)
+        raise ReadinessError(
+            f"snapshot top-level keys mismatch: missing={missing} extra={extra}"
+        )
     if snapshot.get("schema_version") != 1:
         raise ReadinessError("snapshot schema_version must equal 1")
     if snapshot.get("snapshot_type") != "PUBLIC_CAPABILITY_SNAPSHOT_V1":
@@ -231,22 +335,28 @@ def _snapshot_map(snapshot: dict) -> dict[str, dict]:
     version = snapshot.get("registry_version")
     if not isinstance(version, int) or isinstance(version, bool) or version < 1:
         raise ReadinessError("snapshot registry_version must be a positive integer")
-    digest = snapshot.get("registry_sha256")
-    if not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None:
-        raise ReadinessError("snapshot registry_sha256 invalid")
+    _valid_digest(snapshot.get("registry_sha256"), "snapshot registry_sha256")
+    if snapshot.get("authority_granted") is not False:
+        raise ReadinessError("snapshot authority_granted must be false")
+
     caps = snapshot.get("capabilities")
-    if not isinstance(caps, list):
-        raise ReadinessError("snapshot capabilities must be an array")
+    if not isinstance(caps, list) or not caps:
+        raise ReadinessError("snapshot capabilities must be a non-empty array")
+
     result: dict[str, dict] = {}
-    for cap in caps:
-        if not isinstance(cap, dict):
-            raise ReadinessError("snapshot capability must be an object")
-        cid = cap.get("capability_id")
-        if not isinstance(cid, str) or not cid:
-            raise ReadinessError("snapshot capability_id invalid")
+    for index, cap in enumerate(caps):
+        cid = _validate_snapshot_capability(cap, index)
         if cid in result:
             raise ReadinessError(f"duplicate snapshot capability: {cid}")
         result[cid] = cap
+
+    for cid, cap in result.items():
+        if cap.get("kind") != "reviewer":
+            continue
+        primary = cap["primary_skill"]
+        if primary not in result or result[primary].get("kind") != "skill":
+            raise ReadinessError(f"{cid} snapshot primary_skill not present as a skill")
+
     return result
 
 
