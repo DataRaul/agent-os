@@ -54,7 +54,7 @@ Status: `P4_BOUNDED_TRANCHE_COMPLETE__MARKETPLACE_REFERENCE_AUDIT_V1__SECOND_TOO
 
 P4 is bounded capability evaluation, not a mandate to exhaust every marketplace entry.
 
-A local CSV query adapter candidate is documented in `docs/P4_DUCKDB_LOCAL_ADHOC_ADAPTER.md`. Its narrow invocation and fail-closed boundaries are deterministically contract-tested in CI; it remains evaluation-only, outside the capability registry and without runtime admission.
+The local CSV aggregate adapter is documented in `docs/P4_DUCKDB_LOCAL_ADHOC_ADAPTER.md` and `docs/CAPABILITY_DUCKDB_LOCAL_CSV_AGGREGATE.md`. Its narrow invocation and fail-closed boundaries are deterministically contract-tested in CI; the `duckdb-local-csv-aggregate` capability is now AVAILABLE in registry version 2, while registry membership still grants no file/process authority.
 
 A bounded OpenAI plugin-format reference audit is documented in `docs/P4_OPENAI_PLUGIN_FORMAT_REFERENCE_AUDIT.md`. It admits only read-only manifest/marketplace format evidence as `REFERENCE_ONLY`; plugin installation, authentication, MCP connection, creator-script execution, filesystem writes, and marketplace mutation remain excluded.
 
@@ -121,6 +121,8 @@ A private observation may motivate a generic capability, but public evolution us
 
 ## Cross-cutting public hardening
 
-Status: `VALIDATION_PUBLICATION_REGISTRY_P2_RESUME_AND_RELEASE_READINESS_V1`
+Status: `VALIDATION_PUBLICATION_REGISTRY_P2_RESUME_AND_RELEASE_READINESS_V1__FIRST_STABLE_RELEASE_CANDIDATE_PREPARED`
 
 The bounded hardening tranche strengthens publication-gate self-tests and credential-path detection, registry/path/version invariants, optional exact registry-digest binding, and resumable P2 manual-attempt evidence. A deterministic release-readiness gate now cross-checks core validators, public documentation paths, exact-SHA capability snapshots, registry digests, changelog treatment, and compatibility rules for capability evolution without publishing or advancing any consumer pin. It adds no reviewer admission, executable routing, private dependency, external installation, authentication, or paid model execution.
+
+The first stable-release programme now has a `1.0.0-rc.1` candidate manifest and stability policy. The proposed 1.0 stable surface is limited to the current AVAILABLE capability contracts and explicitly listed public interfaces; P2 specialist candidates, the P5 fixture router as a production runtime, non-admitted vendor tooling, and Playwright observation remain experimental exclusions. No tag, GitHub Release, or consumer pin has been published or advanced.

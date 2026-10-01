@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "status": "FIRST_STABLE_RELEASE_CANDIDATE_PREPARED",
+  "candidate_version": "1.0.0-rc.1",
+  "target_stable_version": "1.0.0",
+  "baseline_main_sha": "2bc240390203d7b643001deb965f84eadef84f21",
+  "prepared_at": "2026-10-01",
+  "registry_version": 2,
+  "registry_sha256": "eab3d637bb99b5482ccfcf6cdde609d97404f28b4b0c8c077743eda480da3e98",
+  "stable_capability_contracts": [
+    {
+      "capability_id": "silent-failure-hunter",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "verified-completion",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "state-mutation-idempotency",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "provenance-freshness",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "research-data-integrity",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "authority-boundary-review",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "semantic-pr-review",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "silent-failure-reviewer",
+      "kind": "reviewer",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "duckdb-local-csv-aggregate",
+      "kind": "adapter",
+      "capability_contract_version": 1
+    }
+  ],
+  "stable_interfaces": [
+    "catalog/capability-registry.json",
+    "schemas/capability-selection-request.schema.json",
+    "schemas/capability-decision-contracts.schema.json",
+    "schemas/private-overlay-profile.schema.json",
+    "docs/CAPABILITY_REGISTRY.md",
+    "docs/PRIVATE_OVERLAY_CONTRACT.md",
+    "docs/TRUST_MODEL.md"
+  ],
+  "experimental_exclusions": [
+    "P2_SPECIALIST_REVIEWER_CANDIDATES",
+    "P5_BOUNDED_EXECUTABLE_FIXTURE_ROUTER",
+    "NON_ADMITTED_VENDOR_TOOLING",
+    "PLAYWRIGHT_BROWSER_OBSERVATION"
+  ],
+  "stability_guarantees": {
+    "exact_repository_sha_pin_required": true,
+    "registry_membership_grants_authority": false,
+    "public_repository_must_not_depend_on_private_overlay": true,
+    "capability_contract_change_requires_version_bump": true,
+    "capability_registry_change_requires_registry_version_and_changelog": true,
+    "breaking_stable_interface_change_requires_major_version_after_1_0": true,
+    "release_readiness_required_at_publication_commit": true
+  },
+  "nonblocking_deferred_work": [
+    "P2 independent comparative model runs and any resulting specialist-reviewer admission",
+    "real-adapter connection to the P5 executable router prototype",
+    "non-admitted P4 vendor/tool candidates and broader marketplace expansion"
+  ],
+  "publication": {
+    "tag_created": false,
+    "github_release_published": false,
+    "consumer_pin_advanced": false,
+    "automatic_publication": false,
+    "explicit_publication_authority_required": true
+  }
+}

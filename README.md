@@ -75,10 +75,12 @@ P5 also contains a bounded executable plumbing prototype using only a synthetic 
 
 The public machine-readable capability interface is `catalog/capability-registry.json`, governed by `docs/CAPABILITY_REGISTRY.md`. Deterministic public release readiness is enforced by `scripts/release_readiness.py` and documented in `docs/RELEASE_READINESS.md`; it emits exact-SHA capability snapshots and fail-closed registry-compatibility evidence but never publishes automatically. Consumers pin an exact Agent OS commit SHA and reference stable capability IDs; registry validation is fail-closed on malformed paths/version metadata, and consumers may additionally bind verification to an exact registry SHA-256. Registry membership never grants execution authority. Public Agent OS never reads or depends on a private overlay. See `docs/ROADMAP.md` for the public-safe phase sequence.
 
+The repository is now prepared as release candidate `1.0.0-rc.1` for a target first stable `1.0.0` release. `docs/STABILITY_POLICY.md` defines the proposed stable surface and compatibility rules. This preparation does not create a tag, publish a GitHub Release, or advance any consumer pin.
+
 Additional skills or reviewer roles should be added only when they are reusable across projects or ecosystems and the added coordination cost is justified.
 
 ## Status
 
-`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_MANUAL_EXECUTION_OPERATIONS_V1_READY__P3_VENDOR_CATALOG_BASELINE_COMPLETE__P4_BOUNDED_TRANCHE_COMPLETE__P4_SECOND_TOOLING_TRANCHE_V1_COMPLETE__P4_PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE__P4_THIRD_TOOLING_TRANCHE_V1_COMPLETE__P4_DUCKDB_LOCAL_CSV_ADAPTER_V1_ADMITTED__P5_DECLARATIVE_DECISION_CONTRACTS_V1_READY__P5_BOUNDED_EXECUTABLE_FIXTURE_ROUTER_V1_COMPLETE__RELEASE_READINESS_V1`
+`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_MANUAL_EXECUTION_OPERATIONS_V1_READY__P3_VENDOR_CATALOG_BASELINE_COMPLETE__P4_BOUNDED_TRANCHE_COMPLETE__P4_SECOND_TOOLING_TRANCHE_V1_COMPLETE__P4_PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE__P4_THIRD_TOOLING_TRANCHE_V1_COMPLETE__P4_DUCKDB_LOCAL_CSV_ADAPTER_V1_ADMITTED__P5_DECLARATIVE_DECISION_CONTRACTS_V1_READY__P5_BOUNDED_EXECUTABLE_FIXTURE_ROUTER_V1_COMPLETE__RELEASE_READINESS_V1__FIRST_STABLE_RELEASE_CANDIDATE_1_0_0_RC1_PREPARED`
 
-No release or stability guarantee is implied yet.
+Release candidate `1.0.0-rc.1` is prepared. No stable tag or GitHub Release has been published; publication remains an explicit separate gate.

@@ -26,6 +26,11 @@ REQUIRED_LOCAL_CHECKS = (
         "scripts/validate_capability_registry.py",
         "CAPABILITY_REGISTRY_FAILED",
     ),
+    (
+        "release_candidate",
+        "scripts/validate_release_candidate.py",
+        "RELEASE_CANDIDATE_FAILED",
+    ),
 )
 
 

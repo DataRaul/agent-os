@@ -29,6 +29,10 @@ jobs:
         run: python scripts/test_release_readiness.py
       - name: Validate public release readiness
         run: python scripts/release_readiness.py check
+      - name: Validate first stable release candidate
+        run: python scripts/validate_release_candidate.py
+      - name: Test release candidate guardrails
+        run: python scripts/test_release_candidate.py
       - name: Validate generic selection request contract
         run: python scripts/test_capability_selection_contract.py
       - name: Validate pinned capability binding
