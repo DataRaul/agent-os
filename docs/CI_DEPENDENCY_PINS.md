@@ -1,6 +1,6 @@
 # Immutable CI dependency pins
 
-Status: `CI_ACTION_PINS_V1`
+Status: `CI_ACTION_PINS_V2`
 
 External GitHub Actions in public Agent OS workflows must use exact 40-character commit SHAs. Mutable tag, branch, major, or minor references fail deterministic validation.
 
@@ -18,8 +18,8 @@ All reviewed releases use the Node 24 GitHub Actions runtime. Current workflows 
 
 An upstream release is a candidate, not an automatic update. Review official upstream source/release notes, verify used inputs remain compatible, preserve least privilege, update the exact SHA and version comment together, then run public validation.
 
-`scripts/validate_ci_action_pins.py` rejects non-immutable external `owner/repository@ref` references. Local actions are outside this external-pin check.
+`scripts/validate_ci_action_pins.py` rejects non-immutable external action and reusable-workflow references in both step-level and job-level `uses:` forms, including quoted values. Local `./` actions remain allowed. Docker action references fail closed because this contract does not yet define an immutable Docker-image policy.
 
 Pinning identifies executable source; it does not grant authority.
 
-Terminal: `CI_ACTION_DEPENDENCIES_EXACT_SHA_PINNED_V1`
+Terminal: `CI_ACTION_DEPENDENCIES_EXACT_SHA_PINNED__USES_PARSER_V2`
