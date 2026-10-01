@@ -33,6 +33,10 @@ jobs:
         run: python scripts/validate_release_candidate.py
       - name: Test release candidate guardrails
         run: python scripts/test_release_candidate.py
+      - name: Validate published release record
+        run: python scripts/validate_release_publication.py
+      - name: Test published release record guardrails
+        run: python scripts/test_release_publication.py
       - name: Validate generic selection request contract
         run: python scripts/test_capability_selection_contract.py
       - name: Validate pinned capability binding
