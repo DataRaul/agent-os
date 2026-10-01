@@ -1,0 +1,87 @@
+name: Publish v1.0.0-rc.1
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/publish-v1.0.0-rc.1.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-v1.0.0-rc.1
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: v1.0.0-rc.1
+      TARGET_SHA: 7bc62182683857c285bb6487d80b1507c4457dd6
+    steps:
+      - name: Verify exact release target
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          resolved_sha="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${TARGET_SHA}" --jq '.sha')"
+          if [[ "${resolved_sha}" != "${TARGET_SHA}" ]]; then
+            echo "::error::Release target did not resolve to the authorized commit."
+            exit 1
+          fi
+
+          encoded_version="$(gh api "repos/${GITHUB_REPOSITORY}/contents/VERSION?ref=${TARGET_SHA}" --jq '.content')"
+          version="$(printf '%s' "${encoded_version}" | base64 --decode | tr -d '\r\n')"
+          if [[ "${version}" != "1.0.0-rc.1" ]]; then
+            echo "::error::VERSION at target is '${version}', expected '1.0.0-rc.1'."
+            exit 1
+          fi
+
+          if gh release view "${TAG}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            echo "Release ${TAG} already exists; nothing to do."
+            echo "already_published=true" >> "${GITHUB_ENV}"
+            exit 0
+          fi
+
+          if gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG}" >/dev/null 2>&1; then
+            echo "::error::Tag ${TAG} exists without a matching GitHub Release."
+            exit 1
+          fi
+
+          echo "already_published=false" >> "${GITHUB_ENV}"
+
+      - name: Publish prerelease
+        if: env.already_published == 'false'
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release create "${TAG}"             --repo "${GITHUB_REPOSITORY}"             --target "${TARGET_SHA}"             --title "Agent OS v1.0.0-rc.1"             --prerelease             --generate-notes
+
+      - name: Verify published prerelease
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          release_tag="$(gh release view "${TAG}" --repo "${GITHUB_REPOSITORY}" --json tagName --jq '.tagName')"
+          prerelease="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${TAG}" --jq '.prerelease')"
+          tag_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/tags/${TAG}" --jq '.object.sha')"
+
+          if [[ "${release_tag}" != "${TAG}" ]]; then
+            echo "::error::Published release tag mismatch."
+            exit 1
+          fi
+
+          if [[ "${prerelease}" != "true" ]]; then
+            echo "::error::Published release is not marked as a prerelease."
+            exit 1
+          fi
+
+          if [[ "${tag_sha}" != "${TARGET_SHA}" ]]; then
+            echo "::error::Tag points to ${tag_sha}, expected ${TARGET_SHA}."
+            exit 1
+          fi
+
+          echo "Published ${TAG} at exact authorized commit ${TARGET_SHA}."
