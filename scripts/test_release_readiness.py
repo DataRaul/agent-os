@@ -214,7 +214,7 @@ def main() -> None:
     removal_log = empty_changelog()
     removal_log["entries"].append(
         log_entry(
-            current_id,
+            dep_target["capability_id"],
             "REMOVED",
             dep_target["capability_contract_version"],
             None,
