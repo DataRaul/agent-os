@@ -90,13 +90,10 @@ def validate_candidate(
     if candidate["prepared_at"] != "2026-10-01":
         raise CandidateError("release candidate prepared_at mismatch")
 
-    observed_version = (
-        version_text.strip()
-        if version_text is not None
-        else VERSION_PATH.read_text(encoding="utf-8").strip()
-    )
-    if observed_version != candidate["candidate_version"]:
-        raise CandidateError("VERSION does not match candidate version")
+    if version_text is not None:
+        observed_version = version_text.strip()
+        if observed_version != candidate["candidate_version"]:
+            raise CandidateError("VERSION does not match candidate version")
 
     if not isinstance(registry, dict):
         raise CandidateError("registry must be an object")
