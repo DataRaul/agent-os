@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "adapter_id": "duckdb-local-csv-aggregate-v1",
+  "capability_id": "duckdb-local-csv-aggregate",
+  "capability_contract_version": 1,
+  "runtime_scope": "BOUND_REAL_DUCKDB_LOCAL_CSV_ADAPTER",
+  "authority_ceiling": "read-only",
+  "required_preconditions": [
+    "input CSV read explicitly authorized",
+    "reviewed DuckDB CLI v1.4.1 process explicitly authorized"
+  ],
+  "input_contract": {
+    "type": "object",
+    "required": [
+      "csv_file",
+      "operation",
+      "column",
+      "duckdb_cli"
+    ],
+    "additional_properties": false,
+    "max_canonical_json_bytes": 4096,
+    "operations": [
+      "count",
+      "sum"
+    ],
+    "count_column": null,
+    "sum_column": "SIMPLE_IDENTIFIER_ONLY"
+  },
+  "output_contract": {
+    "output_type": "duckdb-local-csv-aggregate-result",
+    "postconditions": [
+      "bounded aggregate completed",
+      "input CSV remained unchanged"
+    ]
+  },
+  "execution_boundary": {
+    "dynamic_capability_search": false,
+    "dynamic_import": false,
+    "shell": false,
+    "arbitrary_sql": false,
+    "network": false,
+    "credentials": false,
+    "filesystem_mutation": false,
+    "software_installation": false,
+    "session_state": false,
+    "subprocess": "EXACT_CALLER_SUPPLIED_DUCKDB_V1_4_1_ONLY",
+    "input_file": "ONE_EXPLICIT_EXISTING_REGULAR_LOCAL_CSV_NOT_SYMLINK"
+  },
+  "authority": {
+    "registry_grants_authority": false,
+    "caller_must_authorize_input_file_read": true,
+    "caller_must_authorize_local_process_execution": true,
+    "private_or_project_mapping": false
+  }
+}
