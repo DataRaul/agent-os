@@ -4,6 +4,8 @@ Status: `RELEASE_READINESS_V1`
 
 The public release-readiness gate is a deterministic, local control-plane check. It does not publish a release, update any consumer pin, grant runtime authority, install tooling, authenticate a service, or make network calls.
 
+For the first stable-release programme, readiness also validates `catalog/release-candidate.json` through `scripts/validate_release_candidate.py`. That check binds the candidate version, registry version/digest, stable capability contracts, stable interface paths, experimental exclusions, and publication boundary.
+
 ## Command
 
 Run:
@@ -68,3 +70,5 @@ The readiness gate validates backticked repository-relative references under `do
 ## Boundary
 
 A `READY` result means the deterministic checks represented by this gate passed for the evaluated checkout. It does not establish release quality beyond those checks and never implies that a release was published, that a private overlay advanced its pin, or that any capability has execution authority.
+
+`1.0.0-rc.1` is preparation for the first stable `1.0.0` release, not publication. The exact commit intended for tagging must be fresh-reconciled and pass this gate again immediately before any explicit publication action.
