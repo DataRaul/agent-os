@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "P4_SECOND_TOOLING_TRANCHE_V1_COMPLETE",
-  "verified_as_of": "2026-09-30",
+  "verified_as_of": "2026-10-01",
   "scope": "PRIORITY_GROUP_4_SOURCE_AUDITED_CANDIDATES",
   "rules": {
     "no_installation": true,
