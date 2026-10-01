@@ -19,6 +19,8 @@ jobs:
           python-version: "3.11"
       - name: Validate Agent OS
         run: python scripts/validate_agent_os.py
+      - name: Test immutable CI action pins
+        run: python scripts/test_ci_action_pins.py
       - name: Self-test publication safety gate
         run: python scripts/test_publication_gate.py
       - name: Validate public capability registry
