@@ -111,7 +111,11 @@ def _validate_adapter_input(adapter_input: object) -> tuple[Path, str, str | Non
     if column is not None and not isinstance(column, str):
         raise RouterError("column must be a string or null")
 
-    return Path(csv_file), operation, column, Path(duckdb_cli)
+    csv_path = Path(csv_file)
+    if csv_path.is_symlink() or not csv_path.is_file() or csv_path.suffix.lower() != ".csv":
+        raise RouterError("input must be an existing, regular CSV file, not a symlink")
+
+    return csv_path, operation, column, Path(duckdb_cli)
 
 
 def _parse_single_result(stdout: str) -> str:
