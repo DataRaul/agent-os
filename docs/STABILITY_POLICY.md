@@ -2,7 +2,7 @@
 
 Status: `FIRST_STABLE_RELEASE_CANDIDATE_POLICY_V1`
 
-Prepared stable candidate: `1.0.0`
+Published stable release: `v1.0.0`
 
 Published prerelease candidate: `v1.0.0-rc.1`
 
@@ -52,4 +52,4 @@ A release-candidate pass does not by itself create a tag, publish a GitHub Relea
 
 ## Terminal
 
-`AGENT_OS_1_0_0_STABLE_CANDIDATE_PREPARED__PUBLICATION_AUTHORITY_REQUIRED`
+`AGENT_OS_V1_0_0_STABLE_PUBLISHED__CONSUMER_PIN_AUTHORITY_SEPARATE`
