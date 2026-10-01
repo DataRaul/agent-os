@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "status": "P4_DUCKDB_LOCAL_CSV_ADMISSION_V1_COMPLETE",
+  "admitted_at": "2026-10-01",
+  "capability_id": "duckdb-local-csv-aggregate",
+  "source": {
+    "source_id": "duckdb-skills",
+    "upstream_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+    "reviewed_version": "0.2.4",
+    "source_disposition": "KEEP_REFERENCE_ONLY",
+    "narrow_derivation": "Separate Agent OS adapter; full upstream query skill remains reference-only."
+  },
+  "implementation": {
+    "path": "scripts/query_local_csv.py",
+    "eval_path": "scripts/test_query_local_csv_adapter.py",
+    "duckdb_cli_version": "v1.4.1",
+    "operations": [
+      "count",
+      "sum"
+    ],
+    "input_scope": "ONE_EXPLICIT_EXISTING_REGULAR_LOCAL_CSV_NOT_SYMLINK",
+    "sum_column_scope": "SIMPLE_IDENTIFIER_ONLY",
+    "database_mode": ":memory:",
+    "shell": false,
+    "init_file": false,
+    "external_access": false,
+    "persistent_secrets": false,
+    "configuration_locked": true,
+    "cli_timeout_seconds": 15,
+    "version_probe_timeout_seconds": 5,
+    "output_byte_limit": 4096
+  },
+  "evidence": {
+    "real_cli_evaluation": {
+      "document": "docs/P4_DUCKDB_LOCAL_ADHOC_EVALUATION.md",
+      "date": "2026-09-29",
+      "synthetic_rows": [
+        7,
+        11
+      ],
+      "observed_sum": 18,
+      "boundary_probes_passed": [
+        "sole allowed CSV read",
+        "other local CSV denied",
+        "new or overwrite output denied",
+        "external access re-enable denied",
+        "symlink and wildcard reads denied",
+        "database attach denied",
+        "extension install/load denied",
+        "remote HTTPS denied",
+        "persistent secret and getenv denied"
+      ]
+    },
+    "deterministic_contract_test": {
+      "path": "scripts/test_query_local_csv_adapter.py",
+      "fake_cli_only": true,
+      "verifies": [
+        "no shell invocation",
+        "no -init",
+        "explicit :memory:",
+        "exact v1.4.1 pin",
+        "single resolved allowed path",
+        "external access disabled",
+        "persistent secrets disabled",
+        "configuration locked",
+        "simple sum identifier",
+        "symlink rejection",
+        "input immutability",
+        "output byte cap"
+      ]
+    }
+  },
+  "authority_boundary": {
+    "registry_grants_authority": false,
+    "caller_must_authorize_input_file_read": true,
+    "caller_must_supply_reviewed_cli": true,
+    "adapter_installs_software": false,
+    "adapter_uses_credentials": false,
+    "adapter_accesses_network": false,
+    "adapter_writes_user_data": false,
+    "arbitrary_sql": false,
+    "state_discovery": false,
+    "session_restore": false
+  },
+  "admission_decision": {
+    "state": "AVAILABLE",
+    "kind": "adapter",
+    "capability_contract_version": 1,
+    "registry_version": 2,
+    "public_reusable": true,
+    "real_project_activation_requires_consumer_authority": true,
+    "private_mapping_not_created": true,
+    "full_duckdb_skill_admitted": false,
+    "terminal": "DUCKDB_LOCAL_CSV_AGGREGATE_PUBLIC_ADAPTER_ADMITTED_V1"
+  }
+}
