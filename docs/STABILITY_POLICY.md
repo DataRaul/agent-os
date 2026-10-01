@@ -2,7 +2,7 @@
 
 Status: `FIRST_STABLE_RELEASE_CANDIDATE_POLICY_V1`
 
-Target stable release: `1.0.0`
+Prepared stable candidate: `1.0.0`
 
 Published prerelease candidate: `v1.0.0-rc.1`
 
@@ -10,7 +10,7 @@ Published prerelease candidate: `v1.0.0-rc.1`
 
 The first stable release is intended to stabilize the public capability identity and consumer contracts, not every experimental implementation in the repository.
 
-The release-candidate manifest is `catalog/release-candidate.json`. It freezes the listed public capability IDs and contract versions plus the listed registry, selection, decision, overlay, and trust interfaces for the 1.0 line.
+The published RC preparation manifest is `catalog/release-candidate.json`; the post-publication record is `catalog/release-publication.json`; and the prepared stable candidate is `catalog/stable-release-candidate.json`. The stable candidate revalidates the same public capability IDs, contract versions, registry, selection, decision, overlay, and trust interfaces for the 1.0 line and pins their RC Git blob identities.
 
 Consumers still pin an exact repository commit SHA. The semantic release version identifies a reviewed distribution point; it does not replace the exact-SHA implementation identity.
 
@@ -52,4 +52,4 @@ A release-candidate pass does not by itself create a tag, publish a GitHub Relea
 
 ## Terminal
 
-`AGENT_OS_1_0_0_RC1_PUBLISHED__STABLE_PUBLICATION_AUTHORITY_SEPARATE`
+`AGENT_OS_1_0_0_STABLE_CANDIDATE_PREPARED__PUBLICATION_AUTHORITY_REQUIRED`
