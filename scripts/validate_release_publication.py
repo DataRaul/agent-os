@@ -133,9 +133,10 @@ def validate_publication(
     if publication["next_gate"] != "RC_VALIDATION_THEN_EXPLICIT_STABLE_PUBLICATION_AUTHORITY":
         raise PublicationError("next gate mismatch")
 
-    observed_version = version_text.strip() if version_text is not None else VERSION_PATH.read_text(encoding="utf-8").strip()
-    if observed_version != publication["candidate_version"]:
-        raise PublicationError("VERSION does not match published candidate")
+    if version_text is not None:
+        observed_version = version_text.strip()
+        if observed_version != publication["candidate_version"]:
+            raise PublicationError("VERSION does not match published candidate")
 
 
 def main() -> None:

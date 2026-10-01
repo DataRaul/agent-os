@@ -55,6 +55,12 @@ def main() -> None:
         candidate,
         registry,
         candidate_bytes=candidate_bytes,
+    )
+    module.validate_publication(
+        publication,
+        candidate,
+        registry,
+        candidate_bytes=candidate_bytes,
         version_text="1.0.0-rc.1",
     )
 

@@ -27,9 +27,19 @@ REQUIRED_LOCAL_CHECKS = (
         "CAPABILITY_REGISTRY_FAILED",
     ),
     (
-        "release_candidate",
+        "release_candidate_history",
         "scripts/validate_release_candidate.py",
-        "RELEASE_CANDIDATE_FAILED",
+        "RELEASE_CANDIDATE_HISTORY_FAILED",
+    ),
+    (
+        "release_publication_history",
+        "scripts/validate_release_publication.py",
+        "RELEASE_PUBLICATION_HISTORY_FAILED",
+    ),
+    (
+        "stable_release_candidate",
+        "scripts/validate_stable_release_candidate.py",
+        "STABLE_RELEASE_CANDIDATE_FAILED",
     ),
 )
 
