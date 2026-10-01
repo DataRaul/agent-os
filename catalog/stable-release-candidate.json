@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "status": "FIRST_STABLE_RELEASE_CANDIDATE_PREPARED",
+  "candidate_version": "1.0.0",
+  "prepared_from_main_sha": "e9e630f631137632297dcaf224016839344b791c",
+  "prepared_at": "2026-10-01",
+  "based_on_prerelease_tag": "v1.0.0-rc.1",
+  "prerelease_commit_sha": "7bc62182683857c285bb6487d80b1507c4457dd6",
+  "prerelease_release_id": 400905466,
+  "registry_version": 2,
+  "registry_sha256": "eab3d637bb99b5482ccfcf6cdde609d97404f28b4b0c8c077743eda480da3e98",
+  "stable_capability_contracts": [
+    {
+      "capability_id": "silent-failure-hunter",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "verified-completion",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "state-mutation-idempotency",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "provenance-freshness",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "research-data-integrity",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "authority-boundary-review",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "semantic-pr-review",
+      "kind": "skill",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "silent-failure-reviewer",
+      "kind": "reviewer",
+      "capability_contract_version": 1
+    },
+    {
+      "capability_id": "duckdb-local-csv-aggregate",
+      "kind": "adapter",
+      "capability_contract_version": 1
+    }
+  ],
+  "stable_interfaces": [
+    "catalog/capability-registry.json",
+    "schemas/capability-selection-request.schema.json",
+    "schemas/capability-decision-contracts.schema.json",
+    "schemas/private-overlay-profile.schema.json",
+    "docs/CAPABILITY_REGISTRY.md",
+    "docs/PRIVATE_OVERLAY_CONTRACT.md",
+    "docs/TRUST_MODEL.md"
+  ],
+  "stable_surface_blob_snapshot": [
+    {
+      "path": "agents/silent-failure-reviewer.md",
+      "git_blob_sha": "e83ea6931ea28f0e837022c64c98f57e27dec043"
+    },
+    {
+      "path": "catalog/capability-registry.json",
+      "git_blob_sha": "072ab49d7b9a42a1a664c404fe136edb466c5b29"
+    },
+    {
+      "path": "docs/CAPABILITY_REGISTRY.md",
+      "git_blob_sha": "fd4d2208132430f99872ae8030770fa79dfb31d0"
+    },
+    {
+      "path": "docs/PRIVATE_OVERLAY_CONTRACT.md",
+      "git_blob_sha": "9bbe72d360d752b0ba1669c47ccaaea07cc5105b"
+    },
+    {
+      "path": "docs/TRUST_MODEL.md",
+      "git_blob_sha": "44bc3eab0e2fc5ce70c7ce2eaf7c5ea9ce38096a"
+    },
+    {
+      "path": "evals/authority-boundary-review/cases.json",
+      "git_blob_sha": "02f0a2daec7f15dbd5ef56ee474cdd8cf5e805b5"
+    },
+    {
+      "path": "evals/provenance-freshness/cases.json",
+      "git_blob_sha": "e0e32d6acc058e83110fac23bcfb2c4a9a86ef31"
+    },
+    {
+      "path": "evals/research-data-integrity/cases.json",
+      "git_blob_sha": "c388000c347609421e89854e43c1cecd3c65da1f"
+    },
+    {
+      "path": "evals/semantic-pr-review/cases.json",
+      "git_blob_sha": "73ed3040833639505aaded13263fb4a324439453"
+    },
+    {
+      "path": "evals/silent-failure-hunter/cases.json",
+      "git_blob_sha": "48673d720c67d08ef99c15572b052e15d91fd983"
+    },
+    {
+      "path": "evals/state-mutation-idempotency/cases.json",
+      "git_blob_sha": "88951fd6bbebf8343a89fb8715e6c239d45ee297"
+    },
+    {
+      "path": "evals/verified-completion/cases.json",
+      "git_blob_sha": "1b6787726f9a9779dab3618364b849f3f43a98ab"
+    },
+    {
+      "path": "schemas/capability-decision-contracts.schema.json",
+      "git_blob_sha": "96a0e596ed2376f220f995d501abb39b1dff72c9"
+    },
+    {
+      "path": "schemas/capability-selection-request.schema.json",
+      "git_blob_sha": "ca2e9b948ab9e7254b7d3a1e0e859fd0309b7822"
+    },
+    {
+      "path": "schemas/private-overlay-profile.schema.json",
+      "git_blob_sha": "e8b4a668ef9354bd15b2ed93c4fd122b80f7ed4b"
+    },
+    {
+      "path": "scripts/query_local_csv.py",
+      "git_blob_sha": "386cac478d14c939a6b38a9543e70106ff7deae3"
+    },
+    {
+      "path": "scripts/test_query_local_csv_adapter.py",
+      "git_blob_sha": "5167e86e0139b5777602d88cea28f1adb818d61a"
+    },
+    {
+      "path": "skills/authority-boundary-review/SKILL.md",
+      "git_blob_sha": "e1489efb61dd302f309ed4b6a558c65de7bfb1d9"
+    },
+    {
+      "path": "skills/provenance-freshness/SKILL.md",
+      "git_blob_sha": "809466b0d2648d404eb83d624cc75d831d05807b"
+    },
+    {
+      "path": "skills/research-data-integrity/SKILL.md",
+      "git_blob_sha": "95417f0ded5ddc649a3506dd794b8b1a6f1e1afa"
+    },
+    {
+      "path": "skills/semantic-pr-review/SKILL.md",
+      "git_blob_sha": "1a247d64f33e8ea07ef81b19758751ba4cdd182c"
+    },
+    {
+      "path": "skills/silent-failure-hunter/SKILL.md",
+      "git_blob_sha": "9be7abfc0ceaa8d89426ef6d30feff9a9e0656ff"
+    },
+    {
+      "path": "skills/state-mutation-idempotency/SKILL.md",
+      "git_blob_sha": "d62bd212849aae9ad589b9309748871626a39363"
+    },
+    {
+      "path": "skills/verified-completion/SKILL.md",
+      "git_blob_sha": "8c608dd3b8a92eedcd0e1256c4d0e293c1e191cd"
+    }
+  ],
+  "rc_validation": {
+    "prerelease_verified": true,
+    "prerelease_is_draft": false,
+    "prerelease_is_prerelease": true,
+    "tagged_commit_verified": true,
+    "stable_surface_unchanged_since_rc": true,
+    "post_publication_main_sha": "e9e630f631137632297dcaf224016839344b791c",
+    "validate_run_number": 111,
+    "publication_gate_run_number": 91
+  },
+  "experimental_exclusions": [
+    "P2_SPECIALIST_REVIEWER_CANDIDATES",
+    "P5_BOUNDED_EXECUTABLE_FIXTURE_ROUTER",
+    "NON_ADMITTED_VENDOR_TOOLING",
+    "PLAYWRIGHT_BROWSER_OBSERVATION"
+  ],
+  "publication": {
+    "stable_tag_created": false,
+    "github_release_published": false,
+    "consumer_pin_advanced": false,
+    "automatic_publication": false,
+    "explicit_publication_authority_required": true
+  }
+}
