@@ -121,8 +121,8 @@ A private observation may motivate a generic capability, but public evolution us
 
 ## Cross-cutting public hardening
 
-Status: `VALIDATION_PUBLICATION_REGISTRY_P2_RESUME_AND_RELEASE_READINESS_V1__RC1_PUBLISHED__STABLE_1_0_0_CANDIDATE_PREPARED`
+Status: `VALIDATION_PUBLICATION_REGISTRY_P2_RESUME_AND_RELEASE_READINESS_V1__STABLE_V1_0_0_PUBLISHED`
 
 The bounded hardening tranche strengthens publication-gate self-tests and credential-path detection, registry/path/version invariants, optional exact registry-digest binding, and resumable P2 manual-attempt evidence. A deterministic release-readiness gate now cross-checks core validators, public documentation paths, exact-SHA capability snapshots, registry digests, changelog treatment, and compatibility rules for capability evolution without publishing or advancing any consumer pin. It adds no reviewer admission, executable routing, private dependency, external installation, authentication, or paid model execution.
 
-The first stable-release programme has a published GitHub prerelease `v1.0.0-rc.1` at exact commit `7bc62182683857c285bb6487d80b1507c4457dd6` and a prepared stable `1.0.0` candidate. Deterministic stable-surface validation pins every stable interface, capability implementation, and registered eval path to the same Git blob identities as the RC. P2 specialist candidates, the P5 fixture router as a production runtime, non-admitted vendor tooling, and Playwright observation remain experimental exclusions. No stable `v1.0.0` tag/release or consumer/private-overlay pin advancement has occurred.
+Stable GitHub release `v1.0.0` is published at exact commit `62fd8466971f4c8055ffefa3606d1cb1e28c7974` after deterministic RC stable-surface validation. The stable release remains limited to the AVAILABLE capability contracts and listed public interfaces; P2 specialist candidates, the P5 fixture router as a production runtime, non-admitted vendor tooling, and Playwright observation remain experimental exclusions. Consumer/private-overlay pin advancement has not occurred and remains separately gated.
