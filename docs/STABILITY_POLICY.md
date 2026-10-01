@@ -4,7 +4,7 @@ Status: `FIRST_STABLE_RELEASE_CANDIDATE_POLICY_V1`
 
 Target stable release: `1.0.0`
 
-Prepared candidate: `1.0.0-rc.1`
+Published prerelease candidate: `v1.0.0-rc.1`
 
 ## Stable public surface
 
@@ -40,7 +40,7 @@ Experimental material may evolve without implying a breaking change to the stabl
 
 `scripts/release_readiness.py check` remains the authoritative local release-readiness command. The release-candidate validator adds exact manifest, registry, capability-contract, stable-path, and publication-boundary checks.
 
-A release-candidate pass does not create a tag, publish a GitHub Release, advance any consumer or private-overlay pin, or grant runtime authority. Publication requires separate explicit authority and must run release readiness against the exact commit to be tagged.
+A release-candidate pass does not by itself create a tag, publish a GitHub Release, advance any consumer or private-overlay pin, or grant runtime authority. Explicit publication authority was exercised for prerelease `v1.0.0-rc.1`; post-publication evidence is recorded in `catalog/release-publication.json`. Stable `v1.0.0` publication remains separately gated.
 
 ## Publication sequence
 
@@ -52,4 +52,4 @@ A release-candidate pass does not create a tag, publish a GitHub Release, advanc
 
 ## Terminal
 
-`AGENT_OS_1_0_0_RC1_POLICY_PREPARED__PUBLICATION_AUTHORITY_SEPARATE`
+`AGENT_OS_1_0_0_RC1_PUBLISHED__STABLE_PUBLICATION_AUTHORITY_SEPARATE`
