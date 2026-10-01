@@ -1294,6 +1294,12 @@ def validate_required_docs() -> None:
         "schemas/capability-decision-contracts.schema.json",
         "benchmarks/capability-decision-contract/fixtures.json",
         "scripts/capability_decision_contracts.py",
+        "docs/P5_BOUNDED_EXECUTABLE_ROUTER.md",
+        "scripts/p5_bounded_executable_router.py",
+        "scripts/test_p5_bounded_executable_router.py",
+        "schemas/p5-bounded-execution-receipt.schema.json",
+        "benchmarks/p5-bounded-executable-router/fixtures.json",
+        "benchmarks/p5-bounded-executable-router/fixture-adapter-contract.json",
         "scripts/release_readiness.py",
     ]
     for rel in paths:
