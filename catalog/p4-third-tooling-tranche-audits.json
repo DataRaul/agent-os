@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "status": "P4_THIRD_TOOLING_TRANCHE_V1_COMPLETE",
+  "verified_as_of": "2026-10-01",
+  "scope": "EXPLICITLY_AUTHORIZED_BOUNDED_PRIORITY_GROUP_5_SUBSET",
+  "selection_rule": {
+    "explicit_authorization_required": true,
+    "automatic_group5_expansion": false,
+    "maximum_candidates": 5,
+    "preference": "NARROW_REFERENCE_OR_DECLARATIVE_SUBSET_WITHOUT_EXECUTION",
+    "selected_capability_ids": [
+      "cloudflare-skills:web-perf",
+      "cloudflare-skills:workers-best-practices",
+      "duckdb-skills:duckdb-docs",
+      "duckdb-skills:read-file",
+      "microsoft-playwright-skills:request-mocking"
+    ]
+  },
+  "rules": {
+    "no_installation": true,
+    "no_authentication": true,
+    "no_external_mutation": true,
+    "no_vendor_code_execution": true,
+    "no_credentials_used": true,
+    "no_network_requests": true,
+    "no_runtime_authority_granted": true,
+    "no_capability_registry_change": true,
+    "current_source_reconciliation_required": true
+  },
+  "source_reconciliation": {
+    "cloudflare-skills": {
+      "current_default_branch_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "drift": "NONE",
+      "evidence_paths": [
+        {
+          "path": "skills/web-perf/SKILL.md",
+          "blob_sha": "b028d9cae41d3af2f59d6a90fcac3c241d6ff437"
+        },
+        {
+          "path": "skills/workers-best-practices/SKILL.md",
+          "blob_sha": "4b67f637255b42a11adb28826769f2b703d8730b"
+        }
+      ]
+    },
+    "duckdb-skills": {
+      "current_default_branch_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "reviewed_version": "0.2.4",
+      "drift": "NONE",
+      "evidence_paths": [
+        {
+          "path": "skills/duckdb-docs/SKILL.md",
+          "blob_sha": "f200b0d02d3dbb158735c0ec79520f9a5267b1c1"
+        },
+        {
+          "path": "skills/read-file/SKILL.md",
+          "blob_sha": "b5fe7bfd4e19c6eb00de10165d647ba041df7fe1"
+        }
+      ]
+    },
+    "microsoft-playwright-skills": {
+      "current_implementation_commit": "b85c7a736bb473bf55b584e54a09ffa698d6d871",
+      "current_version": "0.1.22",
+      "drift_relative_to_original_audit": "REVIEWED_IN_P4_SECOND_TRANCHE",
+      "evidence_paths": [
+        {
+          "path": "skills/playwright-cli/SKILL.md",
+          "blob_sha": "0a75c909eb7c8d93d9f81954b1b6dc5165c963f4"
+        },
+        {
+          "path": "skills/playwright-cli/references/request-mocking.md",
+          "blob_sha": "9005fda67dfc4af13848fd9ebedee08420aeec97"
+        }
+      ]
+    }
+  },
+  "candidates": [
+    {
+      "capability_id": "cloudflare-skills:web-perf",
+      "source_id": "cloudflare-skills",
+      "priority_group": 5,
+      "narrow_contract": {
+        "id": "web-performance-audit-plan-reference",
+        "purpose": "Produce a declarative performance-audit plan and evidence checklist without installing or invoking browser/MCP tooling.",
+        "allowed": [
+          "map performance questions to public measurement categories",
+          "identify which fresh documentation or runtime measurements would be required",
+          "review already supplied public-safe evidence"
+        ],
+        "prohibited": [
+          "install Chrome DevTools MCP",
+          "navigate a target",
+          "capture a trace",
+          "change MCP configuration",
+          "claim fresh metrics without runtime evidence"
+        ]
+      },
+      "terminal_disposition": "REFERENCE_ONLY__RUNTIME_MEASUREMENT_AND_MCP_BOUNDARY"
+    },
+    {
+      "capability_id": "cloudflare-skills:workers-best-practices",
+      "source_id": "cloudflare-skills",
+      "priority_group": 5,
+      "narrow_contract": {
+        "id": "workers-best-practices-review-reference",
+        "purpose": "Use pinned guidance as a static review checklist without changing Worker code, configuration, secrets, or remote resources.",
+        "allowed": [
+          "review supplied public-safe Worker snippets",
+          "identify best-practice concerns",
+          "identify which current docs or generated types should be consulted"
+        ],
+        "prohibited": [
+          "edit project code",
+          "run Wrangler",
+          "change compatibility dates",
+          "configure observability",
+          "set secrets",
+          "deploy a Worker"
+        ]
+      },
+      "terminal_disposition": "REFERENCE_ONLY__CODE_CONFIG_AND_DEPLOYMENT_BOUNDARY"
+    },
+    {
+      "capability_id": "duckdb-skills:duckdb-docs",
+      "source_id": "duckdb-skills",
+      "priority_group": 5,
+      "narrow_contract": {
+        "id": "duckdb-docs-query-plan-reference",
+        "purpose": "Translate a documentation question into a declared search plan without installing extensions, downloading indexes, or writing cache state.",
+        "allowed": [
+          "extract technical search terms",
+          "select DuckDB versus DuckLake documentation class",
+          "declare version-filter intent"
+        ],
+        "prohibited": [
+          "install extensions",
+          "download documentation indexes",
+          "write cache files",
+          "run DuckDB",
+          "make network requests"
+        ]
+      },
+      "terminal_disposition": "REFERENCE_ONLY__NETWORK_EXTENSION_AND_CACHE_BOUNDARY"
+    },
+    {
+      "capability_id": "duckdb-skills:read-file",
+      "source_id": "duckdb-skills",
+      "priority_group": 5,
+      "narrow_contract": {
+        "id": "duckdb-local-file-read-plan",
+        "purpose": "Classify an explicitly supplied local data file and describe the minimum reader plan without reading it.",
+        "allowed": [
+          "classify an explicit local path by supported extension",
+          "declare the expected DuckDB reader",
+          "identify extension or remote-access requirements"
+        ],
+        "prohibited": [
+          "discover files with broad search",
+          "read file contents",
+          "read remote URLs",
+          "use credential chains",
+          "install extensions"
+        ]
+      },
+      "terminal_disposition": "EVALUATION_ONLY__LOCAL_READ_SUBSET_REQUIRES_SEPARATE_ADMISSION"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:request-mocking",
+      "source_id": "microsoft-playwright-skills",
+      "priority_group": 5,
+      "narrow_contract": {
+        "id": "browser-request-mocking-plan-reference",
+        "purpose": "Describe a synthetic request-mocking plan without launching a browser or intercepting traffic.",
+        "allowed": [
+          "classify route patterns",
+          "describe mock response intent",
+          "identify when interception changes test semantics"
+        ],
+        "prohibited": [
+          "launch a browser",
+          "install Playwright",
+          "route or unroute requests",
+          "run arbitrary Playwright code",
+          "intercept real network traffic"
+        ]
+      },
+      "terminal_disposition": "REFERENCE_ONLY__BROWSER_NETWORK_MUTATION_BOUNDARY"
+    }
+  ],
+  "tranche_conclusion": {
+    "candidates_reviewed": 5,
+    "registry_promotions": 0,
+    "runtime_admissions": 0,
+    "external_executions": 0,
+    "network_requests": 0,
+    "credentials_used": 0,
+    "installations": 0,
+    "external_mutations": 0,
+    "terminal": "P4_THIRD_TOOLING_TRANCHE_COMPLETE__SELECTED_GROUP5_CANDIDATES_REMAIN_NON_RUNTIME"
+  }
+}

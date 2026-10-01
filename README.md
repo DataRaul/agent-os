@@ -61,6 +61,8 @@ The explicitly authorized P4 second tooling tranche source-reconciles the six pr
 
 Playwright browser observation now also has a two-timepoint synthetic loopback calibration baseline across exact CLI versions 0.1.21 and 0.1.22. It remains pinned and non-runtime. See `docs/P4_PLAYWRIGHT_CALIBRATION.md`.
 
+A third bounded tooling tranche audits five explicitly selected priority-group 5 candidates from Cloudflare, DuckDB, and Playwright without installing or executing them. All remain non-runtime. See `docs/P4_THIRD_TOOLING_TRANCHE.md`.
+
 P5 now also defines deterministic declarative decision, precondition/postcondition, and multi-capability compatibility evidence in `docs/P5_DECLARATIVE_DECISION_CONTRACTS.md`; those contracts explicitly do not create executable routing or grant authority.
 
 The public machine-readable capability interface is `catalog/capability-registry.json`, governed by `docs/CAPABILITY_REGISTRY.md`. Deterministic public release readiness is enforced by `scripts/release_readiness.py` and documented in `docs/RELEASE_READINESS.md`; it emits exact-SHA capability snapshots and fail-closed registry-compatibility evidence but never publishes automatically. Consumers pin an exact Agent OS commit SHA and reference stable capability IDs; registry validation is fail-closed on malformed paths/version metadata, and consumers may additionally bind verification to an exact registry SHA-256. Registry membership never grants execution authority. Public Agent OS never reads or depends on a private overlay. See `docs/ROADMAP.md` for the public-safe phase sequence.
@@ -69,6 +71,6 @@ Additional skills or reviewer roles should be added only when they are reusable 
 
 ## Status
 
-`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_MANUAL_EXECUTION_OPERATIONS_V1_READY__P3_VENDOR_CATALOG_BASELINE_COMPLETE__P4_BOUNDED_TRANCHE_COMPLETE__P4_SECOND_TOOLING_TRANCHE_V1_COMPLETE__P4_PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE__P5_DECLARATIVE_DECISION_CONTRACTS_V1_READY__RELEASE_READINESS_V1`
+`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_MANUAL_EXECUTION_OPERATIONS_V1_READY__P3_VENDOR_CATALOG_BASELINE_COMPLETE__P4_BOUNDED_TRANCHE_COMPLETE__P4_SECOND_TOOLING_TRANCHE_V1_COMPLETE__P4_PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE__P4_THIRD_TOOLING_TRANCHE_V1_COMPLETE__P5_DECLARATIVE_DECISION_CONTRACTS_V1_READY__RELEASE_READINESS_V1`
 
 No release or stability guarantee is implied yet.

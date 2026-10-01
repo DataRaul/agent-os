@@ -40,7 +40,7 @@ Official/vendor provenance is catalogued and audited without granting blanket ex
 
 ## P4 — Tooling layer expansion
 
-Status: `P4_BOUNDED_TRANCHE_COMPLETE__MARKETPLACE_REFERENCE_AUDIT_V1__SECOND_TOOLING_TRANCHE_V1_COMPLETE__PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE`
+Status: `P4_BOUNDED_TRANCHE_COMPLETE__MARKETPLACE_REFERENCE_AUDIT_V1__SECOND_TOOLING_TRANCHE_V1_COMPLETE__PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE__THIRD_TOOLING_TRANCHE_V1_COMPLETE`
 
 - P4.0 inventory — complete;
 - P4.1 deterministic prioritization — complete;
@@ -49,6 +49,7 @@ Status: `P4_BOUNDED_TRANCHE_COMPLETE__MARKETPLACE_REFERENCE_AUDIT_V1__SECOND_TOO
 - P4.4 delivery gate — complete for the initial bounded tranche.
 - P4.5 explicitly authorized priority-group 4 follow-up — complete as a source-reconciled, non-runtime tranche.
 - P4.6 Playwright observation shadow calibration — two public loopback timepoints established; runtime admission unchanged.
+- P4.7 explicitly authorized priority-group 5 subset — five source-reconciled candidates audited; all remain non-runtime.
 
 P4 is bounded capability evaluation, not a mandate to exhaust every marketplace entry.
 
@@ -59,6 +60,8 @@ A bounded OpenAI plugin-format reference audit is documented in `docs/P4_OPENAI_
 The second tooling tranche is documented in `docs/P4_SECOND_TOOLING_TRANCHE.md`. It covers the six previously classified priority-group 4 Cloudflare, DuckDB, and Playwright candidates using refreshed source identities plus synthetic public-safe contracts only. It installs or executes no vendor tooling, uses no credentials or private session data, makes no registry promotion, and grants no runtime authority.
 
 Playwright observation calibration is documented in `docs/P4_PLAYWRIGHT_CALIBRATION.md`. Exact 0.1.21 and 0.1.22 public loopback timepoints now form a minimal shadow-calibration baseline; the candidate remains `PIN_REQUIRED`, non-admitted, and outside the capability registry.
+
+The third tooling tranche is documented in `docs/P4_THIRD_TOOLING_TRANCHE.md`. It covers a bounded five-candidate priority-group 5 subset selected under explicit authorization. The tranche is source inspection plus synthetic contract evaluation only; priority groups 5 and 6 remain closed to automatic expansion.
 
 ## P4R — Public capability registry
 
