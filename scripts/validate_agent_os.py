@@ -932,6 +932,129 @@ def validate_p4_third_tooling_tranche() -> None:
         fail("P4 third tooling tranche terminal invalid")
 
 
+def validate_p4_duckdb_local_csv_admission() -> None:
+    evidence = load_json(ROOT / "catalog" / "p4-duckdb-local-csv-admission.json")
+    registry = load_json(ROOT / "catalog" / "capability-registry.json")
+    sources = load_json(ROOT / "catalog" / "trusted-sources.json")
+
+    if not isinstance(evidence, dict) or evidence.get("schema_version") != 1:
+        fail("DuckDB local CSV admission evidence invalid")
+    if evidence.get("status") != "P4_DUCKDB_LOCAL_CSV_ADMISSION_V1_COMPLETE":
+        fail("DuckDB local CSV admission status invalid")
+    if evidence.get("capability_id") != "duckdb-local-csv-aggregate":
+        fail("DuckDB local CSV admission capability ID invalid")
+
+    source = evidence.get("source")
+    if not isinstance(source, dict):
+        fail("DuckDB local CSV admission source evidence missing")
+    if source.get("source_id") != "duckdb-skills":
+        fail("DuckDB local CSV admission source ID mismatch")
+    if source.get("upstream_commit") != "7feda8e01e22bc0886c86123f3884947e36d8c69":
+        fail("DuckDB local CSV admission upstream commit mismatch")
+    if source.get("reviewed_version") != "0.2.4":
+        fail("DuckDB local CSV admission reviewed version mismatch")
+    if source.get("source_disposition") != "KEEP_REFERENCE_ONLY":
+        fail("DuckDB source package must remain reference-only")
+    source_items = sources.get("sources") if isinstance(sources, dict) else None
+    source_row = next(
+        (
+            item
+            for item in source_items or []
+            if isinstance(item, dict) and item.get("id") == "duckdb-skills"
+        ),
+        None,
+    )
+    if not isinstance(source_row, dict) or source_row.get("admission_state") != "REFERENCE_ONLY":
+        fail("DuckDB source catalog disposition widened unexpectedly")
+
+    implementation = evidence.get("implementation")
+    expected_impl = {
+        "path": "scripts/query_local_csv.py",
+        "eval_path": "scripts/test_query_local_csv_adapter.py",
+        "duckdb_cli_version": "v1.4.1",
+        "operations": ["count", "sum"],
+        "input_scope": "ONE_EXPLICIT_EXISTING_REGULAR_LOCAL_CSV_NOT_SYMLINK",
+        "sum_column_scope": "SIMPLE_IDENTIFIER_ONLY",
+        "database_mode": ":memory:",
+        "shell": False,
+        "init_file": False,
+        "external_access": False,
+        "persistent_secrets": False,
+        "configuration_locked": True,
+        "cli_timeout_seconds": 15,
+        "version_probe_timeout_seconds": 5,
+        "output_byte_limit": 4096,
+    }
+    if not isinstance(implementation, dict):
+        fail("DuckDB local CSV implementation evidence missing")
+    for key, value in expected_impl.items():
+        if implementation.get(key) != value:
+            fail(f"DuckDB local CSV implementation {key} mismatch")
+
+    authority = evidence.get("authority_boundary")
+    if not isinstance(authority, dict):
+        fail("DuckDB local CSV authority boundary missing")
+    for key in (
+        "caller_must_authorize_input_file_read",
+        "caller_must_supply_reviewed_cli",
+    ):
+        if authority.get(key) is not True:
+            fail(f"DuckDB local CSV authority requirement {key} missing")
+    for key in (
+        "registry_grants_authority",
+        "adapter_installs_software",
+        "adapter_uses_credentials",
+        "adapter_accesses_network",
+        "adapter_writes_user_data",
+        "arbitrary_sql",
+        "state_discovery",
+        "session_restore",
+    ):
+        if authority.get(key) is not False:
+            fail(f"DuckDB local CSV authority boundary {key} must be false")
+
+    decision = evidence.get("admission_decision")
+    if not isinstance(decision, dict):
+        fail("DuckDB local CSV admission decision missing")
+    expected_decision = {
+        "state": "AVAILABLE",
+        "kind": "adapter",
+        "capability_contract_version": 1,
+        "registry_version": 2,
+        "public_reusable": True,
+        "real_project_activation_requires_consumer_authority": True,
+        "private_mapping_not_created": True,
+        "full_duckdb_skill_admitted": False,
+        "terminal": "DUCKDB_LOCAL_CSV_AGGREGATE_PUBLIC_ADAPTER_ADMITTED_V1",
+    }
+    for key, value in expected_decision.items():
+        if decision.get(key) != value:
+            fail(f"DuckDB local CSV admission decision {key} mismatch")
+
+    if not isinstance(registry, dict) or registry.get("registry_version") != 2:
+        fail("DuckDB local CSV admission requires registry version 2")
+    matches = [
+        item
+        for item in registry.get("capabilities", [])
+        if isinstance(item, dict)
+        and item.get("capability_id") == "duckdb-local-csv-aggregate"
+    ]
+    if len(matches) != 1:
+        fail("DuckDB local CSV registry entry missing or duplicate")
+    cap = matches[0]
+    expected_cap = {
+        "capability_id": "duckdb-local-csv-aggregate",
+        "kind": "adapter",
+        "state": "AVAILABLE",
+        "capability_contract_version": 1,
+        "path": "scripts/query_local_csv.py",
+        "eval_path": "scripts/test_query_local_csv_adapter.py",
+        "grants_authority": False,
+    }
+    if cap != expected_cap:
+        fail("DuckDB local CSV registry contract mismatch")
+
+
 def validate_p4_playwright_calibration() -> None:
     evidence = load_json(ROOT / "catalog" / "p4-playwright-calibration.json")
     if not isinstance(evidence, dict) or evidence.get("schema_version") != 1:
@@ -1244,6 +1367,7 @@ def validate_json() -> None:
     validate_p4_narrow_audits()
     validate_p4_second_tooling_tranche()
     validate_p4_third_tooling_tranche()
+    validate_p4_duckdb_local_csv_admission()
     validate_p4_playwright_calibration()
     validate_p4_admission_evidence()
     validate_p4_delivery_closeout()
@@ -1281,6 +1405,8 @@ def validate_required_docs() -> None:
         "docs/P4_THIRD_TOOLING_TRANCHE.md",
         "catalog/p4-third-tooling-tranche-audits.json",
         "catalog/p4-third-tooling-tranche-cases.json",
+        "docs/CAPABILITY_DUCKDB_LOCAL_CSV_AGGREGATE.md",
+        "catalog/p4-duckdb-local-csv-admission.json",
         "docs/P4_PLAYWRIGHT_CALIBRATION.md",
         "catalog/p4-playwright-calibration.json",
         ".github/workflows/p4-playwright-calibration.yml",
