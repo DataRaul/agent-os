@@ -40,19 +40,22 @@ Official/vendor provenance is catalogued and audited without granting blanket ex
 
 ## P4 — Tooling layer expansion
 
-Status: `P4_BOUNDED_TRANCHE_COMPLETE__MARKETPLACE_REFERENCE_AUDIT_V1`
+Status: `P4_BOUNDED_TRANCHE_COMPLETE__MARKETPLACE_REFERENCE_AUDIT_V1__SECOND_TOOLING_TRANCHE_V1_COMPLETE`
 
 - P4.0 inventory — complete;
 - P4.1 deterministic prioritization — complete;
 - P4.2 bounded narrow audits — complete;
 - P4.3 admission/value evidence — complete;
 - P4.4 delivery gate — complete for the initial bounded tranche.
+- P4.5 explicitly authorized priority-group 4 follow-up — complete as a source-reconciled, non-runtime tranche.
 
 P4 is bounded capability evaluation, not a mandate to exhaust every marketplace entry.
 
 A local CSV query adapter candidate is documented in `docs/P4_DUCKDB_LOCAL_ADHOC_ADAPTER.md`. Its narrow invocation and fail-closed boundaries are deterministically contract-tested in CI; it remains evaluation-only, outside the capability registry and without runtime admission.
 
 A bounded OpenAI plugin-format reference audit is documented in `docs/P4_OPENAI_PLUGIN_FORMAT_REFERENCE_AUDIT.md`. It admits only read-only manifest/marketplace format evidence as `REFERENCE_ONLY`; plugin installation, authentication, MCP connection, creator-script execution, filesystem writes, and marketplace mutation remain excluded.
+
+The second tooling tranche is documented in `docs/P4_SECOND_TOOLING_TRANCHE.md`. It covers the six previously classified priority-group 4 Cloudflare, DuckDB, and Playwright candidates using refreshed source identities plus synthetic public-safe contracts only. It installs or executes no vendor tooling, uses no credentials or private session data, makes no registry promotion, and grants no runtime authority.
 
 ## P4R — Public capability registry
 

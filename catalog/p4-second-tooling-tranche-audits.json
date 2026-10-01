@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "status": "P4_SECOND_TOOLING_TRANCHE_V1_COMPLETE",
+  "verified_as_of": "2026-10-01",
+  "scope": "PRIORITY_GROUP_4_SOURCE_AUDITED_CANDIDATES",
+  "rules": {
+    "no_installation": true,
+    "no_authentication": true,
+    "no_external_mutation": true,
+    "no_vendor_code_execution": true,
+    "no_credentials_used": true,
+    "no_private_session_data_read": true,
+    "no_runtime_authority_granted": true,
+    "no_capability_registry_change": true,
+    "current_source_reconciliation_required": true
+  },
+  "source_reconciliation": {
+    "cloudflare-skills": {
+      "upstream_repository": "https://github.com/cloudflare/skills",
+      "license": "Apache-2.0",
+      "prior_reviewed_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "current_default_branch_commit": "626547c06881a20b3322bdc2ed6e6451b33a4fb6",
+      "drift": "NONE",
+      "evidence_paths": [
+        {
+          "path": "skills/cloudflare/SKILL.md",
+          "blob_sha": "51ad180b998c9353c77e39b8c02a9c7aa68ef63e"
+        }
+      ]
+    },
+    "duckdb-skills": {
+      "upstream_repository": "https://github.com/duckdb/duckdb-skills",
+      "license": "MIT",
+      "prior_reviewed_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "current_default_branch_commit": "7feda8e01e22bc0886c86123f3884947e36d8c69",
+      "reviewed_version": "0.2.4",
+      "drift": "NONE",
+      "evidence_paths": [
+        {
+          "path": "skills/convert-file/SKILL.md",
+          "blob_sha": "cfcbd116530483c56b02913e02da251b735c7b70"
+        },
+        {
+          "path": "skills/query/SKILL.md",
+          "blob_sha": "abc8258a046fa8cd109bb37935c9d31047936c66"
+        },
+        {
+          "path": "skills/read-memories/SKILL.md",
+          "blob_sha": "8997532b0adfe7bfd9e1d48e38c24de17c8d5a1c"
+        },
+        {
+          "path": "skills/s3-explore/SKILL.md",
+          "blob_sha": "22e66bd21a8a35991b08700e19cd1cb8aa2b8fb1"
+        }
+      ]
+    },
+    "microsoft-playwright-skills": {
+      "upstream_repository": "https://github.com/microsoft/playwright-cli",
+      "documentation_repository": "https://github.com/microsoft/playwright.dev",
+      "license": "Apache-2.0",
+      "prior_reviewed_implementation_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "prior_reviewed_version": "0.1.21",
+      "current_implementation_commit": "b85c7a736bb473bf55b584e54a09ffa698d6d871",
+      "current_version": "0.1.22",
+      "current_documentation_commit": "718ff450acfcb2fb1b006515a07c9412efe0bd88",
+      "drift": "IMPLEMENTATION_AND_DOCUMENTATION_ADVANCED",
+      "evidence_paths": [
+        {
+          "path": "skills/playwright-cli/SKILL.md",
+          "blob_sha": "0a75c909eb7c8d93d9f81954b1b6dc5165c963f4"
+        },
+        {
+          "path": "skills/playwright-cli/references/session-management.md",
+          "blob_sha": "eb1bde35d9ce619d5cd939384d656e5c91310ebd"
+        }
+      ],
+      "drift_note": "Version 0.1.22 narrows the bundled skill's preapproved command surface to Playwright commands, but persistent profiles and attached-browser access still expose authenticated browser state and remain outside automatic admission."
+    }
+  },
+  "candidates": [
+    {
+      "capability_id": "cloudflare-skills:cloudflare",
+      "source_id": "cloudflare-skills",
+      "priority_group": 4,
+      "source_state": "CURRENT_PIN_RECONFIRMED",
+      "authority_surface": {
+        "local_read": true,
+        "local_write": false,
+        "network": "OPTIONAL_FOR_CURRENT_DOCS",
+        "credential_use": false,
+        "software_install": false,
+        "external_mutation": false,
+        "privacy_sensitive": false,
+        "arbitrary_code": false,
+        "delegated_broader_authority": true
+      },
+      "side_effects": [
+        "The root guidance can route to product-specific implementation skills whose authority is broader than this reference-only contract.",
+        "Checking current availability, limits, or pricing requires network evidence."
+      ],
+      "narrow_contract": {
+        "id": "cloudflare-product-selection-reference",
+        "purpose": "Use pinned public guidance to map a stated requirement to candidate Cloudflare product families.",
+        "allowed": [
+          "read pinned public reference text",
+          "produce architecture/product-selection rationale",
+          "identify when current external documentation would be required"
+        ],
+        "prohibited": [
+          "load or execute sibling skills",
+          "invoke MCP or Wrangler",
+          "authenticate an account",
+          "change Cloudflare resources",
+          "claim current pricing or availability without fresh evidence"
+        ]
+      },
+      "terminal_disposition": "REFERENCE_ONLY__NO_RUNTIME_ADMISSION"
+    },
+    {
+      "capability_id": "duckdb-skills:convert-file",
+      "source_id": "duckdb-skills",
+      "priority_group": 4,
+      "source_state": "CURRENT_PIN_RECONFIRMED",
+      "authority_surface": {
+        "local_read": true,
+        "local_write": true,
+        "network": "OPTIONAL_FOR_REMOTE_INPUTS",
+        "credential_use": "OPTIONAL_FOR_OBJECT_STORAGE",
+        "software_install": "POSSIBLE_EXTENSION_INSTALL",
+        "external_mutation": false,
+        "privacy_sensitive": false,
+        "arbitrary_code": "SQL_AND_SHELL_COMMAND_CONSTRUCTION"
+      },
+      "side_effects": [
+        "Writes a user-selected output file.",
+        "Some formats require extension installation/loading.",
+        "Remote inputs may use network and credential-chain access."
+      ],
+      "narrow_contract": {
+        "id": "duckdb-local-format-conversion-declaration",
+        "purpose": "Describe a bounded local conversion plan without performing conversion.",
+        "allowed": [
+          "validate explicit local input/output paths syntactically",
+          "map supported file extensions to a declared conversion plan"
+        ],
+        "prohibited": [
+          "write output files",
+          "run DuckDB",
+          "install or load extensions",
+          "read remote URLs",
+          "use credentials"
+        ]
+      },
+      "terminal_disposition": "EVALUATION_ONLY__LOCAL_WRITE_REQUIRES_SEPARATE_ADMISSION"
+    },
+    {
+      "capability_id": "duckdb-skills:query",
+      "source_id": "duckdb-skills",
+      "priority_group": 4,
+      "source_state": "CURRENT_PIN_RECONFIRMED",
+      "authority_surface": {
+        "local_read": true,
+        "local_write": "POSSIBLE_VIA_RAW_SQL_OR_SESSION_STATE",
+        "network": false,
+        "credential_use": "POSSIBLE_SECRET_REUSE_FROM_SESSION_STATE",
+        "software_install": "DELEGATES_ON_MISSING_EXTENSION",
+        "external_mutation": "DATABASE_MUTATION_POSSIBLE_VIA_RAW_SQL",
+        "privacy_sensitive": "SESSION_STATE_MAY_REFERENCE_UNRELATED_DATABASES_OR_SECRETS",
+        "arbitrary_code": "RAW_SQL"
+      },
+      "side_effects": [
+        "Session mode restores shared state and may expose attached databases or persisted secrets.",
+        "Raw SQL is accepted, so package-level query authority is not intrinsically read-only."
+      ],
+      "narrow_contract": {
+        "id": "duckdb-local-adhoc-readonly",
+        "purpose": "Reuse the already documented local ad-hoc evaluation profile with external access and persistent secrets disabled.",
+        "allowed": [
+          "explicit local-file read",
+          "count or aggregate within an explicitly allowed local path"
+        ],
+        "prohibited": [
+          "session state",
+          "arbitrary write SQL",
+          "external access",
+          "persistent secrets",
+          "extension installation"
+        ],
+        "existing_public_evaluation": "docs/P4_DUCKDB_LOCAL_ADHOC_ADAPTER.md"
+      },
+      "terminal_disposition": "EXISTING_NARROW_EVALUATION_ONLY__NO_REGISTRY_PROMOTION"
+    },
+    {
+      "capability_id": "duckdb-skills:read-memories",
+      "source_id": "duckdb-skills",
+      "priority_group": 4,
+      "source_state": "CURRENT_PIN_RECONFIRMED",
+      "authority_surface": {
+        "local_read": true,
+        "local_write": false,
+        "network": false,
+        "credential_use": false,
+        "software_install": false,
+        "external_mutation": false,
+        "privacy_sensitive": true,
+        "arbitrary_code": "SQL_OVER_SESSION_LOGS"
+      },
+      "side_effects": [
+        "Reads historical coding-agent session logs from home/project directories.",
+        "Retrieved material may contain private conversation context or unrelated project information."
+      ],
+      "narrow_contract": {
+        "id": "session-history-search-reference",
+        "purpose": "Document the privacy boundary of searching historical agent session logs.",
+        "allowed": [
+          "evaluate synthetic public-safe session-log fixtures only"
+        ],
+        "prohibited": [
+          "read real user session histories",
+          "cross project privacy boundaries",
+          "copy private context into public evidence"
+        ]
+      },
+      "terminal_disposition": "REFERENCE_ONLY__PRIVACY_BOUNDARY"
+    },
+    {
+      "capability_id": "duckdb-skills:s3-explore",
+      "source_id": "duckdb-skills",
+      "priority_group": 4,
+      "source_state": "CURRENT_PIN_RECONFIRMED",
+      "authority_surface": {
+        "local_read": false,
+        "local_write": false,
+        "network": true,
+        "credential_use": "OPTIONAL_OR_REQUIRED_BY_PROVIDER",
+        "software_install": false,
+        "external_mutation": false,
+        "privacy_sensitive": "REMOTE_DATA_MAY_BE_PRIVATE",
+        "arbitrary_code": "SQL"
+      },
+      "side_effects": [
+        "Reads remote object-store metadata and data.",
+        "Private stores use credential-chain or explicit key/secret configuration."
+      ],
+      "narrow_contract": {
+        "id": "object-store-read-plan-reference",
+        "purpose": "Describe a read-only object-store inspection plan without making a network request.",
+        "allowed": [
+          "classify URL/provider syntax",
+          "describe metadata-only versus sampled-data reads",
+          "identify credential requirement"
+        ],
+        "prohibited": [
+          "make network requests",
+          "use credential chains or explicit secrets",
+          "download or query remote data"
+        ]
+      },
+      "terminal_disposition": "REFERENCE_ONLY__NETWORK_CREDENTIAL_BOUNDARY"
+    },
+    {
+      "capability_id": "microsoft-playwright-skills:persistent-and-attached-sessions",
+      "source_id": "microsoft-playwright-skills",
+      "priority_group": 4,
+      "source_state": "UPSTREAM_DRIFT_REVIEWED_NOT_ADOPTED",
+      "authority_surface": {
+        "local_read": true,
+        "local_write": true,
+        "network": true,
+        "credential_use": "IMPLICIT_AUTHENTICATED_BROWSER_STATE",
+        "software_install": "PACKAGE_INSTALL_AVAILABLE_IN_PARENT_SKILL",
+        "external_mutation": "POSSIBLE_THROUGH_ATTACHED_BROWSER",
+        "privacy_sensitive": true,
+        "arbitrary_code": "AVAILABLE_IN_PARENT_SKILL"
+      },
+      "side_effects": [
+        "Persistent profiles store browser state on disk.",
+        "Attached browsers can expose existing authenticated cookies, storage, tabs, and unrelated browsing state.",
+        "The parent CLI can mutate remote sites once connected."
+      ],
+      "narrow_contract": {
+        "id": "browser-session-boundary-reference",
+        "purpose": "Classify session-isolation and attachment risk without opening or attaching to a browser.",
+        "allowed": [
+          "reason over synthetic session metadata",
+          "distinguish ephemeral, persistent, and attached session authority"
+        ],
+        "prohibited": [
+          "launch a browser",
+          "persist a profile",
+          "attach to an existing browser",
+          "read cookies/storage",
+          "navigate or mutate a website"
+        ]
+      },
+      "terminal_disposition": "REFERENCE_ONLY__AUTH_STATE_PRIVACY_BOUNDARY__UPSTREAM_DRIFT"
+    }
+  ],
+  "tranche_conclusion": {
+    "candidates_reviewed": 6,
+    "registry_promotions": 0,
+    "runtime_admissions": 0,
+    "external_executions": 0,
+    "credentials_used": 0,
+    "installations": 0,
+    "external_mutations": 0,
+    "terminal": "P4_SECOND_TOOLING_TRANCHE_COMPLETE__ALL_CANDIDATES_REMAIN_NON_RUNTIME"
+  }
+}
