@@ -55,6 +55,8 @@ An entry may be `AVAILABLE` only when:
 
 Vendor/tool candidates discovered in P4 do not enter the registry merely because they were found or audited. They enter only after the applicable admission/evidence/delivery gates establish a public reusable capability.
 
+The first admitted adapter is `duckdb-local-csv-aggregate`. Its inclusion is bound to `catalog/p4-duckdb-local-csv-admission.json`, exact DuckDB CLI v1.4.1 behavior, and the narrow contract in `docs/CAPABILITY_DUCKDB_LOCAL_CSV_AGGREGATE.md`. The wider upstream DuckDB skill remains reference-only.
+
 ## Authority boundary
 
 The registry answers:
