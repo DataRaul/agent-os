@@ -71,4 +71,4 @@ The readiness gate validates backticked repository-relative references under `do
 
 A `READY` result means the deterministic checks represented by this gate passed for the evaluated checkout. It does not establish release quality beyond those checks and never implies that a release was published, that a private overlay advanced its pin, or that any capability has execution authority.
 
-`1.0.0-rc.1` is preparation for the first stable `1.0.0` release, not publication. The exact commit intended for tagging must be fresh-reconciled and pass this gate again immediately before any explicit publication action.
+`v1.0.0-rc.1` has now been published as a prerelease at exact commit `7bc62182683857c285bb6487d80b1507c4457dd6`. The tagged commit remains the authoritative candidate snapshot. Stable `v1.0.0` publication is a separate action and must fresh-reconcile its intended exact commit and pass this gate immediately before publication.

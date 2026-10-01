@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "status": "RC1_PUBLISHED",
+  "candidate_version": "1.0.0-rc.1",
+  "target_stable_version": "1.0.0",
+  "tag": "v1.0.0-rc.1",
+  "release_name": "Agent OS v1.0.0-rc.1",
+  "tagged_commit_sha": "7bc62182683857c285bb6487d80b1507c4457dd6",
+  "candidate_manifest_blob_sha": "ff5b73c9e6aadb5995e4c0d0213dff814ccbc3f9",
+  "registry_version": 2,
+  "registry_sha256": "eab3d637bb99b5482ccfcf6cdde609d97404f28b4b0c8c077743eda480da3e98",
+  "github_release_id": 400905466,
+  "published_at": "2026-10-01T11:32:37Z",
+  "prerelease": true,
+  "draft": false,
+  "consumer_pin_advanced": false,
+  "stable_release_published": false,
+  "automatic_publication": false,
+  "next_gate": "RC_VALIDATION_THEN_EXPLICIT_STABLE_PUBLICATION_AUTHORITY"
+}
