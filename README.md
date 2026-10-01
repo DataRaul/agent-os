@@ -75,12 +75,12 @@ P5 also contains a bounded executable plumbing prototype using only a synthetic 
 
 The public machine-readable capability interface is `catalog/capability-registry.json`, governed by `docs/CAPABILITY_REGISTRY.md`. Deterministic public release readiness is enforced by `scripts/release_readiness.py` and documented in `docs/RELEASE_READINESS.md`; it emits exact-SHA capability snapshots and fail-closed registry-compatibility evidence but never publishes automatically. Consumers pin an exact Agent OS commit SHA and reference stable capability IDs; registry validation is fail-closed on malformed paths/version metadata, and consumers may additionally bind verification to an exact registry SHA-256. Registry membership never grants execution authority. Public Agent OS never reads or depends on a private overlay. See `docs/ROADMAP.md` for the public-safe phase sequence.
 
-Release candidate `v1.0.0-rc.1` is published as a GitHub prerelease at exact commit `7bc62182683857c285bb6487d80b1507c4457dd6`. The repository is now prepared as the first stable `1.0.0` candidate with byte-identical stable interfaces/capability surfaces relative to the RC. `docs/STABLE_RELEASE_CANDIDATE.md` records that validation. No stable tag/release or consumer/private-overlay pin is created by preparation.
+Stable `v1.0.0` is published at exact commit `62fd8466971f4c8055ffefa3606d1cb1e28c7974`, following the published `v1.0.0-rc.1` prerelease and byte-identical stable-surface validation. `docs/STABLE_RELEASE_PUBLICATION.md` records the post-publication evidence. No consumer or private-overlay pin is advanced by publication.
 
 Additional skills or reviewer roles should be added only when they are reusable across projects or ecosystems and the added coordination cost is justified.
 
 ## Status
 
-`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_MANUAL_EXECUTION_OPERATIONS_V1_READY__P3_VENDOR_CATALOG_BASELINE_COMPLETE__P4_BOUNDED_TRANCHE_COMPLETE__P4_SECOND_TOOLING_TRANCHE_V1_COMPLETE__P4_PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE__P4_THIRD_TOOLING_TRANCHE_V1_COMPLETE__P4_DUCKDB_LOCAL_CSV_ADAPTER_V1_ADMITTED__P5_DECLARATIVE_DECISION_CONTRACTS_V1_READY__P5_BOUNDED_EXECUTABLE_FIXTURE_ROUTER_V1_COMPLETE__RELEASE_READINESS_V1__RC1_PUBLISHED__STABLE_1_0_0_CANDIDATE_PREPARED`
+`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_MANUAL_EXECUTION_OPERATIONS_V1_READY__P3_VENDOR_CATALOG_BASELINE_COMPLETE__P4_BOUNDED_TRANCHE_COMPLETE__P4_SECOND_TOOLING_TRANCHE_V1_COMPLETE__P4_PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE__P4_THIRD_TOOLING_TRANCHE_V1_COMPLETE__P4_DUCKDB_LOCAL_CSV_ADAPTER_V1_ADMITTED__P5_DECLARATIVE_DECISION_CONTRACTS_V1_READY__P5_BOUNDED_EXECUTABLE_FIXTURE_ROUTER_V1_COMPLETE__RELEASE_READINESS_V1__STABLE_V1_0_0_PUBLISHED`
 
-GitHub prerelease `v1.0.0-rc.1` is published and stable `1.0.0` is prepared locally as the next candidate. Publishing tag/release `v1.0.0` and advancing any consumer/private-overlay pin remain separate explicit gates.
+Stable GitHub release `v1.0.0` is published. Consumer/private-overlay pin advancement remains a separate explicit gate.
