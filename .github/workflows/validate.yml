@@ -35,6 +35,8 @@ jobs:
         run: python scripts/test_capability_selection_binding.py
       - name: Validate declarative decision contracts
         run: python scripts/test_capability_decision_contracts.py
+      - name: Validate bounded executable router
+        run: python scripts/test_p5_bounded_executable_router.py
       - name: Validate local CSV adapter contract
         run: python scripts/test_query_local_csv_adapter.py
       - name: Validate plugin format reference audit
