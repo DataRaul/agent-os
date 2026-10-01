@@ -40,7 +40,7 @@ Official/vendor provenance is catalogued and audited without granting blanket ex
 
 ## P4 — Tooling layer expansion
 
-Status: `P4_BOUNDED_TRANCHE_COMPLETE__MARKETPLACE_REFERENCE_AUDIT_V1__SECOND_TOOLING_TRANCHE_V1_COMPLETE__PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE__THIRD_TOOLING_TRANCHE_V1_COMPLETE`
+Status: `P4_BOUNDED_TRANCHE_COMPLETE__MARKETPLACE_REFERENCE_AUDIT_V1__SECOND_TOOLING_TRANCHE_V1_COMPLETE__PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE__THIRD_TOOLING_TRANCHE_V1_COMPLETE__DUCKDB_LOCAL_CSV_ADAPTER_V1_ADMITTED`
 
 - P4.0 inventory — complete;
 - P4.1 deterministic prioritization — complete;
@@ -50,6 +50,7 @@ Status: `P4_BOUNDED_TRANCHE_COMPLETE__MARKETPLACE_REFERENCE_AUDIT_V1__SECOND_TOO
 - P4.5 explicitly authorized priority-group 4 follow-up — complete as a source-reconciled, non-runtime tranche.
 - P4.6 Playwright observation shadow calibration — two public loopback timepoints established; runtime admission unchanged.
 - P4.7 explicitly authorized priority-group 5 subset — five source-reconciled candidates audited; all remain non-runtime.
+- P4.8 DuckDB local CSV aggregate — narrow adapter admitted as a public capability; full upstream DuckDB skill remains reference-only.
 
 P4 is bounded capability evaluation, not a mandate to exhaust every marketplace entry.
 
@@ -63,9 +64,11 @@ Playwright observation calibration is documented in `docs/P4_PLAYWRIGHT_CALIBRAT
 
 The third tooling tranche is documented in `docs/P4_THIRD_TOOLING_TRANCHE.md`. It covers a bounded five-candidate priority-group 5 subset selected under explicit authorization. The tranche is source inspection plus synthetic contract evaluation only; priority groups 5 and 6 remain closed to automatic expansion.
 
+The bounded DuckDB local CSV aggregate adapter is now admitted as public capability `duckdb-local-csv-aggregate` after real synthetic CLI boundary evidence plus deterministic contract tests. Registry membership grants no file/process authority, and the broader DuckDB source package remains reference-only. See `docs/CAPABILITY_DUCKDB_LOCAL_CSV_AGGREGATE.md`.
+
 ## P4R — Public capability registry
 
-Status: `FOUNDATION_V1__STRUCTURAL_VALIDATION_HARDENED`
+Status: `FOUNDATION_V1__STRUCTURAL_VALIDATION_HARDENED__DUCKDB_LOCAL_CSV_ADAPTER_V1_ADMITTED`
 
 Maintain `catalog/capability-registry.json` as the public machine-readable interface for reusable capabilities.
 
