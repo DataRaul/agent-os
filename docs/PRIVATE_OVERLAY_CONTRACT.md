@@ -37,4 +37,6 @@ The schema is intentionally generic. It contains no private project identifiers 
 
 The public repository must not require private overlay data for tests or normal development.
 
+Public Agent OS may specify the generic adoption/pinning contract, but whether any private consumer has adopted a particular SHA, route, capability, or authority state is private operational state and must not be recorded as a current fact in the public repository.
+
 Private test fixtures must never be copied into public evals merely to improve coverage.
