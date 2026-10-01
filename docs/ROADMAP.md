@@ -121,8 +121,8 @@ A private observation may motivate a generic capability, but public evolution us
 
 ## Cross-cutting public hardening
 
-Status: `VALIDATION_PUBLICATION_REGISTRY_P2_RESUME_AND_RELEASE_READINESS_V1__FIRST_STABLE_RELEASE_CANDIDATE_PREPARED`
+Status: `VALIDATION_PUBLICATION_REGISTRY_P2_RESUME_AND_RELEASE_READINESS_V1__FIRST_STABLE_RELEASE_CANDIDATE_PUBLISHED`
 
 The bounded hardening tranche strengthens publication-gate self-tests and credential-path detection, registry/path/version invariants, optional exact registry-digest binding, and resumable P2 manual-attempt evidence. A deterministic release-readiness gate now cross-checks core validators, public documentation paths, exact-SHA capability snapshots, registry digests, changelog treatment, and compatibility rules for capability evolution without publishing or advancing any consumer pin. It adds no reviewer admission, executable routing, private dependency, external installation, authentication, or paid model execution.
 
-The first stable-release programme now has a `1.0.0-rc.1` candidate manifest and stability policy. The proposed 1.0 stable surface is limited to the current AVAILABLE capability contracts and explicitly listed public interfaces; P2 specialist candidates, the P5 fixture router as a production runtime, non-admitted vendor tooling, and Playwright observation remain experimental exclusions. No tag, GitHub Release, or consumer pin has been published or advanced.
+The first stable-release programme now has a published GitHub prerelease `v1.0.0-rc.1` at exact commit `7bc62182683857c285bb6487d80b1507c4457dd6`, plus a candidate manifest, stability policy, and post-publication evidence record. The proposed 1.0 stable surface is limited to the current AVAILABLE capability contracts and explicitly listed public interfaces; P2 specialist candidates, the P5 fixture router as a production runtime, non-admitted vendor tooling, and Playwright observation remain experimental exclusions. No stable `v1.0.0` release or consumer/private-overlay pin advancement has occurred.
