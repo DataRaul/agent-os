@@ -6,6 +6,7 @@ from pathlib import Path
 
 from build_tooling_priority_queue import build_priority_queue
 from validate_ci_action_pins import PinValidationError, validate_workflows
+from validate_ci_action_pins import PinValidationError, validate_workflows
 
 ROOT = Path(__file__).resolve().parents[1]
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
@@ -46,6 +47,13 @@ def load_json(path: Path) -> object:
         return json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:
         fail(f"{path.relative_to(ROOT)} invalid JSON: {exc}")
+
+
+def validate_ci_dependencies() -> None:
+    try:
+        validate_workflows(ROOT)
+    except PinValidationError as exc:
+        fail(f"immutable CI action pin validation failed: {exc}")
 
 
 def validate_ci_dependencies() -> None:
@@ -1452,6 +1460,9 @@ def validate_required_docs() -> None:
         "benchmarks/p5-bounded-executable-router/fixtures.json",
         "benchmarks/p5-bounded-executable-router/fixture-adapter-contract.json",
         "scripts/release_readiness.py",
+        "docs/CI_DEPENDENCY_PINS.md",
+        "scripts/validate_ci_action_pins.py",
+        "scripts/test_ci_action_pins.py",
         "docs/CI_DEPENDENCY_PINS.md",
         "scripts/validate_ci_action_pins.py",
         "scripts/test_ci_action_pins.py",
