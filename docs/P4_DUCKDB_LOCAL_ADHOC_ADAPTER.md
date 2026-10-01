@@ -1,8 +1,8 @@
 # Bounded local CSV query adapter
 
-Status: **EVALUATION_ONLY — NOT REGISTERED OR RUNTIME_ADMITTED**
+Status: **PUBLIC ADAPTER AVAILABLE — CONSUMER AUTHORITY REQUIRED**
 
-`scripts/query_local_csv.py` is a public candidate adapter independent of the full upstream DuckDB skill. It accepts one explicit local CSV and only `count` or `sum` on a simple column identifier. It does not accept arbitrary SQL, discover prior state, install software, use credentials, or fetch remote data.
+`scripts/query_local_csv.py` is the admitted public `duckdb-local-csv-aggregate` adapter, independent of the full upstream DuckDB skill. It accepts one explicit local CSV and only `count` or `sum` on a simple column identifier. It does not accept arbitrary SQL, discover prior state, install software, use credentials, or fetch remote data.
 
 The caller supplies a trusted DuckDB CLI v1.4.1 binary explicitly; the script does not download or install it. For example:
 
@@ -17,4 +17,4 @@ Local synthetic verification with DuckDB CLI v1.4.1 returned two rows and sum 18
 
 CI also runs `scripts/test_query_local_csv_adapter.py` with an inert fake CLI. That deterministic contract test verifies the direct no-shell invocation shape, explicit `:memory:` mode, absence of `-init`, exact v1.4.1 pin enforcement, allowed-path/external-access/secret/config-lock SQL boundaries, simple-column restriction, symlink rejection, input immutability, and output-size cap. The fake-CLI test does not replace the real DuckDB v1.4.1 evaluation and grants no runtime admission.
 
-This is a narrow candidate, not a claim of general DuckDB sandboxing or vendor-skill admission. Registry promotion, private mapping, and real-project use require the applicable selection, authority and calibration gates.
+This is a narrow public adapter, not a claim of general DuckDB sandboxing or vendor-skill admission. Its registry entry grants no authority: consumers must authorize the exact local file read and supply the reviewed CLI. The full upstream DuckDB skill remains reference-only, and private mapping or real-project activation remains a consumer-side decision. See `docs/CAPABILITY_DUCKDB_LOCAL_CSV_AGGREGATE.md` and `catalog/p4-duckdb-local-csv-admission.json`.
