@@ -1,5 +1,15 @@
 {
   "schema_version": 1,
   "policy": "Capability additions, deprecations, removals, reactivations, and capability_contract_version changes require an explicit entry tied to the resulting registry_version. Repository SHA remains the implementation identity; ordinary implementation changes that preserve the public capability contract do not require a capability-contract version bump.",
-  "entries": []
+  "entries": [
+    {
+      "capability_id": "duckdb-local-csv-aggregate",
+      "change_type": "ADDED",
+      "from_contract_version": null,
+      "to_contract_version": 1,
+      "registry_version": 2,
+      "compatibility": "COMPATIBLE",
+      "notes": "Adds a new bounded local CSV aggregate adapter. Existing capability IDs and contracts are unchanged; consumers must explicitly opt in and provide local file/process authority."
+    }
+  ]
 }

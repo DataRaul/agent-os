@@ -51,6 +51,10 @@ Current public skills:
 - `authority-boundary-review`
 - `semantic-pr-review`
 
+Current public adapters:
+
+- `duckdb-local-csv-aggregate` — one explicitly authorized local CSV, `count`/`sum` only, exact DuckDB CLI v1.4.1, no network/credentials/install/state restore.
+
 P2 evaluates whether proposed specialist reviewer roles add measurable value beyond one capable primary agent plus the P1 skills. Blinded packets, packet-bound independent execution receipts, deterministic one-run-per-session fragment collection, resumable append-only attempt tracking, and deterministic 90-run manual execution operations are ready; actual comparative model runs remain required before any role can be considered. See `docs/SPECIALIST_REVIEWER_EVALUATION.md`.
 
 P3 completed the initial provenance/authority audit baseline for the public tooling sources. See `docs/P3_VENDOR_CATALOG_BASELINE.md` and `docs/VENDOR_CAPABILITY_ADMISSION.md`.
@@ -63,6 +67,8 @@ Playwright browser observation now also has a two-timepoint synthetic loopback c
 
 A third bounded tooling tranche audits five explicitly selected priority-group 5 candidates from Cloudflare, DuckDB, and Playwright without installing or executing them. All remain non-runtime. See `docs/P4_THIRD_TOOLING_TRANCHE.md`.
 
+The narrowed DuckDB local CSV aggregate adapter has separately passed its admission gate and is now in the public capability registry. Consumers still supply the exact file-read/local-process authority; registry membership grants none. See `docs/CAPABILITY_DUCKDB_LOCAL_CSV_AGGREGATE.md`.
+
 P5 now also defines deterministic declarative decision, precondition/postcondition, and multi-capability compatibility evidence in `docs/P5_DECLARATIVE_DECISION_CONTRACTS.md`; those contracts explicitly do not create executable routing or grant authority.
 
 P5 also contains a bounded executable plumbing prototype using only a synthetic built-in echo adapter and synthetic registry; it grants no real capability or external authority. See `docs/P5_BOUNDED_EXECUTABLE_ROUTER.md`.
@@ -73,6 +79,6 @@ Additional skills or reviewer roles should be added only when they are reusable 
 
 ## Status
 
-`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_MANUAL_EXECUTION_OPERATIONS_V1_READY__P3_VENDOR_CATALOG_BASELINE_COMPLETE__P4_BOUNDED_TRANCHE_COMPLETE__P4_SECOND_TOOLING_TRANCHE_V1_COMPLETE__P4_PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE__P4_THIRD_TOOLING_TRANCHE_V1_COMPLETE__P5_DECLARATIVE_DECISION_CONTRACTS_V1_READY__P5_BOUNDED_EXECUTABLE_FIXTURE_ROUTER_V1_COMPLETE__RELEASE_READINESS_V1`
+`V0_PUBLIC_CORE_COMPLETE__P1_CAPABILITY_BASELINE_COMPLETE__P2_MANUAL_EXECUTION_OPERATIONS_V1_READY__P3_VENDOR_CATALOG_BASELINE_COMPLETE__P4_BOUNDED_TRANCHE_COMPLETE__P4_SECOND_TOOLING_TRANCHE_V1_COMPLETE__P4_PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE__P4_THIRD_TOOLING_TRANCHE_V1_COMPLETE__P4_DUCKDB_LOCAL_CSV_ADAPTER_V1_ADMITTED__P5_DECLARATIVE_DECISION_CONTRACTS_V1_READY__P5_BOUNDED_EXECUTABLE_FIXTURE_ROUTER_V1_COMPLETE__RELEASE_READINESS_V1`
 
 No release or stability guarantee is implied yet.

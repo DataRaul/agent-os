@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "registry_version": 1,
+  "registry_version": 2,
   "status": "PUBLIC_CAPABILITY_REGISTRY_V1",
   "versioning_policy": "Consumers must pin an exact Agent OS repository commit SHA. capability_contract_version increments only when a capability contract changes materially; repository SHA remains the authoritative implementation identity.",
   "authority_policy": "Presence in this registry grants no external execution authority. Authority is supplied by the consuming environment and may only be narrowed by overlays or local policy.",
@@ -76,6 +76,15 @@
       "capability_contract_version": 1,
       "path": "agents/silent-failure-reviewer.md",
       "primary_skill": "silent-failure-hunter",
+      "grants_authority": false
+    },
+    {
+      "capability_id": "duckdb-local-csv-aggregate",
+      "kind": "adapter",
+      "state": "AVAILABLE",
+      "capability_contract_version": 1,
+      "path": "scripts/query_local_csv.py",
+      "eval_path": "scripts/test_query_local_csv_adapter.py",
       "grants_authority": false
     }
   ]
