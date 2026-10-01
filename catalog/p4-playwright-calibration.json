@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "status": "P4_PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE",
+  "evaluated_at": "2026-10-01",
+  "capability_id": "microsoft-playwright-skills:browser-observation",
+  "rules": {
+    "loopback_only": true,
+    "isolated_ephemeral_sessions_only": true,
+    "stdout_evidence_only": true,
+    "authenticated_profiles_forbidden": true,
+    "persistent_or_attached_sessions_forbidden": true,
+    "credentials_forbidden": true,
+    "external_target_mutation_forbidden": true,
+    "repository_must_remain_clean": true,
+    "calibration_does_not_grant_runtime_authority": true,
+    "calibration_does_not_promote_registry": true
+  },
+  "timepoints": [
+    {
+      "label": "initial-runtime-evidence",
+      "date": "2026-09-28",
+      "package": "@playwright/cli",
+      "package_version": "0.1.21",
+      "upstream_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+      "evaluated_agent_os_commit": "09ad8d4f869ced502032b5043820ca425b9dcf85",
+      "workflow_run_id": 36496133988,
+      "job_id": 109176027754,
+      "replicates": 1,
+      "passed_replicates": 1,
+      "terminal_marker": "P4_PLAYWRIGHT_OBSERVATION_RUNTIME_EVAL_PASS",
+      "repository_postcondition": "CLEAN"
+    },
+    {
+      "label": "version-drift-shadow-calibration",
+      "date": "2026-10-01",
+      "package": "@playwright/cli",
+      "package_version": "0.1.22",
+      "upstream_commit": "b85c7a736bb473bf55b584e54a09ffa698d6d871",
+      "evaluated_agent_os_commit": "5d62d46d135df84bacd26a9f43f9b66b4a430dd1",
+      "workflow_run_id": 36848122108,
+      "workflow_run_number": 1,
+      "job_id": 110323064050,
+      "replicates": 3,
+      "passed_replicates": 3,
+      "terminal_marker": "P4_PLAYWRIGHT_OBSERVATION_CALIBRATION_PASS",
+      "repository_postcondition": "CLEAN"
+    }
+  ],
+  "observed_dimensions": {
+    "dom_snapshot": "PASS_ACROSS_TIMEPOINTS",
+    "find_runtime_state": "PASS_ACROSS_TIMEPOINTS",
+    "console_error_observation": "PASS_ACROSS_TIMEPOINTS",
+    "request_metadata_observation": "PASS_ACROSS_TIMEPOINTS",
+    "repository_clean_postcondition": "PASS_ACROSS_TIMEPOINTS",
+    "version_drift_tolerance": "PASS_FOR_0_1_21_TO_0_1_22_UNDER_NARROW_PROFILE",
+    "calibration_scope": "SYNTHETIC_LOOPBACK_ONLY"
+  },
+  "conclusion": {
+    "calibration_state": "TWO_TIMEPOINT_SHADOW_BASELINE_ESTABLISHED",
+    "runtime_admission": false,
+    "registry_promotion": false,
+    "disposition": "PIN_REQUIRED",
+    "next_requirement": "REAL_CONSUMER_SHADOW_EVIDENCE_OR_SEPARATE_RUNTIME_ADMISSION_AUTHORIZATION"
+  }
+}

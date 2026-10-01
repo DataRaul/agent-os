@@ -761,6 +761,103 @@ def validate_p4_second_tooling_tranche() -> None:
         fail("P4 second tooling tranche terminal invalid")
 
 
+def validate_p4_playwright_calibration() -> None:
+    evidence = load_json(ROOT / "catalog" / "p4-playwright-calibration.json")
+    if not isinstance(evidence, dict) or evidence.get("schema_version") != 1:
+        fail("P4 Playwright calibration evidence invalid")
+    if evidence.get("status") != "P4_PLAYWRIGHT_CALIBRATION_BASELINE_V1_COMPLETE":
+        fail("P4 Playwright calibration status invalid")
+    if evidence.get("capability_id") != "microsoft-playwright-skills:browser-observation":
+        fail("P4 Playwright calibration capability invalid")
+
+    rules = evidence.get("rules")
+    required_rules = {
+        "loopback_only",
+        "isolated_ephemeral_sessions_only",
+        "stdout_evidence_only",
+        "authenticated_profiles_forbidden",
+        "persistent_or_attached_sessions_forbidden",
+        "credentials_forbidden",
+        "external_target_mutation_forbidden",
+        "repository_must_remain_clean",
+        "calibration_does_not_grant_runtime_authority",
+        "calibration_does_not_promote_registry",
+    }
+    if not isinstance(rules, dict) or any(rules.get(key) is not True for key in required_rules):
+        fail("P4 Playwright calibration rules must fail closed")
+
+    timepoints = evidence.get("timepoints")
+    if not isinstance(timepoints, list) or len(timepoints) != 2:
+        fail("P4 Playwright calibration requires exactly two accepted timepoints")
+    expected = [
+        {
+            "date": "2026-09-28",
+            "package": "@playwright/cli",
+            "package_version": "0.1.21",
+            "upstream_commit": "74354ecc7a43da16d91a9bc54fa8db8283a3fcf5",
+            "evaluated_agent_os_commit": "09ad8d4f869ced502032b5043820ca425b9dcf85",
+            "workflow_run_id": 36496133988,
+            "job_id": 109176027754,
+            "replicates": 1,
+            "passed_replicates": 1,
+            "terminal_marker": "P4_PLAYWRIGHT_OBSERVATION_RUNTIME_EVAL_PASS",
+            "repository_postcondition": "CLEAN",
+        },
+        {
+            "date": "2026-10-01",
+            "package": "@playwright/cli",
+            "package_version": "0.1.22",
+            "upstream_commit": "b85c7a736bb473bf55b584e54a09ffa698d6d871",
+            "evaluated_agent_os_commit": "5d62d46d135df84bacd26a9f43f9b66b4a430dd1",
+            "workflow_run_id": 36848122108,
+            "job_id": 110323064050,
+            "replicates": 3,
+            "passed_replicates": 3,
+            "terminal_marker": "P4_PLAYWRIGHT_OBSERVATION_CALIBRATION_PASS",
+            "repository_postcondition": "CLEAN",
+        },
+    ]
+    for actual, wanted in zip(timepoints, expected):
+        if not isinstance(actual, dict):
+            fail("P4 Playwright calibration timepoint invalid")
+        for key, value in wanted.items():
+            if actual.get(key) != value:
+                fail(f"P4 Playwright calibration timepoint {key} mismatch")
+        if not re.fullmatch(r"[0-9a-f]{40}", actual["upstream_commit"]):
+            fail("P4 Playwright calibration upstream commit invalid")
+        if not re.fullmatch(r"[0-9a-f]{40}", actual["evaluated_agent_os_commit"]):
+            fail("P4 Playwright calibration Agent OS commit invalid")
+
+    dimensions = evidence.get("observed_dimensions")
+    if not isinstance(dimensions, dict):
+        fail("P4 Playwright calibration dimensions missing")
+    for key in (
+        "dom_snapshot",
+        "find_runtime_state",
+        "console_error_observation",
+        "request_metadata_observation",
+        "repository_clean_postcondition",
+    ):
+        if dimensions.get(key) != "PASS_ACROSS_TIMEPOINTS":
+            fail(f"P4 Playwright calibration dimension {key} mismatch")
+    if dimensions.get("version_drift_tolerance") != "PASS_FOR_0_1_21_TO_0_1_22_UNDER_NARROW_PROFILE":
+        fail("P4 Playwright calibration version-drift evidence mismatch")
+    if dimensions.get("calibration_scope") != "SYNTHETIC_LOOPBACK_ONLY":
+        fail("P4 Playwright calibration scope mismatch")
+
+    conclusion = evidence.get("conclusion")
+    if not isinstance(conclusion, dict):
+        fail("P4 Playwright calibration conclusion missing")
+    if conclusion.get("calibration_state") != "TWO_TIMEPOINT_SHADOW_BASELINE_ESTABLISHED":
+        fail("P4 Playwright calibration conclusion state invalid")
+    if conclusion.get("runtime_admission") is not False:
+        fail("P4 Playwright calibration must not grant runtime admission")
+    if conclusion.get("registry_promotion") is not False:
+        fail("P4 Playwright calibration must not promote registry")
+    if conclusion.get("disposition") != "PIN_REQUIRED":
+        fail("P4 Playwright calibration disposition must remain PIN_REQUIRED")
+
+
 def validate_p4_admission_evidence() -> None:
     evidence = load_json(ROOT / "catalog" / "p4-admission-evidence.json")
     audits = load_json(ROOT / "catalog" / "p4-narrow-audits.json")
@@ -975,6 +1072,7 @@ def validate_json() -> None:
     validate_tooling_priority_queue()
     validate_p4_narrow_audits()
     validate_p4_second_tooling_tranche()
+    validate_p4_playwright_calibration()
     validate_p4_admission_evidence()
     validate_p4_delivery_closeout()
     for source in catalog.get("sources", []):
@@ -1008,6 +1106,9 @@ def validate_required_docs() -> None:
         "docs/P4_SECOND_TOOLING_TRANCHE.md",
         "catalog/p4-second-tooling-tranche-audits.json",
         "catalog/p4-second-tooling-tranche-cases.json",
+        "docs/P4_PLAYWRIGHT_CALIBRATION.md",
+        "catalog/p4-playwright-calibration.json",
+        ".github/workflows/p4-playwright-calibration.yml",
         "agents/silent-failure-reviewer.md",
         "scripts/score_specialist_reviewer_eval.py",
         "scripts/assemble_specialist_reviewer_eval_result.py",

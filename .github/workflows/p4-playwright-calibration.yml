@@ -1,0 +1,42 @@
+name: p4-playwright-calibration
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/p4-playwright-calibration.yml"
+      - "scripts/run_p4_playwright_observation_eval.sh"
+      - "scripts/p4_playwright_fixture_server.py"
+      - "catalog/p4-playwright-observation-config.json"
+      - "catalog/p4-playwright-calibration.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  p4-playwright-calibration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install exact Playwright CLI calibration candidate
+        run: npm install --global @playwright/cli@0.1.22
+      - name: Verify exact candidate
+        run: |
+          set -euo pipefail
+          playwright-cli --version
+          npm list --global @playwright/cli --depth=0
+      - name: Run three isolated loopback calibration replicates
+        run: |
+          set -euo pipefail
+          for replicate in 1 2 3; do
+            echo "P4_PLAYWRIGHT_CALIBRATION_REPLICATE_START:${replicate}"
+            bash scripts/run_p4_playwright_observation_eval.sh
+            echo "P4_PLAYWRIGHT_CALIBRATION_REPLICATE_PASS:${replicate}"
+          done
+          echo "P4_PLAYWRIGHT_OBSERVATION_CALIBRATION_PASS"
