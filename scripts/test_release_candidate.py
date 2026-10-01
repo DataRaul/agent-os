@@ -42,7 +42,7 @@ def main() -> None:
     candidate = json.loads(CANDIDATE_PATH.read_text(encoding="utf-8"))
     registry = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
 
-    module.validate_candidate(candidate, registry, ROOT, "1.0.0-rc.1")
+    module.validate_candidate(candidate, registry, ROOT)\n    module.validate_candidate(candidate, registry, ROOT, "1.0.0-rc.1")
 
     wrong_digest = copy.deepcopy(candidate)
     wrong_digest["registry_sha256"] = "0" * 64
