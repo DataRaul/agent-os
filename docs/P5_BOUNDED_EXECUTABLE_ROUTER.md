@@ -1,6 +1,6 @@
 # P5 bounded executable router prototype V1
 
-Status: `BOUNDED_EXECUTABLE_FIXTURE_ROUTER_V1_COMPLETE`
+Status: `BOUNDED_EXECUTABLE_FIXTURE_ROUTER_V1_COMPLETE__DUCKDB_REAL_ADAPTER_PROFILE_V1_COMPLETE`
 
 ## Purpose
 
@@ -51,8 +51,10 @@ The deterministic test covers successful execution plus stale-pin, registry-dige
 
 ## Next boundary
 
-This tranche establishes executable plumbing only. Connecting the router to a real capability requires a separately admitted adapter with its own authority, input/output, postcondition, and calibration evidence. Registry membership alone is never sufficient.
+The synthetic fixture profile remains unchanged and is still synthetic-only. A separately authorized bounded execution profile now connects the same P5 binding/precondition/postcondition machinery to the already-admitted `duckdb-local-csv-aggregate` capability; see `docs/P5_DUCKDB_LOCAL_CSV_EXECUTION.md`.
+
+That real-adapter profile is hard-coded to the admitted DuckDB adapter and does not turn this prototype into a dynamic loader. Registry membership alone remains insufficient: each execution requires caller-supplied local file-read and process authority. Connecting any additional real adapter remains separately gated.
 
 ## Terminal
 
-`P5_BOUNDED_EXECUTABLE_FIXTURE_ROUTER_COMPLETE__REAL_ADAPTER_ADMISSION_SEPARATE`
+`P5_BOUNDED_EXECUTABLE_FIXTURE_ROUTER_COMPLETE__DUCKDB_REAL_ADAPTER_PROFILE_COMPLETE__OTHER_REAL_ADAPTERS_SEPARATE`
