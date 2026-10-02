@@ -144,7 +144,7 @@ Produce a receipt compatible with `schemas/bounded-run-integrity-receipt.schema.
 - authority source declaration;
 - `authority_granted=false`.
 
-Public receipts and fixtures must remain generic. Do not copy private mappings, secrets, credentials, private thresholds, Knowledge Core material, or private calibration observations into this repository.
+Public receipts and fixtures must remain generic. Do not copy private mappings, secrets, credentials, private thresholds, private knowledge-system material, or private calibration observations into this repository.
 
 ## Composition
 
