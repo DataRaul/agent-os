@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STABLE_PATH = ROOT / "catalog" / "stable-release-candidate.json"
 RC_PATH = ROOT / "catalog" / "release-candidate.json"
 PUBLICATION_PATH = ROOT / "catalog" / "release-publication.json"
-REGISTRY_PATH = ROOT / "catalog" / "capability-registry.json"
+REGISTRY_PATH = ROOT / "catalog" / "releases" / "v1.0.0-capability-registry.json"
 VERSION_PATH = ROOT / "VERSION"
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 DIGEST_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -67,6 +67,7 @@ def validate_stable_candidate(
     *,
     root: Path = ROOT,
     version_text: str | None = None,
+    registry_bytes: bytes | None = None,
 ) -> None:
     if not isinstance(stable, dict):
         raise StableCandidateError("stable release candidate must be an object")
@@ -174,8 +175,12 @@ def validate_stable_candidate(
         observed_paths.add(path)
         if not isinstance(blob, str) or SHA_RE.fullmatch(blob) is None:
             raise StableCandidateError(f"stable surface blob SHA invalid: {path}")
-        file_path = _safe_file(root, path)
-        if git_blob_sha1(file_path.read_bytes()) != blob:
+        if path == "catalog/capability-registry.json" and registry_bytes is not None:
+            observed_blob = git_blob_sha1(registry_bytes)
+        else:
+            file_path = _safe_file(root, path)
+            observed_blob = git_blob_sha1(file_path.read_bytes())
+        if observed_blob != blob:
             raise StableCandidateError(f"stable surface drift detected: {path}")
     if observed_paths != expected_paths:
         raise StableCandidateError("stable surface snapshot path set mismatch")
@@ -222,6 +227,7 @@ def main() -> None:
             load_json(RC_PATH),
             load_json(PUBLICATION_PATH),
             load_json(REGISTRY_PATH),
+            registry_bytes=REGISTRY_PATH.read_bytes(),
         )
     except (OSError, StableCandidateError) as exc:
         raise SystemExit(f"STABLE_RELEASE_CANDIDATE_VALIDATION_FAIL: {exc}") from None
