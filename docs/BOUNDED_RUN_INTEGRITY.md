@@ -24,7 +24,7 @@ Do not activate it for ordinary deterministic tests whose existing assertions al
 
 A run-integrity review binds together:
 
-1. exact run, candidate, and runner identity;
+1. caller-supplied context identity plus exact run, candidate, and runner identity;
 2. declared inputs/configuration;
 3. preconditions and predeclared thresholds;
 4. evidence that the intended work actually occurred;
@@ -68,7 +68,7 @@ The classifier emits a `BOUNDED_RUN_INTEGRITY_RECEIPT` that includes:
 
 - capability and contract version;
 - work class;
-- run, candidate, and runner identity;
+- caller context identity digest plus run, candidate, and runner identity;
 - run-contract and input/configuration digests;
 - precondition results;
 - execution evidence;
