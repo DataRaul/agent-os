@@ -1,0 +1,297 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Agent OS Bounded Run Integrity Receipt V1",
+  "description": "Generic public receipt for lifecycle verification of a consequential bounded evidence-producing run. It grants no execution authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_type",
+    "capability_id",
+    "capability_contract_version",
+    "work_class",
+    "context_identity_digest",
+    "run_identity",
+    "candidate_identity",
+    "runner_identity",
+    "declared_run_contract_digest",
+    "inputs_configuration_digest",
+    "precondition_results",
+    "execution_evidence",
+    "produced_output_artifact_identities",
+    "positive_postcondition_results",
+    "negative_postcondition_results",
+    "protected_state_checks",
+    "observed_failures_warnings",
+    "final_disposition",
+    "authority_source_declaration",
+    "authority_granted"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_type": {
+      "const": "BOUNDED_RUN_INTEGRITY_RECEIPT"
+    },
+    "capability_id": {
+      "const": "bounded-run-integrity"
+    },
+    "capability_contract_version": {
+      "const": 1
+    },
+    "work_class": {
+      "const": "BOUNDED_EVIDENCE_PRODUCING_RUN"
+    },
+    "candidate_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runner_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "declared_run_contract_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "inputs_configuration_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "precondition_results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/checkResult"
+      }
+    },
+    "execution_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authoritative_evidence_available",
+        "authority_confirmed",
+        "runner_executed",
+        "expected_work_occurred",
+        "observed_runner_identity",
+        "observed_candidate_identity",
+        "observed_inputs_configuration_digest",
+        "source_failure_evidence_status"
+      ],
+      "properties": {
+        "authoritative_evidence_available": {
+          "type": "boolean"
+        },
+        "runner_executed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "expected_work_occurred": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "observed_candidate_identity": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "observed_inputs_configuration_digest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_failure_evidence_status": {
+          "enum": [
+            "COMPLETE",
+            "UNKNOWN"
+          ]
+        },
+        "observed_runner_identity": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "authority_confirmed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "produced_output_artifact_identities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifact_id",
+          "run_identity",
+          "candidate_identity",
+          "inputs_configuration_digest",
+          "fresh",
+          "persisted"
+        ],
+        "properties": {
+          "artifact_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "candidate_identity": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "inputs_configuration_digest": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "fresh": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "persisted": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "run_identity": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "positive_postcondition_results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/checkResult"
+      }
+    },
+    "negative_postcondition_results": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/checkResult"
+      }
+    },
+    "protected_state_checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "UNCHANGED",
+              "CHANGED",
+              "UNKNOWN"
+            ]
+          }
+        }
+      }
+    },
+    "observed_failures_warnings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_failures",
+        "warnings"
+      ],
+      "properties": {
+        "source_failures": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "final_disposition": {
+      "enum": [
+        "RUN_INTEGRITY_PASS",
+        "RUN_INTEGRITY_PARTIAL",
+        "RUN_INTEGRITY_FAILED",
+        "RUN_INTEGRITY_INSUFFICIENT_EVIDENCE"
+      ]
+    },
+    "authority_source_declaration": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority_granted": {
+      "const": false
+    },
+    "run_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "context_identity_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "$defs": {
+    "checkResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "UNKNOWN"
+          ]
+        }
+      }
+    }
+  }
+}

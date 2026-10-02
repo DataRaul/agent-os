@@ -69,6 +69,12 @@ Ordinary code or documentation changes that preserve the public semantic contrac
 
 The readiness gate validates backticked repository-relative references under `docs/`, `scripts/`, `catalog/`, `schemas/`, `benchmarks/`, and `.github/`. These namespaces are treated as local documentation/control-plane references; missing referenced paths fail readiness. Skill, reviewer, and eval membership/path consistency is enforced separately by the Agent OS and capability-registry validators so documentation may still quote upstream `skills/...` paths without falsely treating them as local.
 
+## Post-stable registry evolution
+
+A later compatible capability addition may advance the live registry version without rewriting the historical evidence for an already-published stable release. Historical release records remain bound to the registry version and digest that existed at their tagged commit; current readiness compares the live candidate against retained capability history and requires explicit changelog treatment for additions or contract changes.
+
+For `bounded-run-integrity`, readiness requires the registered skill/eval paths, deterministic classifier test, receipt schema, and authority-free registry entry to coexist on the exact candidate. Green CI remains scoped evidence and does not itself establish a real consumer run-integrity PASS.
+
 ## Boundary
 
 A `READY` result means the deterministic checks represented by this gate passed for the evaluated checkout. It does not establish release quality beyond those checks and never implies that a release was published, that a private overlay advanced its pin, or that any capability has execution authority.

@@ -13,7 +13,7 @@ MODULE_PATH = ROOT / "scripts" / "validate_stable_release_candidate.py"
 STABLE_PATH = ROOT / "catalog" / "stable-release-candidate.json"
 RC_PATH = ROOT / "catalog" / "release-candidate.json"
 PUBLICATION_PATH = ROOT / "catalog" / "release-publication.json"
-REGISTRY_PATH = ROOT / "catalog" / "capability-registry.json"
+REGISTRY_PATH = ROOT / "catalog" / "releases" / "v1.0.0-capability-registry.json"
 
 
 def fail(message: str) -> None:
@@ -38,6 +38,7 @@ def expect_error(module, stable, rc, publication, registry, contains: str, *, ro
             registry,
             root=root,
             version_text=version,
+            registry_bytes=REGISTRY_PATH.read_bytes(),
         )
     except module.StableCandidateError as exc:
         if contains not in str(exc):
@@ -53,7 +54,14 @@ def main() -> None:
     publication = json.loads(PUBLICATION_PATH.read_text(encoding="utf-8"))
     registry = json.loads(REGISTRY_PATH.read_text(encoding="utf-8"))
 
-    module.validate_stable_candidate(stable, rc, publication, registry, version_text="1.0.0")
+    module.validate_stable_candidate(
+        stable,
+        rc,
+        publication,
+        registry,
+        version_text="1.0.0",
+        registry_bytes=REGISTRY_PATH.read_bytes(),
+    )
 
     wrong_version = copy.deepcopy(stable)
     wrong_version["candidate_version"] = "1.0.1"

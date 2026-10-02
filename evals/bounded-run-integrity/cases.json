@@ -1,0 +1,794 @@
+{
+  "schema_version": 1,
+  "skill": "bounded-run-integrity",
+  "cases": [
+    {
+      "id": "bri-001-easy-clean-success",
+      "level": "easy",
+      "scenario": "A bounded runner executes the declared candidate and configuration, performs the expected work, persists one fresh artifact bound to the run, meets every declared positive and negative postcondition, and leaves protected state unchanged.",
+      "expected_focus": [
+        "exact run binding",
+        "positive and negative postconditions",
+        "RUN_INTEGRITY_PASS"
+      ],
+      "expected_disposition": "RUN_INTEGRITY_PASS",
+      "record": {
+        "schema_version": 1,
+        "work_class": "BOUNDED_EVIDENCE_PRODUCING_RUN",
+        "candidate_identity": "candidate-a",
+        "runner_identity": "runner-v1",
+        "authority_source_declaration": "caller-declared-existing-authority",
+        "authority_granted": false,
+        "contract": {
+          "preconditions": [
+            "authority-present",
+            "inputs-present",
+            "thresholds-predeclared"
+          ],
+          "positive_postconditions": [
+            "minimum-output-met",
+            "persistence-complete"
+          ],
+          "negative_postconditions": [
+            "no-duplicate-effects",
+            "no-stale-evidence"
+          ],
+          "persistence_required": true,
+          "protected_state_checks_required": true,
+          "partial_result_allowed": false
+        },
+        "inputs_configuration": {
+          "mode": "bounded",
+          "limit": 10
+        },
+        "evidence": {
+          "authoritative_evidence_available": true,
+          "preconditions": [
+            {
+              "id": "authority-present",
+              "status": "PASS"
+            },
+            {
+              "id": "inputs-present",
+              "status": "PASS"
+            },
+            {
+              "id": "thresholds-predeclared",
+              "status": "PASS"
+            }
+          ],
+          "runner_executed": true,
+          "observed_candidate_identity": "candidate-a",
+          "observed_inputs_configuration": {
+            "mode": "bounded",
+            "limit": 10
+          },
+          "expected_work_occurred": true,
+          "source_failure_evidence_status": "COMPLETE",
+          "source_failures": [],
+          "warnings": [],
+          "artifacts": [
+            {
+              "artifact_id": "artifact-run-a",
+              "candidate_identity": "candidate-a",
+              "inputs_configuration": {
+                "mode": "bounded",
+                "limit": 10
+              },
+              "fresh": true,
+              "persisted": true,
+              "run_identity": "run-a"
+            }
+          ],
+          "positive_postconditions": [
+            {
+              "id": "minimum-output-met",
+              "status": "PASS"
+            },
+            {
+              "id": "persistence-complete",
+              "status": "PASS"
+            }
+          ],
+          "negative_postconditions": [
+            {
+              "id": "no-duplicate-effects",
+              "status": "PASS"
+            },
+            {
+              "id": "no-stale-evidence",
+              "status": "PASS"
+            }
+          ],
+          "protected_state_checks": [
+            {
+              "id": "protected-baseline",
+              "status": "UNCHANGED"
+            }
+          ],
+          "observed_runner_identity": "runner-v1",
+          "authority_confirmed": true
+        },
+        "run_identity": "run-a",
+        "context_identity": "context-a"
+      }
+    },
+    {
+      "id": "bri-002-normal-green-runner-threshold-shortfall",
+      "level": "normal",
+      "scenario": "The workflow and runner are green and persist a fresh artifact, but the predeclared minimum-output threshold is not met.",
+      "expected_focus": [
+        "process success is insufficient",
+        "predeclared threshold failure",
+        "RUN_INTEGRITY_FAILED"
+      ],
+      "expected_disposition": "RUN_INTEGRITY_FAILED",
+      "record": {
+        "schema_version": 1,
+        "work_class": "BOUNDED_EVIDENCE_PRODUCING_RUN",
+        "candidate_identity": "candidate-b",
+        "runner_identity": "runner-v1",
+        "authority_source_declaration": "caller-declared-existing-authority",
+        "authority_granted": false,
+        "contract": {
+          "preconditions": [
+            "authority-present"
+          ],
+          "positive_postconditions": [
+            "minimum-output-met"
+          ],
+          "negative_postconditions": [
+            "no-stale-evidence"
+          ],
+          "persistence_required": true,
+          "protected_state_checks_required": false,
+          "partial_result_allowed": false
+        },
+        "inputs_configuration": {
+          "limit": 20
+        },
+        "evidence": {
+          "authoritative_evidence_available": true,
+          "preconditions": [
+            {
+              "id": "authority-present",
+              "status": "PASS"
+            }
+          ],
+          "runner_executed": true,
+          "observed_candidate_identity": "candidate-b",
+          "observed_inputs_configuration": {
+            "limit": 20
+          },
+          "expected_work_occurred": true,
+          "source_failure_evidence_status": "COMPLETE",
+          "source_failures": [],
+          "warnings": [],
+          "artifacts": [
+            {
+              "artifact_id": "artifact-run-b",
+              "candidate_identity": "candidate-b",
+              "inputs_configuration": {
+                "limit": 20
+              },
+              "fresh": true,
+              "persisted": true,
+              "run_identity": "run-b"
+            }
+          ],
+          "positive_postconditions": [
+            {
+              "id": "minimum-output-met",
+              "status": "FAIL"
+            }
+          ],
+          "negative_postconditions": [
+            {
+              "id": "no-stale-evidence",
+              "status": "PASS"
+            }
+          ],
+          "protected_state_checks": [],
+          "observed_runner_identity": "runner-v1",
+          "authority_confirmed": true
+        },
+        "run_identity": "run-b",
+        "context_identity": "context-b"
+      }
+    },
+    {
+      "id": "bri-003-deceptive-partial-source-failure",
+      "level": "deceptive",
+      "scenario": "The runner exits zero and produces plausible output, but one declared source failed and the contract does not allow partial success.",
+      "expected_focus": [
+        "visible partial source failure",
+        "zero exit code cannot mask it",
+        "RUN_INTEGRITY_FAILED"
+      ],
+      "expected_disposition": "RUN_INTEGRITY_FAILED",
+      "record": {
+        "schema_version": 1,
+        "work_class": "BOUNDED_EVIDENCE_PRODUCING_RUN",
+        "candidate_identity": "candidate-c",
+        "runner_identity": "collector-v2",
+        "authority_source_declaration": "caller-declared-existing-authority",
+        "authority_granted": false,
+        "contract": {
+          "preconditions": [
+            "source-ready"
+          ],
+          "positive_postconditions": [
+            "coverage-met"
+          ],
+          "negative_postconditions": [
+            "no-hidden-partial-failure"
+          ],
+          "persistence_required": true,
+          "protected_state_checks_required": false,
+          "partial_result_allowed": false
+        },
+        "inputs_configuration": {
+          "sources": 3
+        },
+        "evidence": {
+          "authoritative_evidence_available": true,
+          "preconditions": [
+            {
+              "id": "source-ready",
+              "status": "PASS"
+            }
+          ],
+          "runner_executed": true,
+          "observed_candidate_identity": "candidate-c",
+          "observed_inputs_configuration": {
+            "sources": 3
+          },
+          "expected_work_occurred": true,
+          "source_failure_evidence_status": "COMPLETE",
+          "source_failures": [
+            "source-2-timeout"
+          ],
+          "warnings": [
+            "runner-returned-zero"
+          ],
+          "artifacts": [
+            {
+              "artifact_id": "artifact-run-c",
+              "candidate_identity": "candidate-c",
+              "inputs_configuration": {
+                "sources": 3
+              },
+              "fresh": true,
+              "persisted": true,
+              "run_identity": "run-c"
+            }
+          ],
+          "positive_postconditions": [
+            {
+              "id": "coverage-met",
+              "status": "PASS"
+            }
+          ],
+          "negative_postconditions": [
+            {
+              "id": "no-hidden-partial-failure",
+              "status": "PASS"
+            }
+          ],
+          "protected_state_checks": [],
+          "observed_runner_identity": "collector-v2",
+          "authority_confirmed": true
+        },
+        "run_identity": "run-c",
+        "context_identity": "context-c"
+      }
+    },
+    {
+      "id": "bri-004-adversarial-stale-artifact",
+      "level": "adversarial",
+      "scenario": "The current runner is green, but the only evidence artifact is from a prior run and is stale relative to the current candidate.",
+      "expected_focus": [
+        "stale artifact rejection",
+        "run-specific evidence",
+        "RUN_INTEGRITY_FAILED"
+      ],
+      "expected_disposition": "RUN_INTEGRITY_FAILED",
+      "record": {
+        "schema_version": 1,
+        "work_class": "BOUNDED_EVIDENCE_PRODUCING_RUN",
+        "candidate_identity": "candidate-d",
+        "runner_identity": "runner-v3",
+        "authority_source_declaration": "caller-declared-existing-authority",
+        "authority_granted": false,
+        "contract": {
+          "preconditions": [
+            "inputs-present"
+          ],
+          "positive_postconditions": [
+            "artifact-produced"
+          ],
+          "negative_postconditions": [
+            "no-stale-evidence"
+          ],
+          "persistence_required": false,
+          "protected_state_checks_required": false,
+          "partial_result_allowed": false
+        },
+        "inputs_configuration": {
+          "sample": "new"
+        },
+        "evidence": {
+          "authoritative_evidence_available": true,
+          "preconditions": [
+            {
+              "id": "inputs-present",
+              "status": "PASS"
+            }
+          ],
+          "runner_executed": true,
+          "observed_candidate_identity": "candidate-d",
+          "observed_inputs_configuration": {
+            "sample": "new"
+          },
+          "expected_work_occurred": true,
+          "source_failure_evidence_status": "COMPLETE",
+          "source_failures": [],
+          "warnings": [],
+          "artifacts": [
+            {
+              "artifact_id": "artifact-prior-run",
+              "candidate_identity": "candidate-d",
+              "inputs_configuration": {
+                "sample": "new"
+              },
+              "fresh": false,
+              "persisted": true,
+              "run_identity": "run-d"
+            }
+          ],
+          "positive_postconditions": [
+            {
+              "id": "artifact-produced",
+              "status": "PASS"
+            }
+          ],
+          "negative_postconditions": [
+            {
+              "id": "no-stale-evidence",
+              "status": "FAIL"
+            }
+          ],
+          "protected_state_checks": [],
+          "observed_runner_identity": "runner-v3",
+          "authority_confirmed": true
+        },
+        "run_identity": "run-d",
+        "context_identity": "context-d"
+      }
+    },
+    {
+      "id": "bri-005-deceptive-wrong-candidate-binding",
+      "level": "deceptive",
+      "scenario": "The intended candidate is candidate-e, but execution evidence and the produced artifact are bound to candidate-e-old.",
+      "expected_focus": [
+        "candidate mismatch",
+        "artifact binding",
+        "RUN_INTEGRITY_FAILED"
+      ],
+      "expected_disposition": "RUN_INTEGRITY_FAILED",
+      "record": {
+        "schema_version": 1,
+        "work_class": "BOUNDED_EVIDENCE_PRODUCING_RUN",
+        "candidate_identity": "candidate-e",
+        "runner_identity": "runner-v1",
+        "authority_source_declaration": "caller-declared-existing-authority",
+        "authority_granted": false,
+        "contract": {
+          "preconditions": [
+            "candidate-frozen"
+          ],
+          "positive_postconditions": [
+            "output-valid"
+          ],
+          "negative_postconditions": [
+            "no-wrong-candidate"
+          ],
+          "persistence_required": true,
+          "protected_state_checks_required": false,
+          "partial_result_allowed": false
+        },
+        "inputs_configuration": {
+          "revision": 2
+        },
+        "evidence": {
+          "authoritative_evidence_available": true,
+          "preconditions": [
+            {
+              "id": "candidate-frozen",
+              "status": "PASS"
+            }
+          ],
+          "runner_executed": true,
+          "observed_candidate_identity": "candidate-e-old",
+          "observed_inputs_configuration": {
+            "revision": 2
+          },
+          "expected_work_occurred": true,
+          "source_failure_evidence_status": "COMPLETE",
+          "source_failures": [],
+          "warnings": [],
+          "artifacts": [
+            {
+              "artifact_id": "artifact-run-e",
+              "candidate_identity": "candidate-e-old",
+              "inputs_configuration": {
+                "revision": 2
+              },
+              "fresh": true,
+              "persisted": true,
+              "run_identity": "run-e"
+            }
+          ],
+          "positive_postconditions": [
+            {
+              "id": "output-valid",
+              "status": "PASS"
+            }
+          ],
+          "negative_postconditions": [
+            {
+              "id": "no-wrong-candidate",
+              "status": "FAIL"
+            }
+          ],
+          "protected_state_checks": [],
+          "observed_runner_identity": "runner-v1",
+          "authority_confirmed": true
+        },
+        "run_identity": "run-e",
+        "context_identity": "context-e"
+      }
+    },
+    {
+      "id": "bri-006-normal-retry-duplicate-effect",
+      "level": "normal",
+      "scenario": "A retry completes and persists the expected output but authoritative state shows the same logical effect was applied twice.",
+      "expected_focus": [
+        "retry/resume safety",
+        "duplicate effect",
+        "RUN_INTEGRITY_FAILED"
+      ],
+      "expected_disposition": "RUN_INTEGRITY_FAILED",
+      "record": {
+        "schema_version": 1,
+        "work_class": "BOUNDED_EVIDENCE_PRODUCING_RUN",
+        "candidate_identity": "candidate-f",
+        "runner_identity": "mutating-runner-v1",
+        "authority_source_declaration": "caller-declared-existing-authority",
+        "authority_granted": false,
+        "contract": {
+          "preconditions": [
+            "retry-guard-declared"
+          ],
+          "positive_postconditions": [
+            "persistence-complete"
+          ],
+          "negative_postconditions": [
+            "no-duplicate-effects"
+          ],
+          "persistence_required": true,
+          "protected_state_checks_required": false,
+          "partial_result_allowed": false
+        },
+        "inputs_configuration": {
+          "batch": 7
+        },
+        "evidence": {
+          "authoritative_evidence_available": true,
+          "preconditions": [
+            {
+              "id": "retry-guard-declared",
+              "status": "PASS"
+            }
+          ],
+          "runner_executed": true,
+          "observed_candidate_identity": "candidate-f",
+          "observed_inputs_configuration": {
+            "batch": 7
+          },
+          "expected_work_occurred": true,
+          "source_failure_evidence_status": "COMPLETE",
+          "source_failures": [],
+          "warnings": [
+            "retry-observed"
+          ],
+          "artifacts": [
+            {
+              "artifact_id": "artifact-run-f",
+              "candidate_identity": "candidate-f",
+              "inputs_configuration": {
+                "batch": 7
+              },
+              "fresh": true,
+              "persisted": true,
+              "run_identity": "run-f"
+            }
+          ],
+          "positive_postconditions": [
+            {
+              "id": "persistence-complete",
+              "status": "PASS"
+            }
+          ],
+          "negative_postconditions": [
+            {
+              "id": "no-duplicate-effects",
+              "status": "FAIL"
+            }
+          ],
+          "protected_state_checks": [],
+          "observed_runner_identity": "mutating-runner-v1",
+          "authority_confirmed": true
+        },
+        "run_identity": "run-f",
+        "context_identity": "context-f"
+      }
+    },
+    {
+      "id": "bri-007-adversarial-protected-state-corruption",
+      "level": "adversarial",
+      "scenario": "The intended output is correct and current, but a protected baseline surface changed during the run.",
+      "expected_focus": [
+        "protected-state negative postcondition",
+        "success output does not excuse corruption",
+        "RUN_INTEGRITY_FAILED"
+      ],
+      "expected_disposition": "RUN_INTEGRITY_FAILED",
+      "record": {
+        "schema_version": 1,
+        "work_class": "BOUNDED_EVIDENCE_PRODUCING_RUN",
+        "candidate_identity": "candidate-g",
+        "runner_identity": "repair-runner-v1",
+        "authority_source_declaration": "caller-declared-existing-authority",
+        "authority_granted": false,
+        "contract": {
+          "preconditions": [
+            "protected-baseline-recorded"
+          ],
+          "positive_postconditions": [
+            "repair-output-valid"
+          ],
+          "negative_postconditions": [
+            "no-protected-overwrite"
+          ],
+          "persistence_required": true,
+          "protected_state_checks_required": true,
+          "partial_result_allowed": false
+        },
+        "inputs_configuration": {
+          "repair_scope": "bounded"
+        },
+        "evidence": {
+          "authoritative_evidence_available": true,
+          "preconditions": [
+            {
+              "id": "protected-baseline-recorded",
+              "status": "PASS"
+            }
+          ],
+          "runner_executed": true,
+          "observed_candidate_identity": "candidate-g",
+          "observed_inputs_configuration": {
+            "repair_scope": "bounded"
+          },
+          "expected_work_occurred": true,
+          "source_failure_evidence_status": "COMPLETE",
+          "source_failures": [],
+          "warnings": [],
+          "artifacts": [
+            {
+              "artifact_id": "artifact-run-g",
+              "candidate_identity": "candidate-g",
+              "inputs_configuration": {
+                "repair_scope": "bounded"
+              },
+              "fresh": true,
+              "persisted": true,
+              "run_identity": "run-g"
+            }
+          ],
+          "positive_postconditions": [
+            {
+              "id": "repair-output-valid",
+              "status": "PASS"
+            }
+          ],
+          "negative_postconditions": [
+            {
+              "id": "no-protected-overwrite",
+              "status": "FAIL"
+            }
+          ],
+          "protected_state_checks": [
+            {
+              "id": "protected-baseline",
+              "status": "CHANGED"
+            }
+          ],
+          "observed_runner_identity": "repair-runner-v1",
+          "authority_confirmed": true
+        },
+        "run_identity": "run-g",
+        "context_identity": "context-g"
+      }
+    },
+    {
+      "id": "bri-008-control-authoritative-evidence-unavailable",
+      "level": "control",
+      "scenario": "A generated report looks complete, but the authoritative source required to bind the evidence to the run is unavailable.",
+      "expected_focus": [
+        "fail closed on missing authority",
+        "do not convert missing evidence to success",
+        "RUN_INTEGRITY_INSUFFICIENT_EVIDENCE"
+      ],
+      "expected_disposition": "RUN_INTEGRITY_INSUFFICIENT_EVIDENCE",
+      "record": {
+        "schema_version": 1,
+        "work_class": "BOUNDED_EVIDENCE_PRODUCING_RUN",
+        "candidate_identity": "candidate-h",
+        "runner_identity": "runner-v1",
+        "authority_source_declaration": "caller-declared-existing-authority",
+        "authority_granted": false,
+        "contract": {
+          "preconditions": [
+            "inputs-present"
+          ],
+          "positive_postconditions": [
+            "coverage-met"
+          ],
+          "negative_postconditions": [
+            "no-stale-evidence"
+          ],
+          "persistence_required": false,
+          "protected_state_checks_required": false,
+          "partial_result_allowed": false
+        },
+        "inputs_configuration": {
+          "window": "bounded"
+        },
+        "evidence": {
+          "authoritative_evidence_available": false,
+          "preconditions": [
+            {
+              "id": "inputs-present",
+              "status": "PASS"
+            }
+          ],
+          "runner_executed": true,
+          "observed_candidate_identity": null,
+          "observed_inputs_configuration": null,
+          "expected_work_occurred": true,
+          "source_failure_evidence_status": "UNKNOWN",
+          "source_failures": [],
+          "warnings": [
+            "authoritative-source-unavailable"
+          ],
+          "artifacts": [
+            {
+              "artifact_id": "generated-report",
+              "candidate_identity": null,
+              "inputs_configuration": null,
+              "fresh": null,
+              "persisted": true,
+              "run_identity": "run-h"
+            }
+          ],
+          "positive_postconditions": [
+            {
+              "id": "coverage-met",
+              "status": "UNKNOWN"
+            }
+          ],
+          "negative_postconditions": [
+            {
+              "id": "no-stale-evidence",
+              "status": "UNKNOWN"
+            }
+          ],
+          "protected_state_checks": [],
+          "observed_runner_identity": "runner-v1",
+          "authority_confirmed": true
+        },
+        "run_identity": "run-h",
+        "context_identity": "context-h"
+      }
+    },
+    {
+      "id": "bri-009-control-explicitly-allowed-partial",
+      "level": "control",
+      "scenario": "One source fails, the predeclared contract explicitly permits a bounded partial result, the partial condition is surfaced, the minimum partial threshold passes, and all other integrity checks pass.",
+      "expected_focus": [
+        "explicit partial contract",
+        "visible partial condition",
+        "RUN_INTEGRITY_PARTIAL"
+      ],
+      "expected_disposition": "RUN_INTEGRITY_PARTIAL",
+      "record": {
+        "schema_version": 1,
+        "work_class": "BOUNDED_EVIDENCE_PRODUCING_RUN",
+        "candidate_identity": "candidate-i",
+        "runner_identity": "collector-v3",
+        "authority_source_declaration": "caller-declared-existing-authority",
+        "authority_granted": false,
+        "contract": {
+          "preconditions": [
+            "partial-policy-predeclared"
+          ],
+          "positive_postconditions": [
+            "minimum-partial-threshold-met"
+          ],
+          "negative_postconditions": [
+            "no-hidden-partial-failure"
+          ],
+          "persistence_required": true,
+          "protected_state_checks_required": false,
+          "partial_result_allowed": true
+        },
+        "inputs_configuration": {
+          "sources": 4
+        },
+        "evidence": {
+          "authoritative_evidence_available": true,
+          "preconditions": [
+            {
+              "id": "partial-policy-predeclared",
+              "status": "PASS"
+            }
+          ],
+          "runner_executed": true,
+          "observed_candidate_identity": "candidate-i",
+          "observed_inputs_configuration": {
+            "sources": 4
+          },
+          "expected_work_occurred": true,
+          "source_failure_evidence_status": "COMPLETE",
+          "source_failures": [
+            "optional-source-4-timeout"
+          ],
+          "warnings": [
+            "partial-result"
+          ],
+          "artifacts": [
+            {
+              "artifact_id": "artifact-run-i",
+              "candidate_identity": "candidate-i",
+              "inputs_configuration": {
+                "sources": 4
+              },
+              "fresh": true,
+              "persisted": true,
+              "run_identity": "run-i"
+            }
+          ],
+          "positive_postconditions": [
+            {
+              "id": "minimum-partial-threshold-met",
+              "status": "PASS"
+            }
+          ],
+          "negative_postconditions": [
+            {
+              "id": "no-hidden-partial-failure",
+              "status": "PASS"
+            }
+          ],
+          "protected_state_checks": [],
+          "observed_runner_identity": "collector-v3",
+          "authority_confirmed": true
+        },
+        "run_identity": "run-i",
+        "context_identity": "context-i"
+      }
+    }
+  ]
+}

@@ -31,6 +31,8 @@ jobs:
         run: python scripts/validate_capability_registry.py
       - name: Test capability registry hardening
         run: python scripts/test_capability_registry.py
+      - name: Validate bounded run integrity
+        run: python scripts/test_bounded_run_integrity.py
       - name: Test public release readiness
         run: python scripts/test_release_readiness.py
       - name: Validate public release readiness

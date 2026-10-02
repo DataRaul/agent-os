@@ -1047,8 +1047,13 @@ def validate_p4_duckdb_local_csv_admission() -> None:
         if decision.get(key) != value:
             fail(f"DuckDB local CSV admission decision {key} mismatch")
 
-    if not isinstance(registry, dict) or registry.get("registry_version") != 2:
-        fail("DuckDB local CSV admission requires registry version 2")
+    if (
+        not isinstance(registry, dict)
+        or not isinstance(registry.get("registry_version"), int)
+        or isinstance(registry.get("registry_version"), bool)
+        or registry.get("registry_version") < 2
+    ):
+        fail("DuckDB local CSV admission requires registry version 2 or later")
     matches = [
         item
         for item in registry.get("capabilities", [])

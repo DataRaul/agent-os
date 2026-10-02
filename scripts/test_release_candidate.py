@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MODULE_PATH = ROOT / "scripts" / "validate_release_candidate.py"
 CANDIDATE_PATH = ROOT / "catalog" / "release-candidate.json"
-REGISTRY_PATH = ROOT / "catalog" / "capability-registry.json"
+REGISTRY_PATH = ROOT / "catalog" / "releases" / "v1.0.0-capability-registry.json"
 
 
 def fail(message: str) -> None:
