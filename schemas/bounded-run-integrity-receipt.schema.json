@@ -70,6 +70,7 @@
       "additionalProperties": false,
       "required": [
         "authoritative_evidence_available",
+        "authority_confirmed",
         "runner_executed",
         "expected_work_occurred",
         "observed_runner_identity",
@@ -119,6 +120,12 @@
         "observed_runner_identity": {
           "type": [
             "string",
+            "null"
+          ]
+        },
+        "authority_confirmed": {
+          "type": [
+            "boolean",
             "null"
           ]
         }
