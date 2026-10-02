@@ -68,7 +68,7 @@ The bounded DuckDB local CSV aggregate adapter is now admitted as public capabil
 
 ## P4R — Public capability registry
 
-Status: `FOUNDATION_V1__STRUCTURAL_VALIDATION_HARDENED__DUCKDB_LOCAL_CSV_ADAPTER_V1_ADMITTED`
+Status: `FOUNDATION_V1__STRUCTURAL_VALIDATION_HARDENED__DUCKDB_LOCAL_CSV_ADAPTER_V1_ADMITTED__BOUNDED_RUN_INTEGRITY_V1_ADMITTED`
 
 Maintain `catalog/capability-registry.json` as the public machine-readable interface for reusable capabilities.
 
@@ -101,6 +101,14 @@ The public router contract may express generic inputs such as:
 - output/postcondition contract.
 
 It must not contain private repository identities or require access to a private control plane.
+
+## P5I — Bounded run integrity
+
+Status: `BOUNDED_RUN_INTEGRITY_V1_PUBLIC_ADMITTED`
+
+The generic public `bounded-run-integrity` skill covers work class `BOUNDED_EVIDENCE_PRODUCING_RUN`. It verifies candidate/configuration binding, expected work occurrence, artifact freshness/persistence, positive and negative postconditions, protected-state checks, visible partial failures, and final run-integrity disposition. A green workflow or zero exit code is never sufficient by itself for `RUN_INTEGRITY_PASS`.
+
+The capability composes with existing semantic review, mutation/idempotency, provenance/freshness, research-data-integrity and verified-completion contracts rather than duplicating them. Its deterministic public cases and receipt schema are documented in `docs/BOUNDED_RUN_INTEGRITY.md`. Registry admission grants no execution authority and does not activate any consumer or private mapping.
 
 ## Dependency invariant
 
