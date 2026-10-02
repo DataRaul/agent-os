@@ -99,6 +99,7 @@ def _normalize_protected_checks(
     if required and not raw:
         return [], False, True
     rows: list[dict[str, str]] = []
+    seen: set[str] = set()
     changed = False
     unknown = False
     for index, item in enumerate(raw):
@@ -107,6 +108,9 @@ def _normalize_protected_checks(
         status = row.get("status")
         if status not in PROTECTED_STATUSES:
             raise IntegrityError(f"protected_state_checks[{index}].status invalid")
+        if check_id in seen:
+            raise IntegrityError(f"protected_state_checks duplicate id: {check_id}")
+        seen.add(check_id)
         rows.append({"id": check_id, "status": status})
         changed = changed or status == "CHANGED"
         unknown = unknown or status == "UNKNOWN"
@@ -173,9 +177,9 @@ def classify_run(record: object) -> dict[str, Any]:
 
     runner_executed = evidence.get("runner_executed")
     expected_work_occurred = evidence.get("expected_work_occurred")
-    if runner_executed not in {True, False, None}:
+    if runner_executed is not None and not isinstance(runner_executed, bool):
         raise IntegrityError("evidence.runner_executed must be true, false, or null")
-    if expected_work_occurred not in {True, False, None}:
+    if expected_work_occurred is not None and not isinstance(expected_work_occurred, bool):
         raise IntegrityError("evidence.expected_work_occurred must be true, false, or null")
 
     observed_candidate = evidence.get("observed_candidate_identity")
@@ -201,11 +205,15 @@ def classify_run(record: object) -> dict[str, Any]:
     artifacts: list[dict[str, Any]] = []
     artifact_failure = False
     artifact_unknown = False
+    artifact_ids: set[str] = set()
     for index, item in enumerate(artifacts_raw):
         artifact = _require_dict(item, f"evidence.artifacts[{index}]")
         artifact_id = _require_string(
             artifact.get("artifact_id"), f"evidence.artifacts[{index}].artifact_id"
         )
+        if artifact_id in artifact_ids:
+            raise IntegrityError(f"evidence.artifacts duplicate artifact_id: {artifact_id}")
+        artifact_ids.add(artifact_id)
         artifact_candidate = artifact.get("candidate_identity")
         artifact_inputs = artifact.get("inputs_configuration")
         fresh = artifact.get("fresh")
@@ -218,11 +226,11 @@ def classify_run(record: object) -> dict[str, Any]:
             _require_dict(
                 artifact_inputs, f"evidence.artifacts[{index}].inputs_configuration"
             )
-        if fresh not in {True, False, None}:
+        if fresh is not None and not isinstance(fresh, bool):
             raise IntegrityError(
                 f"evidence.artifacts[{index}].fresh must be true, false, or null"
             )
-        if persisted not in {True, False, None}:
+        if persisted is not None and not isinstance(persisted, bool):
             raise IntegrityError(
                 f"evidence.artifacts[{index}].persisted must be true, false, or null"
             )
