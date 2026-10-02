@@ -15,6 +15,7 @@ SCHEMA_PATH = ROOT / "schemas" / "bounded-run-integrity-receipt.schema.json"
 
 PUBLIC_CAPABILITY_FILES = [
     ROOT / "skills" / "bounded-run-integrity" / "SKILL.md",
+    ROOT / "docs" / "BOUNDED_RUN_INTEGRITY.md",
     CASES_PATH,
     SCHEMA_PATH,
     MODULE_PATH,
@@ -24,6 +25,7 @@ FORBIDDEN_PROJECT_TERMS = (
     "culinary-recommender-app",
     "market-lab",
     "DataRaul/",
+    "Knowledge Core",
 )
 
 
@@ -131,6 +133,26 @@ def main() -> None:
     green_without_work["evidence"]["expected_work_occurred"] = False
     if module.classify_run(green_without_work)["final_disposition"] != module.FAILED:
         fail("runner success without expected work must fail")
+
+    invalid_bool = copy.deepcopy(clean)
+    invalid_bool["evidence"]["runner_executed"] = 1
+    try:
+        module.classify_run(invalid_bool)
+    except module.IntegrityError:
+        pass
+    else:
+        fail("integer truthiness must not be accepted as boolean evidence")
+
+    duplicate_artifact = copy.deepcopy(clean)
+    duplicate_artifact["evidence"]["artifacts"].append(
+        copy.deepcopy(duplicate_artifact["evidence"]["artifacts"][0])
+    )
+    try:
+        module.classify_run(duplicate_artifact)
+    except module.IntegrityError:
+        pass
+    else:
+        fail("duplicate artifact identities must be rejected")
 
     for path in PUBLIC_CAPABILITY_FILES:
         text = path.read_text(encoding="utf-8")
