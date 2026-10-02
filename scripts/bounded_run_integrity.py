@@ -170,6 +170,10 @@ def classify_run(record: object) -> dict[str, Any]:
     if not isinstance(evidence_available, bool):
         raise IntegrityError("evidence.authoritative_evidence_available must be boolean")
 
+    authority_confirmed = evidence.get("authority_confirmed")
+    if authority_confirmed is not None and not isinstance(authority_confirmed, bool):
+        raise IntegrityError("evidence.authority_confirmed must be true, false, or null")
+
     preconditions, pre_fail, pre_unknown = _normalize_checks(
         evidence.get("preconditions"), precondition_ids, "preconditions"
     )
@@ -290,6 +294,10 @@ def classify_run(record: object) -> dict[str, Any]:
 
     if not evidence_available:
         insufficient = True
+    if authority_confirmed is False:
+        failed = True
+    if authority_confirmed is None:
+        insufficient = True
     if pre_fail:
         failed = True
     if pre_unknown:
@@ -349,6 +357,7 @@ def classify_run(record: object) -> dict[str, Any]:
         "precondition_results": preconditions,
         "execution_evidence": {
             "authoritative_evidence_available": evidence_available,
+            "authority_confirmed": authority_confirmed,
             "runner_executed": runner_executed,
             "expected_work_occurred": expected_work_occurred,
             "observed_runner_identity": observed_runner,
