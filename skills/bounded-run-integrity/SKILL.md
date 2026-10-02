@@ -32,6 +32,7 @@ Do not activate for ordinary lint/unit tests, trivial read-only status checks, s
 Obtain the smallest sufficient set of:
 
 - project or repository context supplied by the caller;
+- exact run identity;
 - exact candidate, commit, version, configuration, or other bounded identity when applicable;
 - project-native runner/workflow identity;
 - declared inputs/configuration;
@@ -51,6 +52,8 @@ If the candidate or evidence binding is ambiguous, return insufficient evidence.
 
 Before evaluating execution, record:
 
+- run identity;
+- run identity;
 - candidate identity;
 - runner identity;
 - input/configuration identity or digest;
@@ -78,6 +81,7 @@ A precondition failure is a run-integrity failure. Unknown required precondition
 
 Establish that:
 
+- the observed runner identity matches the intended runner;
 - the intended runner executed;
 - the intended candidate/configuration executed;
 - expected work occurred rather than silently short-circuiting;
@@ -90,7 +94,7 @@ A green workflow or zero exit code is evidence only. It cannot by itself produce
 Verify that required artifacts/evidence:
 
 - exist;
-- belong to the exact candidate/configuration;
+- belong to the exact run and candidate/configuration;
 - are fresh enough for the claim;
 - satisfy declared volume/coverage/quality thresholds;
 - persisted when persistence is required.
