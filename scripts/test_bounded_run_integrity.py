@@ -128,6 +128,11 @@ def main() -> None:
     else:
         fail("capability must reject authority_granted=true")
 
+    missing_external_authority = copy.deepcopy(clean)
+    missing_external_authority["evidence"]["authority_confirmed"] = False
+    if module.classify_run(missing_external_authority)["final_disposition"] != module.FAILED:
+        fail("missing external execution authority must fail run integrity")
+
     ambiguous_candidate = copy.deepcopy(clean)
     ambiguous_candidate["evidence"]["observed_candidate_identity"] = None
     if module.classify_run(ambiguous_candidate)["final_disposition"] != module.INSUFFICIENT:
