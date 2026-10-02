@@ -129,6 +129,16 @@ def main() -> None:
     if module.classify_run(ambiguous_candidate)["final_disposition"] != module.INSUFFICIENT:
         fail("missing candidate binding must fail closed to insufficient evidence")
 
+    wrong_runner = copy.deepcopy(clean)
+    wrong_runner["evidence"]["observed_runner_identity"] = "other-runner"
+    if module.classify_run(wrong_runner)["final_disposition"] != module.FAILED:
+        fail("wrong runner binding must fail")
+
+    wrong_run_artifact = copy.deepcopy(clean)
+    wrong_run_artifact["evidence"]["artifacts"][0]["run_identity"] = "prior-run"
+    if module.classify_run(wrong_run_artifact)["final_disposition"] != module.FAILED:
+        fail("artifact from a different run must fail")
+
     green_without_work = copy.deepcopy(clean)
     green_without_work["evidence"]["expected_work_occurred"] = False
     if module.classify_run(green_without_work)["final_disposition"] != module.FAILED:
