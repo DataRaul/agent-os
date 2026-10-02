@@ -124,6 +124,7 @@ def classify_run(record: object) -> dict[str, Any]:
     if data.get("work_class") != WORK_CLASS:
         raise IntegrityError("unsupported work_class")
 
+    context_identity = _require_string(data.get("context_identity"), "context_identity")
     run_identity = _require_string(data.get("run_identity"), "run_identity")
     candidate = _require_string(data.get("candidate_identity"), "candidate_identity")
     runner = _require_string(data.get("runner_identity"), "runner_identity")
@@ -141,6 +142,12 @@ def classify_run(record: object) -> dict[str, Any]:
     negative_ids = _require_string_list(
         contract.get("negative_postconditions"), "contract.negative_postconditions"
     )
+    if not precondition_ids:
+        raise IntegrityError("contract.preconditions must not be empty")
+    if not positive_ids:
+        raise IntegrityError("contract.positive_postconditions must not be empty")
+    if not negative_ids:
+        raise IntegrityError("contract.negative_postconditions must not be empty")
     persistence_required = _require_bool(
         contract.get("persistence_required"), "contract.persistence_required"
     )
@@ -333,6 +340,7 @@ def classify_run(record: object) -> dict[str, Any]:
         "capability_id": CAPABILITY_ID,
         "capability_contract_version": CAPABILITY_CONTRACT_VERSION,
         "work_class": WORK_CLASS,
+        "context_identity_digest": canonical_sha256(context_identity),
         "run_identity": run_identity,
         "candidate_identity": candidate,
         "runner_identity": runner,
