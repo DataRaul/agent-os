@@ -31,7 +31,7 @@ Do not activate for ordinary lint/unit tests, trivial read-only status checks, s
 
 Obtain the smallest sufficient set of:
 
-- project or repository context supplied by the caller;
+- project or repository context identity supplied by the caller;
 - exact run identity;
 - exact candidate, commit, version, configuration, or other bounded identity when applicable;
 - project-native runner/workflow identity;
