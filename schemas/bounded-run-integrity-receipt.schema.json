@@ -10,6 +10,7 @@
     "capability_id",
     "capability_contract_version",
     "work_class",
+    "context_identity_digest",
     "run_identity",
     "candidate_identity",
     "runner_identity",
@@ -257,6 +258,10 @@
     "run_identity": {
       "type": "string",
       "minLength": 1
+    },
+    "context_identity_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
     }
   },
   "$defs": {
