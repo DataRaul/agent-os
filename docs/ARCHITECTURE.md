@@ -50,6 +50,14 @@ The private overlay is not part of this repository. It may:
 
 The public repository must never require those private details to remain useful.
 
+## Task-class routing
+
+Public capabilities are selected by generic work class and evidence need, not by private repository identity.
+
+For consequential bounded runs, `BOUNDED_EVIDENCE_PRODUCING_RUN` may activate `bounded-run-integrity` when process success is weaker than proof of the required project postcondition. The consumer supplies project identity, authority, thresholds and routing privately; the public capability remains repository-neutral and authority-free.
+
+Use the smallest sufficient capability chain. Registration does not imply always-on activation, automatic execution, or consumer adoption.
+
 ## Knowledge-system boundary
 
 Agent OS may call or consult a knowledge/reasoning system through an adapter or private overlay.
