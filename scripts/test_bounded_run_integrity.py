@@ -66,7 +66,11 @@ def validate_receipt_shape(receipt: dict, schema: dict) -> None:
             fail(f"receipt constant mismatch: {key}")
 
     digest_re = re.compile(r"^[0-9a-f]{64}$")
-    for key in ("declared_run_contract_digest", "inputs_configuration_digest"):
+    for key in (
+        "context_identity_digest",
+        "declared_run_contract_digest",
+        "inputs_configuration_digest",
+    ):
         if digest_re.fullmatch(receipt[key]) is None:
             fail(f"invalid digest in {key}")
 
@@ -163,6 +167,16 @@ def main() -> None:
         pass
     else:
         fail("duplicate artifact identities must be rejected")
+
+    empty_positive_contract = copy.deepcopy(clean)
+    empty_positive_contract["contract"]["positive_postconditions"] = []
+    empty_positive_contract["evidence"]["positive_postconditions"] = []
+    try:
+        module.classify_run(empty_positive_contract)
+    except module.IntegrityError:
+        pass
+    else:
+        fail("positive postcondition contract must not be empty")
 
     for path in PUBLIC_CAPABILITY_FILES:
         text = path.read_text(encoding="utf-8")
