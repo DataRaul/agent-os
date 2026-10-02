@@ -108,7 +108,8 @@
           ],
           "observed_runner_identity": "runner-v1"
         },
-        "run_identity": "run-a"
+        "run_identity": "run-a",
+        "context_identity": "context-a"
       }
     },
     {
@@ -189,7 +190,8 @@
           "protected_state_checks": [],
           "observed_runner_identity": "runner-v1"
         },
-        "run_identity": "run-b"
+        "run_identity": "run-b",
+        "context_identity": "context-b"
       }
     },
     {
@@ -274,7 +276,8 @@
           "protected_state_checks": [],
           "observed_runner_identity": "collector-v2"
         },
-        "run_identity": "run-c"
+        "run_identity": "run-c",
+        "context_identity": "context-c"
       }
     },
     {
@@ -355,7 +358,8 @@
           "protected_state_checks": [],
           "observed_runner_identity": "runner-v3"
         },
-        "run_identity": "run-d"
+        "run_identity": "run-d",
+        "context_identity": "context-d"
       }
     },
     {
@@ -436,7 +440,8 @@
           "protected_state_checks": [],
           "observed_runner_identity": "runner-v1"
         },
-        "run_identity": "run-e"
+        "run_identity": "run-e",
+        "context_identity": "context-e"
       }
     },
     {
@@ -519,7 +524,8 @@
           "protected_state_checks": [],
           "observed_runner_identity": "mutating-runner-v1"
         },
-        "run_identity": "run-f"
+        "run_identity": "run-f",
+        "context_identity": "context-f"
       }
     },
     {
@@ -605,7 +611,8 @@
           ],
           "observed_runner_identity": "repair-runner-v1"
         },
-        "run_identity": "run-g"
+        "run_identity": "run-g",
+        "context_identity": "context-g"
       }
     },
     {
@@ -684,7 +691,8 @@
           "protected_state_checks": [],
           "observed_runner_identity": "runner-v1"
         },
-        "run_identity": "run-h"
+        "run_identity": "run-h",
+        "context_identity": "context-h"
       }
     },
     {
@@ -769,7 +777,8 @@
           "protected_state_checks": [],
           "observed_runner_identity": "collector-v3"
         },
-        "run_identity": "run-i"
+        "run_identity": "run-i",
+        "context_identity": "context-i"
       }
     }
   ]
