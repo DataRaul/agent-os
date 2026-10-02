@@ -124,6 +124,7 @@ def classify_run(record: object) -> dict[str, Any]:
     if data.get("work_class") != WORK_CLASS:
         raise IntegrityError("unsupported work_class")
 
+    run_identity = _require_string(data.get("run_identity"), "run_identity")
     candidate = _require_string(data.get("candidate_identity"), "candidate_identity")
     runner = _require_string(data.get("runner_identity"), "runner_identity")
     authority_source = _require_string(
@@ -182,6 +183,9 @@ def classify_run(record: object) -> dict[str, Any]:
     if expected_work_occurred is not None and not isinstance(expected_work_occurred, bool):
         raise IntegrityError("evidence.expected_work_occurred must be true, false, or null")
 
+    observed_runner = evidence.get("observed_runner_identity")
+    if observed_runner is not None:
+        _require_string(observed_runner, "evidence.observed_runner_identity")
     observed_candidate = evidence.get("observed_candidate_identity")
     if observed_candidate is not None:
         _require_string(observed_candidate, "evidence.observed_candidate_identity")
@@ -214,8 +218,13 @@ def classify_run(record: object) -> dict[str, Any]:
         if artifact_id in artifact_ids:
             raise IntegrityError(f"evidence.artifacts duplicate artifact_id: {artifact_id}")
         artifact_ids.add(artifact_id)
+        artifact_run = artifact.get("run_identity")
         artifact_candidate = artifact.get("candidate_identity")
         artifact_inputs = artifact.get("inputs_configuration")
+        if artifact_run is not None:
+            _require_string(
+                artifact_run, f"evidence.artifacts[{index}].run_identity"
+            )
         fresh = artifact.get("fresh")
         persisted = artifact.get("persisted")
         if artifact_candidate is not None:
@@ -238,6 +247,9 @@ def classify_run(record: object) -> dict[str, Any]:
             canonical_sha256(artifact_inputs) if artifact_inputs is not None else None
         )
         artifact_failure = artifact_failure or (
+            artifact_run is not None and artifact_run != run_identity
+        )
+        artifact_failure = artifact_failure or (
             artifact_candidate is not None and artifact_candidate != candidate
         )
         artifact_failure = artifact_failure or (
@@ -247,6 +259,7 @@ def classify_run(record: object) -> dict[str, Any]:
         artifact_failure = artifact_failure or (
             persistence_required and persisted is False
         )
+        artifact_unknown = artifact_unknown or artifact_run is None
         artifact_unknown = artifact_unknown or artifact_candidate is None
         artifact_unknown = artifact_unknown or artifact_inputs is None
         artifact_unknown = artifact_unknown or fresh is None
@@ -256,6 +269,7 @@ def classify_run(record: object) -> dict[str, Any]:
         artifacts.append(
             {
                 "artifact_id": artifact_id,
+                "run_identity": artifact_run,
                 "candidate_identity": artifact_candidate,
                 "inputs_configuration_digest": artifact_config_digest,
                 "fresh": fresh,
@@ -277,9 +291,11 @@ def classify_run(record: object) -> dict[str, Any]:
         failed = True
     if runner_executed is None or expected_work_occurred is None:
         insufficient = True
-    if observed_candidate is None or observed_inputs is None:
+    if observed_runner is None or observed_candidate is None or observed_inputs is None:
         insufficient = True
     else:
+        if observed_runner != runner:
+            failed = True
         if observed_candidate != candidate:
             failed = True
         if canonical_sha256(observed_inputs) != config_digest:
@@ -317,6 +333,7 @@ def classify_run(record: object) -> dict[str, Any]:
         "capability_id": CAPABILITY_ID,
         "capability_contract_version": CAPABILITY_CONTRACT_VERSION,
         "work_class": WORK_CLASS,
+        "run_identity": run_identity,
         "candidate_identity": candidate,
         "runner_identity": runner,
         "declared_run_contract_digest": contract_digest,
@@ -326,6 +343,7 @@ def classify_run(record: object) -> dict[str, Any]:
             "authoritative_evidence_available": evidence_available,
             "runner_executed": runner_executed,
             "expected_work_occurred": expected_work_occurred,
+            "observed_runner_identity": observed_runner,
             "observed_candidate_identity": observed_candidate,
             "observed_inputs_configuration_digest": (
                 canonical_sha256(observed_inputs) if observed_inputs is not None else None
