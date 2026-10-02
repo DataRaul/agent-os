@@ -70,7 +70,7 @@ Do not infer success thresholds after observing the result.
 
 Confirm that:
 
-- execution authority already exists outside this capability;
+- execution authority already exists outside this capability and is explicitly confirmed in the evidence;
 - required inputs/configuration are present;
 - source/quota/environment preconditions are declared where relevant;
 - success thresholds are explicit.
@@ -138,7 +138,7 @@ Produce a receipt compatible with `schemas/bounded-run-integrity-receipt.schema.
 - declared run-contract digest;
 - inputs/configuration digest;
 - precondition results;
-- execution evidence;
+- execution evidence including external authority confirmation;
 - produced artifact identities;
 - positive postcondition results;
 - negative postcondition results;
