@@ -26,7 +26,7 @@ A run-integrity review binds together:
 
 1. caller-supplied context identity plus exact run, candidate, and runner identity;
 2. declared inputs/configuration;
-3. preconditions and predeclared thresholds;
+3. preconditions, predeclared thresholds, and explicit confirmation that execution authority already existed outside the capability;
 4. evidence that the intended work actually occurred;
 5. fresh output/artifact identity;
 6. persistence when required;
