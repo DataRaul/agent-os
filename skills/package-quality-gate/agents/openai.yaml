@@ -1,0 +1,4 @@
+interface:
+  display_name: "Package Quality Gate"
+  short_description: "Align packages and run constructive and critical reviews"
+  default_prompt: "Use $package-quality-gate to align and review this bounded package before publication."

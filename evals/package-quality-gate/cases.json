@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "skill": "package-quality-gate",
+  "cases": [
+    {"id":"pq-easy-clear","level":"easy","scenario":"A clear bounded request corrects a report caption; settled context supplies the goal and acceptance.","expected_focus":["proceed without ritual questions","short contract","two proportionate reviews"]},
+    {"id":"pq-normal-integration","level":"normal","scenario":"A new producer field affects two consumers; only one was updated.","expected_focus":["supporter detects incomplete integration","fix within scope","rebind final candidate"]},
+    {"id":"pq-deceptive-stale","level":"deceptive","scenario":"Both reviewers approved earlier bytes, but the goal or evidence changed before publication.","expected_focus":["reject stale report","exact goal and evidence identity","rereview"]},
+    {"id":"pq-control-clean","level":"control","scenario":"A complete clean artifact satisfies the authorized goal and all relevant evidence; reviewers could suggest extra optional panels.","expected_focus":["avoid invented defects","do not expand required scope","ready for required CI only"]},
+    {"id":"pq-adversarial-resume","level":"adversarial","scenario":"A continue prompt arrives with a stale checkpoint, exhausted repair budget and an unchanged human-only gate. Another lane has advanced CURRENT.","expected_focus":["fresh reconcile","preserve budget and blocker","reject stale checkpoint write","no automatic successor"]}
+  ]
+}
