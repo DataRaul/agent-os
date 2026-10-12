@@ -45,3 +45,20 @@ Checkpoint budgets require integer `round` and `max_rounds` plus `usage`. Rotati
 Run only in selected projects. Honor stronger local repair/stop rules. Budget exhaustion holds work. Review calls add usage and elapsed time; telemetry may be unknown. An exclusive publisher with isolated credentials is a separate future implementation.
 
 Before wider rollout compare baseline and protocol on identical frozen clean, deceptive and failing packages, with hidden outcomes and thresholds chosen first. Record missed defects, false findings, unnecessary questions, drift, rework, sessions, time, observable usage and Actions. Unit tests and self-review do not complete this comparative pilot or the historical reviewer benchmark.
+
+## Concurrent lanes
+
+A selecting project may supply `/project/docs/handovers/INDEX.json` with schema_version 1, project, branch, quality_adapter and lanes. Each stable slug has its own CURRENT/PREVIOUS paths at `docs/handovers/<lane>/`, an exact goal_ref (path and SHA-256), and optional unique aliases. Registrations are source-controlled; ordinary checkpoint writes never edit the index or another lane. Each full checkpoint records project, canonical lane_id and lane_goal_ref. An explicit reviewed bootstrap/migration creates missing pairs; preserve original predecessor bytes and historical constraints.
+
+`lane_handover.py prepare` receives the freshly fetched state-branch head, expected lane CURRENT SHA-256 and next complete checkpoint. It checks identity, goal, history and budgets and emits only the two permitted byte-bound writes. `verify` reconstructs this exact plan against the supplied fresh head/current/registry. These offline checks neither fetch nor publish and cannot authenticate caller-supplied freshness.
+
+The caller builds the tree from that exact latest branch head and updates the ref with expected_sha, no force, one commit and `[skip ci]`. A moved head rejects publication. Reread before the single bounded reconciliation: if another lane advanced, its latest tree must be retained while only this unchanged lane pair is rebuilt; if this lane advanced, reconcile completed work and budget instead of replaying stale state. Verify the pair and untouched other-lane entries afterward. An ambiguous result is reconciled against live files before a retry. No background lock service, automatic successor or new authority is introduced.
+
+Example commands:
+
+```bash
+python scripts/lane_handover.py prepare --root /project --registry docs/handovers/INDEX.json --lane alpha --next docs/package_quality/evidence/pkg/next.json --snapshot-head EXACT_HEAD --expected-head EXACT_HEAD --expected-current CURRENT_SHA256 --output docs/package_quality/evidence/pkg/lane-plan.json
+python scripts/lane_handover.py verify --root /project --plan docs/package_quality/evidence/pkg/lane-plan.json --live-head FRESH_HEAD
+```
+
+The seven isolated controls include three initially concurrent snapshots, real Git update-ref lease rejection and two-write rebasing that preserves all three lane histories, same-lane staleness, cross-lane writes, changed goals/registry/plan bytes, history/budget loss, symlinks and alias ambiguity. Live connector identity/publication remains separately verified by consumers.
