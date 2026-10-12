@@ -24,7 +24,9 @@ jobs:
       - name: Validate Agent OS
         run: python scripts/validate_agent_os.py
       - name: Test experimental package quality gate
-        run: python scripts/test_package_quality_gate.py
+        run: |
+          python scripts/test_package_quality_gate.py
+          python scripts/test_lane_handover.py
       - name: Test immutable CI action pins
         run: python scripts/test_ci_action_pins.py
       - name: Self-test publication safety gate
