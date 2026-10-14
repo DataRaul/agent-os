@@ -1,5 +1,7 @@
 # Constructive supporter session
 
+For an explicitly selected same-chat workflow, use `sequential.md`; its actual-session identity and stage contract override the separate-session instructions here. Keep the constructive review checklist below.
+
 Use a separate reviewer session. Read the exact contract, goal, candidate inventory and actual deliverables; independently inspect current evidence. Select the smallest sufficient reasoning set and extend the route where necessary. Record exact commit/object, applied rule and criterion for each consulted object.
 
 Check completeness, outcome relevance, missing integrations, acceptance coverage, robustness and proportionate improvements. Classify findings as requirement defect, correctness/robustness defect or optional enhancement; give evidence, consequence and remedy. Never invent a finding quota or expand scope because more could be built.

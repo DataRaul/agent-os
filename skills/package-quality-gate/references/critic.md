@@ -1,5 +1,7 @@
 # Fresh critic session
 
+For an explicitly selected same-chat workflow, use `sequential.md`; its shared-context disclosure and stage contract override separate-session/blindness instructions here. Keep the critical review checklist below.
+
 Use a new session without the supporter verdict or author's private reasoning initially. Read the final exact contract, goal, inventory, artifacts and source locators. Independently choose relevant reasoning objects and record commit/object, applied rule and criterion. Same-model context separation is not statistical independence.
 
 Challenge correctness, acceptance assumptions, counterexamples, failure paths, contradictory evidence, scope drift, compatibility, privacy, authority and false completion. Inspect meaningful tests and current evidence; perform safe local checks when useful. Do not edit the candidate or create findings merely to appear critical.
