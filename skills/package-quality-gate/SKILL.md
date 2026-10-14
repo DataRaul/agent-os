@@ -7,6 +7,8 @@ description: Align a bounded package to its authorized goal, then obtain constru
 
 Read the selecting project's adapter and current instructions first. This is an experimental procedure, not a globally admitted reviewer or a tool permission grant.
 
+Select `review_mode` from the adapter and contract. Missing mode means `INDEPENDENT_SESSIONS` for compatibility. If explicitly selected as `SAME_CHAT_SEQUENTIAL`, follow [same-chat sequence](references/sequential.md) instead of steps 4–6 below. Run the passes within the current chat without asking the owner to start another chat. Keep one actual session identity; never describe sequential passes as independent. All other evidence, scope, budget, CI and checkpoint gates remain controlling.
+
 1. Apply [alignment](references/aligner.md) before substantive work. Reconcile live project state, versioned goal, latest steering and checkpoint. Retrieve settled context before asking questions; record a compact contract.
 2. Build one bounded deliverable and run inexpensive relevant checks. Explain criterion → deliverable → evidence → contribution to the goal. Keep existing evidence, privacy, cost and human gates controlling.
 3. Freeze the exact candidate with `scripts/package_quality_gate.py freeze`. Include all publication changes, untracked deliverables, outputs, adapter, contract, goal and required evidence. Keep review sidecars outside the subject to avoid self-referential hashes.

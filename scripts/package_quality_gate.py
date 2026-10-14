@@ -114,6 +114,16 @@ def contract_bundle(root: Path, contract_path: str) -> tuple[dict, dict, dict]:
     adapter = load(safe_path(root, contract["adapter_path"]))
     require(adapter.get("project") == contract["project"], "adapter/project mismatch")
     require(adapter.get("mode") == "PROCEDURAL_PILOT", "adapter not selected")
+    selected = adapter.get("review_mode", "INDEPENDENT_SESSIONS")
+    require(selected in {"INDEPENDENT_SESSIONS", "SAME_CHAT_SEQUENTIAL"}, "unknown review mode")
+    require(contract.get("review_mode", "INDEPENDENT_SESSIONS") == selected,
+        "contract review mode differs from selected adapter; migrate and refreeze")
+    if selected == "SAME_CHAT_SEQUENTIAL":
+        stage_evidence = contract.get("stage_evidence")
+        require(isinstance(stage_evidence, dict), "alignment/build QA evidence mapping required")
+        for stage in ["align", "build_qa"]:
+            refs = unique_strings(stage_evidence.get(stage), stage + " evidence", True)
+            require(refs <= set(contract["required_evidence"]), "stage evidence must be frozen required evidence")
     list_fields(adapter, ["constraints"])
     require(type(adapter.get("max_rounds")) is int and adapter["max_rounds"] >= 1, "adapter round limit missing")
     checks = unique_strings(adapter.get("required_checks", []), "required checks")
@@ -169,9 +179,15 @@ def make_packet(root: Path, contract_path: str, paths: list[str], deletions: lis
 
 
 def check_review(root: Path, report: dict, packet: dict, contract: dict, role: str) -> None:
+    require(report.get("schema_version") == 1, "unsupported review schema")
     require(report.get("role") == role, "wrong review role")
     text_fields(report, ["session_id", "model", "candidate_digest", "verdict"])
-    require(report["session_id"] != contract["author_session_id"], "author cannot independently review")
+    if contract.get("review_mode", "INDEPENDENT_SESSIONS") == "SAME_CHAT_SEQUENTIAL":
+        require(report.get("review_mode") == "SAME_CHAT_SEQUENTIAL", "sequential review mode missing")
+        require(report["session_id"] == contract["author_session_id"], "same-chat pass must use actual author session")
+        require(report.get("independent") is False, "same-chat pass cannot claim independence")
+    else:
+        require(report["session_id"] != contract["author_session_id"], "author cannot independently review")
     require(report["candidate_digest"] == packet["candidate_digest"], "stale review")
     require(report["verdict"] == "PASS", f"{role} holds publication")
     list_fields(report, ["knowledge", "coverage", "findings"])
@@ -209,7 +225,7 @@ def check_review(root: Path, report: dict, packet: dict, contract: dict, role: s
     unique_strings(finding_ids, "finding IDs")
 
 
-def validate(root: Path, packet: dict, supporter: dict, critic: dict, current_base: str) -> dict:
+def validate_candidate(root: Path, packet: dict, current_base: str) -> dict:
     require(isinstance(packet.get("subject"), dict), "packet subject missing")
     subject = packet["subject"]
     require(packet.get("candidate_digest") == digest(subject), "packet digest mismatch")
@@ -218,13 +234,72 @@ def validate(root: Path, packet: dict, supporter: dict, critic: dict, current_ba
     actual = make_packet(root, subject["contract_path"],
         [p for p in subject["candidate_paths"] if p not in subject["deletions"]], subject["deletions"])
     require(actual == packet, "candidate/contract/goal/adapter/evidence changed")
+    return contract
+
+
+def sequential_stage(report: dict, phase: int, predecessor: str) -> None:
+    require(type(report.get("stage")) is int and report["stage"] == phase, "review stage out of order")
+    require(report.get("predecessor_digest") == predecessor, "review predecessor changed or missing")
+
+
+def validate(root: Path, packet: dict, supporter: dict, critic: dict, current_base: str,
+        synthesis: dict | None = None) -> dict:
+    contract = validate_candidate(root, packet, current_base)
     check_review(root, supporter, packet, contract, "supporter")
     check_review(root, critic, packet, contract, "critic")
-    require(supporter["session_id"] != critic["session_id"], "review sessions must differ")
-    return {"schema_version": 1, "status": "REVIEWED_READY_FOR_REQUIRED_CI",
-        "candidate_digest": packet["candidate_digest"], "assurance": "PROCEDURAL_SELF_REPORTED_SESSIONS",
+    reports = {"supporter": digest(supporter), "critic": digest(critic)}
+    sequential = contract.get("review_mode", "INDEPENDENT_SESSIONS") == "SAME_CHAT_SEQUENTIAL"
+    if sequential:
+        sequential_stage(supporter, 3, packet["candidate_digest"])
+        sequential_stage(critic, 4, reports["supporter"])
+        require(isinstance(synthesis, dict), "final synthesis required")
+        check_review(root, synthesis, packet, contract, "synthesis")
+        sequential_stage(synthesis, 5, reports["critic"])
+        require(synthesis.get("report_digests") == reports, "synthesis does not collate exact final reports")
+        dispositions = [{"role": role, "id": finding["id"], "disposition": finding["disposition"],
+            "resolution_evidence": finding.get("resolution_evidence", [])}
+            for role, report in [("supporter", supporter), ("critic", critic)] for finding in report["findings"]]
+        require(synthesis.get("finding_dispositions") == dispositions, "synthesis dropped or changed reviewer finding dispositions")
+        require(synthesis.get("stages") == ["align", "build_qa", "supporter", "critic", "synthesis"],
+            "synthesis stage coverage missing or out of order")
+        text_fields(synthesis, ["rationale", "goal_contribution", "next_gate"])
+        require(synthesis["next_gate"] == "REQUIRED_CI", "synthesis cannot skip required CI")
+        reports["synthesis"] = digest(synthesis)
+    else:
+        require(synthesis is None, "synthesis only supported in selected sequential mode")
+        require(supporter["session_id"] != critic["session_id"], "review sessions must differ")
+    return {"schema_version": 1,
+        "status": "SEQUENTIALLY_REVIEWED_READY_FOR_REQUIRED_CI" if sequential else "REVIEWED_READY_FOR_REQUIRED_CI",
+        "candidate_digest": packet["candidate_digest"],
+        "review_mode": "SAME_CHAT_SEQUENTIAL" if sequential else "INDEPENDENT_SESSIONS",
+        "assurance": "PROCEDURAL_SAME_CHAT_PASSES" if sequential else "PROCEDURAL_SELF_REPORTED_SESSIONS",
+        "independent_review_proven": False,
         "semantic_truth_proven": False, "required_ci_complete": False,
-        "report_digests": {"supporter": digest(supporter), "critic": digest(critic)}}
+        "report_digests": reports}
+
+
+def next_stage(root: Path, packet: dict, current_base: str, supporter_path: str,
+        critic_path: str, synthesis_path: str) -> dict:
+    """Select the next same-chat pass; never generate verdicts or launch a model."""
+    contract = validate_candidate(root, packet, current_base)
+    require(contract.get("review_mode") == "SAME_CHAT_SEQUENTIAL", "next requires selected sequential mode")
+    loaded = {}
+    predecessor = packet["candidate_digest"]
+    for phase, role, path in [(3, "supporter", supporter_path), (4, "critic", critic_path),
+            (5, "synthesis", synthesis_path)]:
+        p = safe_path(root, path)
+        require(path not in packet["subject"]["hashes"], "review sidecar is part of its own subject")
+        if not p.exists():
+            return {"schema_version": 1, "status": "PASS_REQUIRED", "stage": phase,
+                "next_action": role, "output": path, "candidate_digest": packet["candidate_digest"],
+                "predecessor_digest": predecessor, "session_id": contract["author_session_id"],
+                "review_mode": "SAME_CHAT_SEQUENTIAL", "independent": False}
+        report = load(p)
+        check_review(root, report, packet, contract, role)
+        sequential_stage(report, phase, predecessor)
+        loaded[role] = report
+        predecessor = digest(report)
+    return validate(root, packet, loaded["supporter"], loaded["critic"], current_base, loaded["synthesis"])
 
 
 def check_publication(packet: dict, outgoing: list[str], sidecars: list[str]) -> None:
@@ -302,10 +377,14 @@ def main() -> None:
     for name in ["packet", "supporter", "critic", "current-base", "publication-list"]:
         check.add_argument("--" + name, required=True)
     check.add_argument("--git-base")
+    check.add_argument("--synthesis")
+    advance = sub.add_parser("next")
+    for name in ["packet", "supporter", "critic", "synthesis", "current-base"]:
+        advance.add_argument("--" + name, required=True)
     rotate = sub.add_parser("rotate")
     for name in ["current", "next", "expected-current", "output"]:
         rotate.add_argument("--" + name, required=True)
-    for cmd in [freeze, check, rotate]:
+    for cmd in [freeze, check, rotate, advance]:
         cmd.add_argument("--root", type=Path, required=True)
     args = parser.parse_args()
     root = args.root.resolve()
@@ -318,13 +397,19 @@ def main() -> None:
                 require(changed_paths(root, args.git_base) <= set(packet["subject"]["candidate_paths"]) | {args.output}, "changed/untracked path omitted")
             write_json(output, packet)
             print(json.dumps({"status": "FROZEN_NOT_REVIEWED", "candidate_digest": packet["candidate_digest"]}))
+        elif args.command == "next":
+            print(json.dumps(next_stage(root, load(safe_path(root, args.packet)), args.current_base,
+                args.supporter, args.critic, args.synthesis)))
         elif args.command == "validate":
             packet = load(safe_path(root, args.packet))
             supporter = load(safe_path(root, args.supporter))
             critic = load(safe_path(root, args.critic))
-            result = validate(root, packet, supporter, critic, args.current_base)
+            synthesis = load(safe_path(root, args.synthesis)) if args.synthesis else None
+            result = validate(root, packet, supporter, critic, args.current_base, synthesis)
             outgoing = json.loads(Path(args.publication_list).read_text())
             sidecars = [args.packet, args.supporter, args.critic]
+            if args.synthesis:
+                sidecars.append(args.synthesis)
             for name in outgoing:
                 safe_path(root, name)
             check_publication(packet, outgoing, sidecars)
