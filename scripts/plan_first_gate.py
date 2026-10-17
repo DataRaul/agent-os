@@ -75,6 +75,8 @@ def load(root, name):
 def accepted_receipt(plan, review):
     """Validate the proposed decision and its same-chat review before building."""
     require(plan.get("schema_version") == 1, "invalid plan version")
+    require(type(plan.get("revision")) is int and plan["revision"] >= 1,
+            "versioned plan revision required")
     for key in ("plan_id", "problem", "affected_users", "root_cause",
                 "desired_outcome", "expected_value", "selected_option_id",
                 "architecture", "tradeoffs", "estimated_cost", "authority"):
@@ -95,8 +97,12 @@ def accepted_receipt(plan, review):
     decision_ids = []
     for row in decisions:
         require(isinstance(row, dict), "invalid decision")
-        for key in ("id", "decision", "rationale"):
+        for key in ("id", "decision", "rationale", "expected_consequences", "authority"):
             nonempty(row.get(key), "decision." + key)
+        require(row["authority"] in AUTHORITY, "decision lacks delegated authority")
+        require(type(row.get("material")) is bool, "decision materiality must be explicit")
+        if row["material"]:
+            nonempty(row.get("delegation_reference"), "material decision delegation")
         decision_ids.append(row["id"])
     require(len(set(decision_ids)) == len(decision_ids), "duplicate plan decisions")
     string_list(plan.get("acceptance_criteria"), "acceptance criteria", 1)
@@ -119,6 +125,7 @@ def accepted_receipt(plan, review):
         nonempty(dimensions[key], "review." + key)
     findings = review.get("findings")
     require(isinstance(findings, list), "plan findings must be a list")
+    finding_ids = []
     for row in findings:
         require(isinstance(row, dict), "invalid plan finding")
         for key in ("id", "finding", "disposition"):
@@ -128,6 +135,8 @@ def accepted_receipt(plan, review):
         if row.get("material", True):
             require(row["disposition"] == "RESOLVED", "material plan finding unresolved")
             nonempty(row.get("resolution"), "material finding resolution")
+        finding_ids.append(row["id"])
+    require(len(finding_ids) == len(set(finding_ids)), "duplicate plan findings")
     return {
         "schema_version": 1,
         "status": "PLAN_ACCEPTED",
