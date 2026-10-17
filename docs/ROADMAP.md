@@ -110,6 +110,12 @@ The generic public `bounded-run-integrity` skill covers work class `BOUNDED_EVID
 
 The capability composes with existing semantic review, mutation/idempotency, provenance/freshness, research-data-integrity and verified-completion contracts rather than duplicating them. Its deterministic public cases and receipt schema are documented in `docs/BOUNDED_RUN_INTEGRITY.md`. Registry admission grants no execution authority and does not activate any consumer or private mapping.
 
+## P6 — Portable plan-first value creation (opt-in experimental extension)
+
+Status: `IMPLEMENTATION_PILOT_CANDIDATE__REAL_CROSS_REPOSITORY_ADOPTION_PENDING`
+
+Add solution planning and explicit solution challenge before Builder, bind an accepted-plan receipt and implementation trace to the existing frozen package, and extend Synthesis with measured-vs-expected business value. Keep the existing sequential/independent review modes, CI, publication and lane checkpoint rules controlling. The shared, public-safe implementation is selected only by local project adapters. Generic synthetic tests verify two distinct project configurations; real cross-repository portability and outcomes remain unproven until three authorized bounded roadmap pilots demonstrate adoption without core-code duplication, plus Consultant/Coach evaluation. See `docs/PLAN_FIRST_PORTABILITY.md`. Do not auto-activate private consumers or claim demonstrated value from passing tests alone.
+
 ## Dependency invariant
 
 ```text
