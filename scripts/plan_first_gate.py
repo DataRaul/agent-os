@@ -1,0 +1,243 @@
+"""Opt-in pre-build solution review, traceability and value checks.
+
+Offline, repository-neutral and procedural: receipts cannot authenticate review
+chronology, model identity or human approval. No authority is granted.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path, PurePosixPath
+
+
+class PlanGateError(ValueError):
+    pass
+
+
+DIMENSIONS = (
+    "problem_solution_fit", "alternatives", "architecture_tradeoffs",
+    "complexity", "security_compliance", "cost", "failure_scenarios",
+    "acceptance_criteria",
+)
+VERDICTS = {
+    "VALUE_DEMONSTRATED", "VALUE_PARTIALLY_DEMONSTRATED",
+    "VALUE_NOT_YET_MEASURED", "VALUE_NOT_DEMONSTRATED",
+}
+AUTHORITY = {"AUTO", "AUTO + VERIFY"}
+
+
+def require(condition, message):
+    if not condition:
+        raise PlanGateError(message)
+
+
+def digest(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"),
+                                     ensure_ascii=False).encode("utf-8")).hexdigest()
+
+
+def nonempty(value, label):
+    require(isinstance(value, str) and bool(value.strip()), f"missing {label}")
+
+
+def string_list(value, label, minimum=0):
+    require(isinstance(value, list) and len(value) >= minimum, f"invalid {label}")
+    require(all(isinstance(x, str) and x.strip() for x in value), f"invalid {label}")
+    require(len(value) == len(set(value)), f"duplicate {label}")
+
+
+def safe_file(root, name):
+    nonempty(name, "path")
+    posix = PurePosixPath(name)
+    require(not posix.is_absolute() and ".." not in posix.parts
+            and "\\" not in name and str(posix) == name
+            and posix.parts[0] != ".git", f"unsafe path: {name}")
+    candidate = root
+    for part in posix.parts:
+        candidate = candidate / part
+        require(not candidate.is_symlink(), f"symlink path: {name}")
+    require(candidate.resolve().is_relative_to(root.resolve()), "path escapes root")
+    return candidate
+
+
+def load(root, name):
+    p = safe_file(root, name)
+    try:
+        value = json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        raise PlanGateError(f"cannot load {name}: {exc}") from exc
+    require(isinstance(value, dict) and value.get("schema_version") == 1,
+            f"unsupported document: {name}")
+    return value
+
+
+def accepted_receipt(plan, review):
+    """Validate the proposed decision and its same-chat review before building."""
+    require(plan.get("schema_version") == 1, "invalid plan version")
+    for key in ("plan_id", "problem", "affected_users", "root_cause",
+                "desired_outcome", "expected_value", "selected_option_id",
+                "architecture", "tradeoffs", "estimated_cost", "authority"):
+        nonempty(plan.get(key), "plan." + key)
+    require(plan["authority"] in AUTHORITY, "plan requires human authority resolution")
+    options = plan.get("options")
+    require(isinstance(options, list) and len(options) >= 2, "at least two options required")
+    ids = []
+    for option in options:
+        require(isinstance(option, dict), "invalid option")
+        for key in ("id", "description", "pros", "cons"):
+            nonempty(option.get(key), "option." + key)
+        ids.append(option["id"])
+    require(len(set(ids)) == len(ids) and plan["selected_option_id"] in ids,
+            "duplicate or missing selected option")
+    decisions = plan.get("decisions")
+    require(isinstance(decisions, list) and bool(decisions), "plan decisions required")
+    decision_ids = []
+    for row in decisions:
+        require(isinstance(row, dict), "invalid decision")
+        for key in ("id", "decision", "rationale"):
+            nonempty(row.get(key), "decision." + key)
+        decision_ids.append(row["id"])
+    require(len(set(decision_ids)) == len(decision_ids), "duplicate plan decisions")
+    string_list(plan.get("acceptance_criteria"), "acceptance criteria", 1)
+    string_list(plan.get("risks"), "risks")
+
+    require(isinstance(review, dict) and review.get("schema_version") == 1,
+            "invalid solution review")
+    require(review.get("review_mode") == "SAME_CHAT_SEQUENTIAL"
+            and review.get("independent") is False,
+            "same-chat review cannot claim independent peer status")
+    for key in ("session_id", "model", "rationale", "authority"):
+        nonempty(review.get(key), "review." + key)
+    require(review["authority"] == plan["authority"], "review authority mismatch")
+    require(review.get("plan_digest") == digest(plan), "stale solution review")
+    require(review.get("verdict") == "PLAN_ACCEPTED", "plan not accepted")
+    dimensions = review.get("dimensions")
+    require(isinstance(dimensions, dict) and set(DIMENSIONS) <= set(dimensions),
+            "solution review dimensions incomplete")
+    for key in DIMENSIONS:
+        nonempty(dimensions[key], "review." + key)
+    findings = review.get("findings")
+    require(isinstance(findings, list), "plan findings must be a list")
+    for row in findings:
+        require(isinstance(row, dict), "invalid plan finding")
+        for key in ("id", "finding", "disposition"):
+            nonempty(row.get(key), "finding." + key)
+        require(row["disposition"] in ("RESOLVED", "DEFERRED"),
+                "unresolved plan finding")
+        if row.get("material", True):
+            require(row["disposition"] == "RESOLVED", "material plan finding unresolved")
+            nonempty(row.get("resolution"), "material finding resolution")
+    return {
+        "schema_version": 1,
+        "status": "PLAN_ACCEPTED",
+        "plan_digest": digest(plan),
+        "review_digest": digest(review),
+        "authority": plan["authority"],
+        "session_id": review["session_id"],
+        "assurance": "PROCEDURAL_SELF_REPORTED_PREBUILD",
+    }
+
+
+def validate_binding(root, contract, adapter):
+    """Opt-in from existing package contract; never silently activate."""
+    mode = adapter.get("plan_first", "DISABLED")
+    require(mode in ("DISABLED", "REQUIRED"), "invalid plan-first adapter mode")
+    if mode == "DISABLED":
+        require("plan_first" not in contract, "plan-first contract not selected by adapter")
+        return None
+    require(contract.get("review_mode") == "SAME_CHAT_SEQUENTIAL",
+            "plan-first V1 requires selected same-chat mode")
+    config = contract.get("plan_first")
+    require(isinstance(config, dict), "plan-first paths required")
+    paths = [config.get(key) for key in
+             ("plan_path", "review_path", "receipt_path", "trace_path")]
+    for name in paths:
+        nonempty(name, "plan-first evidence path")
+        safe_file(root, name)
+    require(len(set(paths)) == 4, "duplicate plan-first evidence path")
+    require(set(paths) <= set(contract["required_evidence"]),
+            "plan-first files must be frozen required evidence")
+    plan, review, receipt, trace = [load(root, name) for name in paths]
+    expected = accepted_receipt(plan, review)
+    require(receipt == expected, "missing or stale pre-build receipt")
+    require(review["session_id"] == contract["author_session_id"],
+            "solution review must identify actual same-chat author session")
+    require(receipt["authority"] == contract["authority"],
+            "plan authority differs from authorized package")
+    require(trace.get("plan_digest") == receipt["plan_digest"],
+            "implementation trace refers to a different plan")
+    require(trace.get("material_deviations") == [],
+            "material plan deviation requires re-planning and acceptance")
+    rows = trace.get("decisions")
+    require(isinstance(rows, list), "decision trace required")
+    observed = []
+    for row in rows:
+        require(isinstance(row, dict), "invalid trace decision")
+        nonempty(row.get("id"), "trace decision id")
+        require(row.get("status") in ("IMPLEMENTED", "JUSTIFIED_NONMATERIAL_DEVIATION"),
+                "unapproved or incomplete plan decision")
+        string_list(row.get("evidence"), "decision evidence", 1)
+        require(set(row["evidence"]) <= set(contract["required_evidence"]),
+                "trace evidence not frozen in package")
+        if row["status"] != "IMPLEMENTED":
+            nonempty(row.get("rationale"), "non-material deviation rationale")
+        observed.append(row["id"])
+    expected_ids = {row["id"] for row in plan["decisions"]}
+    require(len(observed) == len(set(observed)) and set(observed) == expected_ids,
+            "plan decision coverage incomplete or duplicate")
+    return expected
+
+
+def validate_value(synthesis, contract):
+    """Require evidence-aware business reporting only in selected packages."""
+    value = synthesis.get("business_value")
+    require(isinstance(value, dict), "business value assessment missing")
+    for key in ("problem", "solution", "observed_improvement", "executive_summary"):
+        nonempty(value.get(key), "business_value." + key)
+    require(value.get("verdict") in VERDICTS, "invalid business value verdict")
+    for key in ("expected_but_unverified", "remaining_risks", "owner_actions"):
+        string_list(value.get(key), "business_value." + key)
+    string_list(value.get("acceptance_evidence"), "business acceptance evidence", 1)
+    require(set(value["acceptance_evidence"]) <= set(contract["required_evidence"]),
+            "business value cites unfrozen evidence")
+    observations = value.get("observations")
+    require(isinstance(observations, list), "observations must be a list")
+    for row in observations:
+        require(isinstance(row, dict), "invalid value observation")
+        nonempty(row.get("metric"), "value metric")
+        require(type(row.get("baseline")) in (float, int)
+                and type(row.get("observed")) in (float, int),
+                "numeric baseline and observed values required")
+        string_list(row.get("evidence"), "observation evidence", 1)
+        require(set(row["evidence"]) <= set(contract["required_evidence"]),
+                "value observation has unbound evidence")
+    if value["verdict"] in ("VALUE_DEMONSTRATED", "VALUE_PARTIALLY_DEMONSTRATED"):
+        require(bool(observations), "demonstrated value needs measured observations")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root", type=Path, required=True)
+    parser.add_argument("--plan", required=True)
+    parser.add_argument("--review", required=True)
+    parser.add_argument("--output", required=True)
+    args = parser.parse_args()
+    try:
+        root = args.root.resolve()
+        require(len({args.plan, args.review, args.output}) == 3,
+                "plan, review and receipt must be separate files")
+        receipt = accepted_receipt(load(root, args.plan), load(root, args.review))
+        output = safe_file(root, args.output)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps({"status": "PLAN_ACCEPTED_PREBUILD_ONLY",
+                          "plan_digest": receipt["plan_digest"],
+                          "assurance": receipt["assurance"]}))
+    except (PlanGateError, OSError, ValueError, TypeError) as exc:
+        print(json.dumps({"status": "HOLD", "reason": str(exc)}))
+        raise SystemExit(1) from exc
+
+
+if __name__ == "__main__":
+    main()
