@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "registry_version": 6,
+  "registry_version": 7,
   "status": "PUBLIC_CAPABILITY_REGISTRY_V1",
   "versioning_policy": "Consumers must pin an exact Agent OS repository commit SHA. capability_contract_version increments only when a capability contract changes materially; repository SHA remains the authoritative implementation identity.",
   "authority_policy": "Presence in this registry grants no external execution authority. Authority is supplied by the consuming environment and may only be narrowed by overlays or local policy.",
@@ -82,7 +82,7 @@
       "capability_id": "package-quality-gate",
       "kind": "skill",
       "state": "AVAILABLE",
-      "capability_contract_version": 3,
+      "capability_contract_version": 4,
       "path": "skills/package-quality-gate/SKILL.md",
       "eval_path": "evals/package-quality-gate/cases.json",
       "grants_authority": false
