@@ -217,7 +217,11 @@ class PlanFirstTests(unittest.TestCase):
             with self.subTest(path=path):
                 p = t.root / path
                 old = p.read_bytes()
-                p.write_bytes(old + b"\nchanged priority")
+                if path == "goal.json":
+                    altered = dict(t.goal, purpose="Materially changed strategic purpose")
+                    write_json(p, altered)
+                else:
+                    p.write_bytes(old + b"\nchanged priority")
                 with self.assertRaises(PlanGateError):
                     make_packet(t.root, "contract.json", ["report.bin"])
                 p.write_bytes(old)
