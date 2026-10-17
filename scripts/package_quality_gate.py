@@ -10,6 +10,8 @@ import subprocess
 from pathlib import Path, PurePosixPath
 from typing import Any
 
+from plan_first_gate import validate_binding, validate_value
+
 
 class GateError(ValueError):
     pass
@@ -133,6 +135,7 @@ def contract_bundle(root: Path, contract_path: str) -> tuple[dict, dict, dict]:
     require(type(budget.get("round")) is int and type(budget.get("max_rounds")) is int, "invalid round budget")
     require(1 <= budget["round"] <= budget["max_rounds"] <= adapter["max_rounds"], "review budget exhausted/widened")
     text_fields(budget, ["usage"])
+    validate_binding(root, contract, adapter)
     return contract, goal, adapter
 
 
@@ -264,6 +267,8 @@ def validate(root: Path, packet: dict, supporter: dict, critic: dict, current_ba
             "synthesis stage coverage missing or out of order")
         text_fields(synthesis, ["rationale", "goal_contribution", "next_gate"])
         require(synthesis["next_gate"] == "REQUIRED_CI", "synthesis cannot skip required CI")
+        if contract.get("plan_first") is not None:
+            validate_value(synthesis, contract)
         reports["synthesis"] = digest(synthesis)
     else:
         require(synthesis is None, "synthesis only supported in selected sequential mode")
