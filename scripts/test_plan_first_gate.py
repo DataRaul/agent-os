@@ -30,7 +30,7 @@ class PlanFirstTests(unittest.TestCase):
             "plan.json", "solution_review.json", "prebuild_receipt.json", "trace.json"
         ]
         self.plan = {
-            "schema_version": 1, "plan_id": "synthetic-plan",
+            "schema_version": 1, "plan_id": "synthetic-plan", "revision": 1,
             "problem": "Slow synthetic report preparation",
             "affected_users": "Report readers", "root_cause": "Repeated manual steps",
             "desired_outcome": "Reliable inspectable report",
@@ -45,7 +45,9 @@ class PlanFirstTests(unittest.TestCase):
             "architecture": "One offline renderer", "tradeoffs": "Limited throughput",
             "estimated_cost": "No incremental spend", "authority": "AUTO + VERIFY",
             "decisions": [{"id": "d1", "decision": "Keep local renderer",
-                           "rationale": "Within delegated scope"}],
+                           "rationale": "Within delegated scope",
+                           "expected_consequences": "Low cost with bounded throughput",
+                           "material": False, "authority": "AUTO + VERIFY"}],
             "acceptance_criteria": ["Report is readable"], "risks": ["Stale input"],
         }
         self.review = {
@@ -156,6 +158,20 @@ class PlanFirstTests(unittest.TestCase):
         self.review["plan_digest"] = digest(self.plan)
         with self.assertRaises(PlanGateError):
             accepted_receipt(self.plan, self.review)
+
+    def test_plan_revision_and_material_delegation_require_explicit_evidence(self):
+        plan = copy.deepcopy(self.plan)
+        del plan["revision"]
+        with self.assertRaises(PlanGateError):
+            accepted_receipt(plan, self.review)
+        plan = copy.deepcopy(self.plan)
+        plan["decisions"][0]["material"] = True
+        review = dict(self.review, plan_digest=digest(plan))
+        with self.assertRaises(PlanGateError):
+            accepted_receipt(plan, review)
+        plan["decisions"][0]["delegation_reference"] = "recorded-owner-delegation-id"
+        review["plan_digest"] = digest(plan)
+        self.assertEqual(accepted_receipt(plan, review)["status"], "PLAN_ACCEPTED")
 
     def test_plan_edit_invalidates_receipt_and_review(self):
         self.plan["architecture"] = "New unapproved architecture"
