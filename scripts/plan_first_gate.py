@@ -174,6 +174,13 @@ def validate_binding(root, contract, adapter):
             "solution review must identify actual same-chat author session")
     require(receipt["authority"] == contract["authority"],
             "plan authority differs from authorized package")
+    for decision in plan["decisions"]:
+        if decision["material"]:
+            ref = decision["delegation_reference"]
+            require(ref in contract["required_evidence"],
+                    "material decision delegation must be frozen evidence")
+            require(safe_file(root, ref).is_file(),
+                    "material decision delegation evidence missing")
     require(trace.get("plan_digest") == receipt["plan_digest"],
             "implementation trace refers to a different plan")
     require(trace.get("material_deviations") == [],
