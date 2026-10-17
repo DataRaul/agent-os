@@ -16,6 +16,10 @@ Sequential contracts require `stage_evidence` with nonempty `align` and `build_q
 
 Root instructions invoke the protocol per bounded package. Thin adapters pin the shared implementation and declare local boundaries. Private overlays select projects, budgets and knowledge routes; the public layer never fetches private state. No paid API or scheduled Actions is introduced. Publication tools remain unrestricted: enforcement is procedural, not exclusive.
 
+## Optional pre-build decision and business-value gate
+
+An opt-in local adapter may select `plan_first: REQUIRED` together with `SAME_CHAT_SEQUENTIAL`. It invokes the shared offline pre-build receipt validator before Builder, requires a plan-to-implementation decision trace in frozen evidence, and requires business-value synthesis after the existing Supporter/Critic passes. It adds no review session, does not reset the existing review budget, and does not alter the downstream CI, publication or checkpoint controls. Without the explicit selection all existing package behavior remains unchanged. See [Plan-first portability](PLAN_FIRST_PORTABILITY.md) for accepted-plan, review, receipt, trace and value fields, evidence contracts, portability/pilot gates and self-reported limits.
+
 ## Invocation
 
 Use versioned goal JSON, per-package contract JSON, candidate/evidence files, packet JSON and two report JSONs. Reports and packet are sidecars outside the subject; preserve history.
