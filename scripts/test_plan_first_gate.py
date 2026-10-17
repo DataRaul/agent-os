@@ -1,5 +1,6 @@
 """Synthetic contract tests for portable, opt-in plan-first protocol."""
 import copy
+import hashlib
 import json
 import subprocess
 import sys
@@ -27,8 +28,14 @@ class PlanFirstTests(unittest.TestCase):
             },
         })
         t.contract["required_evidence"] += [
-            "plan.json", "solution_review.json", "prebuild_receipt.json", "trace.json"
+            "plan.json", "solution_review.json", "prebuild_receipt.json",
+            "trace.json", "roadmap.md",
         ]
+        (t.root / "roadmap.md").write_text(
+            "# Synthetic roadmap\n\n## Milestone: Inspectable reports\n"
+        )
+        roadmap_sha = hashlib.sha256((t.root / "roadmap.md").read_bytes()).hexdigest()
+        goal_sha = hashlib.sha256((t.root / "goal.json").read_bytes()).hexdigest()
         self.plan = {
             "schema_version": 1, "plan_id": "synthetic-plan", "revision": 1,
             "problem": "Slow synthetic report preparation",
@@ -49,19 +56,32 @@ class PlanFirstTests(unittest.TestCase):
                            "expected_consequences": "Low cost with bounded throughput",
                            "material": False, "authority": "AUTO + VERIFY"}],
             "acceptance_criteria": ["Report is readable"], "risks": ["Stale input"],
+            "roadmap_alignment": {
+                "status": "ALIGNED", "roadmap_path": "roadmap.md",
+                "roadmap_sha256": roadmap_sha,
+                "milestone_line": "## Milestone: Inspectable reports",
+                "goal_path": "goal.json", "goal_sha256": goal_sha,
+                "goal_criteria": ["g1"],
+                "steering_source": "synthetic owner work order",
+                "priority_rationale": "Roadmap milestone is active",
+                "goal_contribution": "c1 contributes to g1",
+                "value_signal": "Fewer minutes for report preparation",
+                "conflicts": []
+            },
         }
         self.review = {
             "schema_version": 1, "review_mode": "SAME_CHAT_SEQUENTIAL",
             "session_id": "author", "model": "synthetic",
             "independent": False, "authority": "AUTO + VERIFY",
-            "plan_digest": digest(self.plan), "verdict": "PLAN_ACCEPTED",
+            "plan_digest": digest(self.plan),
+            "roadmap_digest": roadmap_sha, "verdict": "PLAN_ACCEPTED",
             "rationale": "Cheaper bounded option satisfies purpose",
             "dimensions": {
                 k: "Checked with synthetic source and bounded constraints"
                 for k in (
                     "problem_solution_fit", "alternatives", "architecture_tradeoffs",
                     "complexity", "security_compliance", "cost", "failure_scenarios",
-                    "acceptance_criteria",
+                    "acceptance_criteria", "roadmap_alignment",
                 )
             },
             "findings": [],
@@ -190,6 +210,46 @@ class PlanFirstTests(unittest.TestCase):
         t.contract["required_evidence"].append("owner-consent.txt")
         write_json(t.root / "contract.json", t.contract)
         self.assertEqual(make_packet(t.root, "contract.json", ["report.bin"])["schema_version"], 1)
+
+    def test_roadmap_and_goal_edits_invalidate_frozen_decision(self):
+        t = self.fixture
+        for path in ("roadmap.md", "goal.json"):
+            with self.subTest(path=path):
+                p = t.root / path
+                old = p.read_bytes()
+                p.write_bytes(old + b"\nchanged priority")
+                with self.assertRaises(PlanGateError):
+                    make_packet(t.root, "contract.json", ["report.bin"])
+                p.write_bytes(old)
+
+    def test_false_or_missing_roadmap_priority_holds(self):
+        t = self.fixture
+        self.plan["roadmap_alignment"]["milestone_line"] = "## imaginary milestone"
+        self.review["plan_digest"] = digest(self.plan)
+        write_json(t.root / "plan.json", self.plan)
+        write_json(t.root / "solution_review.json", self.review)
+        write_json(t.root / "prebuild_receipt.json",
+                   accepted_receipt(self.plan, self.review))
+        self.trace["plan_digest"] = digest(self.plan)
+        write_json(t.root / "trace.json", self.trace)
+        with self.assertRaises(PlanGateError):
+            make_packet(t.root, "contract.json", ["report.bin"])
+
+    def test_available_adapter_does_not_invalidate_existing_contract(self):
+        legacy = fixtures.GateTests()
+        legacy.setUp()
+        try:
+            legacy.adapter["review_mode"] = "SAME_CHAT_SEQUENTIAL"
+            legacy.adapter["plan_first"] = "AVAILABLE"
+            legacy.contract["review_mode"] = "SAME_CHAT_SEQUENTIAL"
+            legacy.contract["stage_evidence"] = {
+                "align": ["checks.txt"], "build_qa": ["checks.txt"]
+            }
+            write_json(legacy.root / "adapter.json", legacy.adapter)
+            write_json(legacy.root / "contract.json", legacy.contract)
+            self.assertEqual(make_packet(legacy.root, "contract.json", ["report.bin"])["schema_version"], 1)
+        finally:
+            legacy.temp.cleanup()
 
     def test_plan_edit_invalidates_receipt_and_review(self):
         self.plan["architecture"] = "New unapproved architecture"
