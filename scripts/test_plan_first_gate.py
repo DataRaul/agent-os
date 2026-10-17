@@ -173,6 +173,24 @@ class PlanFirstTests(unittest.TestCase):
         review["plan_digest"] = digest(plan)
         self.assertEqual(accepted_receipt(plan, review)["status"], "PLAN_ACCEPTED")
 
+    def test_unfrozen_material_delegation_cannot_approve_package(self):
+        t = self.fixture
+        self.plan["decisions"][0]["material"] = True
+        self.plan["decisions"][0]["delegation_reference"] = "owner-consent.txt"
+        self.review["plan_digest"] = digest(self.plan)
+        self.trace["plan_digest"] = digest(self.plan)
+        write_json(t.root / "plan.json", self.plan)
+        write_json(t.root / "solution_review.json", self.review)
+        write_json(t.root / "prebuild_receipt.json",
+                   accepted_receipt(self.plan, self.review))
+        write_json(t.root / "trace.json", self.trace)
+        with self.assertRaises(PlanGateError):
+            make_packet(t.root, "contract.json", ["report.bin"])
+        (t.root / "owner-consent.txt").write_text("synthetic delegated authorization")
+        t.contract["required_evidence"].append("owner-consent.txt")
+        write_json(t.root / "contract.json", t.contract)
+        self.assertEqual(make_packet(t.root, "contract.json", ["report.bin"])["schema_version"], 1)
+
     def test_plan_edit_invalidates_receipt_and_review(self):
         self.plan["architecture"] = "New unapproved architecture"
         write_json(self.fixture.root / "plan.json", self.plan)
