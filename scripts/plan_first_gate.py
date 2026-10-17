@@ -18,7 +18,7 @@ class PlanGateError(ValueError):
 DIMENSIONS = (
     "problem_solution_fit", "alternatives", "architecture_tradeoffs",
     "complexity", "security_compliance", "cost", "failure_scenarios",
-    "acceptance_criteria",
+    "acceptance_criteria", "roadmap_alignment",
 )
 VERDICTS = {
     "VALUE_DEMONSTRATED", "VALUE_PARTIALLY_DEMONSTRATED",
@@ -72,6 +72,43 @@ def load(root, name):
     return value
 
 
+def validate_roadmap(root, plan, contract=None):
+    """Bind local roadmap and goal bytes; semantic priority judgment stays with reviewers."""
+    entry = plan.get("roadmap_alignment")
+    require(isinstance(entry, dict), "roadmap alignment required")
+    for key in ("roadmap_path", "roadmap_sha256", "milestone_line",
+                "goal_path", "goal_sha256", "steering_source",
+                "priority_rationale", "goal_contribution", "value_signal"):
+        nonempty(entry.get(key), "roadmap_alignment." + key)
+    require(entry.get("status") == "ALIGNED", "roadmap alignment not accepted")
+    require(entry.get("conflicts") == [], "unresolved roadmap priority conflict")
+    for key in ("roadmap_sha256", "goal_sha256"):
+        require(len(entry[key]) == 64 and all(c in "0123456789abcdef" for c in entry[key]),
+                "invalid roadmap/goal digest")
+    roadmap_path = safe_file(root, entry["roadmap_path"])
+    goal_path = safe_file(root, entry["goal_path"])
+    require(roadmap_path.is_file() and goal_path.is_file(), "roadmap or goal missing")
+    roadmap_bytes, goal_bytes = roadmap_path.read_bytes(), goal_path.read_bytes()
+    require(hashlib.sha256(roadmap_bytes).hexdigest() == entry["roadmap_sha256"],
+            "roadmap changed; renew alignment and solution review")
+    require(hashlib.sha256(goal_bytes).hexdigest() == entry["goal_sha256"],
+            "goal changed; renew alignment and solution review")
+    try:
+        lines = roadmap_bytes.decode("utf-8").splitlines()
+    except UnicodeDecodeError as exc:
+        raise PlanGateError("roadmap must be UTF-8") from exc
+    require(entry["milestone_line"] in lines, "milestone not present verbatim in roadmap")
+    goal = load(root, entry["goal_path"])
+    ids = {row["id"] for row in goal.get("success_criteria", [])}
+    string_list(entry.get("goal_criteria"), "roadmap goal criteria", 1)
+    require(set(entry["goal_criteria"]) <= ids, "roadmap goal criteria not in versioned goal")
+    if contract is not None:
+        require(entry["goal_path"] == contract["goal_path"], "roadmap goal path differs from contract")
+        require(entry["roadmap_path"] in contract["required_evidence"],
+                "roadmap must be frozen required evidence")
+    return {"roadmap_digest": entry["roadmap_sha256"], "goal_digest": entry["goal_sha256"]}
+
+
 def accepted_receipt(plan, review):
     """Validate the proposed decision and its same-chat review before building."""
     require(plan.get("schema_version") == 1, "invalid plan version")
@@ -117,6 +154,10 @@ def accepted_receipt(plan, review):
         nonempty(review.get(key), "review." + key)
     require(review["authority"] == plan["authority"], "review authority mismatch")
     require(review.get("plan_digest") == digest(plan), "stale solution review")
+    entry = plan.get("roadmap_alignment")
+    require(isinstance(entry, dict), "plan missing roadmap alignment")
+    require(review.get("roadmap_digest") == entry.get("roadmap_sha256"),
+            "solution review missing roadmap identity")
     require(review.get("verdict") == "PLAN_ACCEPTED", "plan not accepted")
     dimensions = review.get("dimensions")
     require(isinstance(dimensions, dict) and set(DIMENSIONS) <= set(dimensions),
@@ -142,6 +183,8 @@ def accepted_receipt(plan, review):
         "status": "PLAN_ACCEPTED",
         "plan_digest": digest(plan),
         "review_digest": digest(review),
+        "roadmap_digest": entry["roadmap_sha256"],
+        "goal_digest": entry["goal_sha256"],
         "authority": plan["authority"],
         "session_id": review["session_id"],
         "assurance": "PROCEDURAL_SELF_REPORTED_PREBUILD",
@@ -151,9 +194,11 @@ def accepted_receipt(plan, review):
 def validate_binding(root, contract, adapter):
     """Opt-in from existing package contract; never silently activate."""
     mode = adapter.get("plan_first", "DISABLED")
-    require(mode in ("DISABLED", "REQUIRED"), "invalid plan-first adapter mode")
+    require(mode in ("DISABLED", "AVAILABLE", "REQUIRED"), "invalid plan-first adapter mode")
     if mode == "DISABLED":
         require("plan_first" not in contract, "plan-first contract not selected by adapter")
+        return None
+    if mode == "AVAILABLE" and "plan_first" not in contract:
         return None
     require(contract.get("review_mode") == "SAME_CHAT_SEQUENTIAL",
             "plan-first V1 requires selected same-chat mode")
@@ -168,7 +213,11 @@ def validate_binding(root, contract, adapter):
     require(set(paths) <= set(contract["required_evidence"]),
             "plan-first files must be frozen required evidence")
     plan, review, receipt, trace = [load(root, name) for name in paths]
+    roadmap = validate_roadmap(root, plan, contract)
     expected = accepted_receipt(plan, review)
+    require(receipt.get("roadmap_digest") == roadmap["roadmap_digest"]
+            and receipt.get("goal_digest") == roadmap["goal_digest"],
+            "receipt roadmap/goal identity mismatch")
     require(receipt == expected, "missing or stale pre-build receipt")
     require(review["session_id"] == contract["author_session_id"],
             "solution review must identify actual same-chat author session")
@@ -243,7 +292,9 @@ def main():
         root = args.root.resolve()
         require(len({args.plan, args.review, args.output}) == 3,
                 "plan, review and receipt must be separate files")
-        receipt = accepted_receipt(load(root, args.plan), load(root, args.review))
+        plan = load(root, args.plan)
+        validate_roadmap(root, plan)
+        receipt = accepted_receipt(plan, load(root, args.review))
         output = safe_file(root, args.output)
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
