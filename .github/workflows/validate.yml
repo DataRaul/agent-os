@@ -29,6 +29,7 @@ jobs:
           python scripts/test_lane_handover.py
           python scripts/test_sequential_quality.py
           python scripts/test_plan_first_gate.py
+          python scripts/test_portfolio_priority_gate.py
       - name: Test immutable CI action pins
         run: python scripts/test_ci_action_pins.py
       - name: Self-test publication safety gate
